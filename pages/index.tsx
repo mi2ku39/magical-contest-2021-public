@@ -4,13 +4,7 @@ import { IPlayerApp, ISongMap, IVideo, Player } from "textalive-app-api";
 const index: React.FC = () => {
   const [token] = useState<string>(process.env.NEXT_PUBLIC_TEXTALIVE_APP_TOKEN)
   const [fallbackSongUrl] = useState<string>(process.env.NEXT_PUBLIC_FALLBACK_SONG_URL)
-  const [player, setPlayer] = useState<Player>(new Player(
-    {
-      app: {
-        token
-      }
-    }
-  ))
+  const [player, setPlayer] = useState<Player | null>(null)
 
   const onAppReady = useCallback<(app: IPlayerApp) => void>((app) => {
     if (!app.songUrl) {
@@ -29,12 +23,22 @@ const index: React.FC = () => {
   }, [])
 
   useEffect(() => {
-    player.addListener({
-      onAppReady,
-      onSongMapLoad,
-      onVideoReady
-    })
-  }, [token, fallbackSongUrl, player, onAppReady, onSongMapLoad, onVideoReady])
+    if (!player) {
+      setPlayer(new Player(
+        {
+          app: {
+            token
+          }
+        }
+      ))
+    } else {
+      player.addListener({
+        onAppReady,
+        onSongMapLoad,
+        onVideoReady
+      })
+    }
+  }, [token, player, onAppReady, onSongMapLoad, onVideoReady])
 
   return <div>hello</div>;
 };
