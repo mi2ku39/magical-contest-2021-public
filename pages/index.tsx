@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { IPlayerApp, ISongMap, IVideo, Player } from "textalive-app-api";
 import styles from "@/pages/index.module.scss";
+import ControllerButton from "~/components/ControllerButton";
 
 const index: React.FC = () => {
   const [token] = useState<string>(process.env.NEXT_PUBLIC_TEXTALIVE_APP_TOKEN);
@@ -10,6 +11,7 @@ const index: React.FC = () => {
   const [player, setPlayer] = useState<Player | null>(null);
 
   const mediaElement = useRef<HTMLDivElement>();
+  const mediaBannerElement = useRef<HTMLDivElement>();
 
   const onAppReady = useCallback<(app: IPlayerApp) => void>(
     (app) => {
@@ -48,13 +50,30 @@ const index: React.FC = () => {
         onVideoReady,
       });
     }
-  }, [token, player, mediaElement, onAppReady, onSongMapLoad, onVideoReady]);
+  }, [
+    token,
+    player,
+    mediaElement,
+    mediaBannerElement,
+    onAppReady,
+    onSongMapLoad,
+    onVideoReady,
+  ]);
 
   return (
-    <div>
-      <img src="/images/icons/play.svg" />
-      <div ref={mediaElement} className={styles.media}></div>
-    </div>
+    <>
+      <div className={styles.media}>
+        <div ref={mediaElement}></div>
+        <div className={styles.controllerContainer}>
+          <div>
+            <ControllerButton src="/images/icons/replay.svg" />
+          </div>
+          <div>
+            <ControllerButton src="/images/icons/play.svg" />
+          </div>
+        </div>
+      </div>
+    </>
   );
 };
 export default index;
