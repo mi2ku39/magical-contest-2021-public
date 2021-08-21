@@ -1,0 +1,51 @@
+@keyframes ripple {
+    0% {
+        filter: opacity(0);
+        transform: scale(0);
+    }
+
+    30% {
+        filter: opacity(1);
+        transform: scale(1);
+    }
+
+    100% {
+        filter: opacity(0);
+        transform: scale(1);
+    }
+}
+
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.25rem;
+    cursor: pointer;
+
+    position: relative;
+
+    transition: filter ease-in-out 200ms;
+    filter: opacity(0.6);
+
+    &:hover {
+        filter: opacity(0.8);
+    }
+
+    &:before {
+        position: absolute;
+        content: "";
+        width: 32px;
+        height: 32px;
+        border-radius: 16px;
+        background-color: rgba(#000000, 0.3);
+
+        filter: opacity(1);
+        transform: scale(0);
+    }
+}
+
+.ripplePlaying {
+    &:before {
+        animation: ripple 500ms linear backwards;
+    }
+}
