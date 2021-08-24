@@ -4,10 +4,15 @@ import style from "./ControllerButton.module.scss";
 
 type Props = {
   src: string;
+  balloonText?: string;
   onClick?: () => void;
 };
 
-const ControllerButton: React.FC<Props> = ({ onClick, src }: Props) => {
+const ControllerButton: React.FC<Props> = ({
+  onClick,
+  src,
+  balloonText,
+}: Props) => {
   const [isRipplePlaying, setRipplePlayingState] = useState(false);
   const playRipple = useCallback(() => {
     setRipplePlayingState(true);
@@ -31,6 +36,9 @@ const ControllerButton: React.FC<Props> = ({ onClick, src }: Props) => {
       ])}
       onClick={onComponentClick}
     >
+      {balloonText && (
+        <div className={style.balloonContainer}>{balloonText}</div>
+      )}
       <img src={src} />
     </div>
   );

@@ -25,9 +25,12 @@
     position: relative;
 
     transition: filter ease-in-out 200ms;
-    filter: opacity(0.6);
 
-    &:hover {
+    & > img {
+        filter: opacity(0.6);
+    }
+
+    &:hover > img {
         filter: opacity(0.8);
     }
 
@@ -41,6 +44,29 @@
 
         filter: opacity(1);
         transform: scale(0);
+    }
+
+    & > .balloonContainer {
+        position: absolute;
+        top: -100%;
+
+        padding: 0.5rem;
+        border-radius: 0.25rem;
+        color: #ffffff;
+        line-height: 1;
+        background-color: rgba(#000000, 0.7);
+        white-space: nowrap;
+        // display: none;
+
+        transition: filter 200ms linear;
+        filter: opacity(0);
+
+        pointer-events: none;
+    }
+
+    &:hover > .balloonContainer {
+        display: block;
+        filter: opacity(1);
     }
 }
 
