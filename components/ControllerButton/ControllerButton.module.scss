@@ -46,7 +46,7 @@
         transform: scale(0);
     }
 
-    & > .balloonContainer {
+    & > .balloon {
         position: absolute;
         top: -100%;
 
@@ -56,7 +56,6 @@
         line-height: 1;
         background-color: rgba(#000000, 0.7);
         white-space: nowrap;
-        // display: none;
 
         transition: filter 200ms linear;
         filter: opacity(0);
@@ -64,7 +63,7 @@
         pointer-events: none;
     }
 
-    &:hover > .balloonContainer {
+    &:hover > .balloon {
         display: block;
         filter: opacity(1);
     }

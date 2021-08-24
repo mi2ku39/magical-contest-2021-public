@@ -36,9 +36,7 @@ const ControllerButton: React.FC<Props> = ({
       ])}
       onClick={onComponentClick}
     >
-      {balloonText && (
-        <div className={style.balloonContainer}>{balloonText}</div>
-      )}
+      {balloonText && <div className={style.balloon}>{balloonText}</div>}
       <img src={src} />
     </div>
   );
