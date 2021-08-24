@@ -66,10 +66,13 @@ const index: React.FC = () => {
         <div ref={mediaElement}></div>
         <div className={styles.controllerContainer}>
           <div>
-            <ControllerButton src="/images/icons/replay.svg" />
+            <ControllerButton
+              src="/images/icons/replay.svg"
+              balloonText="最初に戻す"
+            />
           </div>
           <div>
-            <ControllerButton src="/images/icons/play.svg" />
+            <ControllerButton src="/images/icons/play.svg" balloonText="再生" />
           </div>
         </div>
       </div>
