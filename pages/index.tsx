@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { IPlayerApp, ISongMap, IVideo, Player } from "textalive-app-api";
 import styles from "@/pages/index.module.scss";
 import ControllerButton from "~/components/ControllerButton";
+import VolumeControllerButton from "~/components/VolumeControllerButton";
 
 const index: React.FC = () => {
   const [token] = useState<string>(process.env.NEXT_PUBLIC_TEXTALIVE_APP_TOKEN);
@@ -73,6 +74,9 @@ const index: React.FC = () => {
           </div>
           <div>
             <ControllerButton src="/images/icons/play.svg" balloonText="再生" />
+          </div>
+          <div className={styles.rightItemContainer}>
+            <VolumeControllerButton />
           </div>
         </div>
       </div>
