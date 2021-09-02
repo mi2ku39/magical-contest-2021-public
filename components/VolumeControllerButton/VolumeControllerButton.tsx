@@ -101,12 +101,7 @@ const VolumeControllerButton: React.FC<Props> = ({}) => {
         onMouseEnter={onMouseEnterFader}
         onMouseLeave={onMouseLeaveFader}
       >
-        <input
-          type="range"
-          orient="vertical"
-          ref={fader}
-          onChange={onFaderValueChange}
-        />
+        <input type="range" ref={fader} onChange={onFaderValueChange} />
       </div>
       <ControllerButton
         src={volumeIcon}
