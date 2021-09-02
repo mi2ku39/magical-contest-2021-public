@@ -17,8 +17,9 @@ const index: React.FC = () => {
   );
   const [player, setPlayer] = useState<Player | null>(null);
   const [isPlaying, setPlayState] = useState(false);
+  const [isInitialMute, setInitialMuteState] = useState(false);
+  const [initialVolume, setInitialVolume] = useState(50);
   const mediaElement = useRef<HTMLDivElement>();
-  const mediaBannerElement = useRef<HTMLDivElement>();
 
   const [lyric, setLyric] = useState("");
   const animate = useCallback(
@@ -81,18 +82,16 @@ const index: React.FC = () => {
         onPlay,
         onPause,
       });
+
+      const v = parseInt(localStorage.getItem("volume"));
+      const bv = parseInt(localStorage.getItem("beforeMuteVolume"));
+      const isMute = localStorage.getItem("mute") === "true";
+      setInitialVolume(isNaN(v) ? 50 : v);
+      setInitialMuteState(isMute);
+
+      player.volume = isMute ? 0 : v;
     }
-  }, [
-    token,
-    player,
-    mediaElement,
-    mediaBannerElement,
-    onAppReady,
-    onSongMapLoad,
-    onVideoReady,
-    onPlay,
-    onPause,
-  ]);
+  }, [token, player]);
 
   const onClickPlayerToggleButton = useCallback<
     MouseEventHandler<HTMLDivElement>
@@ -112,6 +111,38 @@ const index: React.FC = () => {
     if (!player) return;
 
     player.requestStop();
+  }, [player]);
+
+  const onChangingVolume = useCallback(
+    (volume: number) => {
+      if (!player) return;
+      player.volume = volume;
+    },
+    [player]
+  );
+  const onChangedVolume = useCallback(
+    (volume: number) => {
+      if (!player) return;
+      player.volume = volume;
+      localStorage.setItem("volume", volume.toString());
+    },
+    [player]
+  );
+  const onMute = useCallback(
+    (volume: number) => {
+      if (!player) return;
+      localStorage.setItem("beforeMuteVolume", volume.toString());
+      localStorage.setItem("mute", "true");
+      player.volume = 0;
+    },
+    [player]
+  );
+  const onUnmute = useCallback<() => number>(() => {
+    if (!player) return;
+    const volume = parseInt(localStorage.getItem("beforeMuteVolume"));
+    localStorage.setItem("mute", "false");
+    player.volume = isNaN(volume) ? 50 : volume;
+    return isNaN(volume) ? 50 : volume;
   }, [player]);
 
   return (
@@ -144,7 +175,14 @@ const index: React.FC = () => {
             )}
           </div>
           <div>
-            <VolumeControllerButton />
+            <VolumeControllerButton
+              onChangingVolume={onChangingVolume}
+              onChangedVolume={onChangedVolume}
+              onMute={onMute}
+              onUnmute={onUnmute}
+              initialMuteState={isInitialMute}
+              initialVolume={initialVolume}
+            />
           </div>
         </div>
       </div>
