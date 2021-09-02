@@ -2,6 +2,7 @@ import React, {
   MouseEventHandler,
   useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from "react";
@@ -16,7 +17,7 @@ const index: React.FC = () => {
     process.env.NEXT_PUBLIC_FALLBACK_SONG_URL
   );
   const [player, setPlayer] = useState<Player | null>(null);
-
+  const [isPlaying, setPlayState] = useState(false);
   const mediaElement = useRef<HTMLDivElement>();
   const mediaBannerElement = useRef<HTMLDivElement>();
 
@@ -42,6 +43,9 @@ const index: React.FC = () => {
     console.dir(v.firstWord);
   }, []);
 
+  const onPlay = useCallback(() => setPlayState(true), [setPlayState]);
+  const onPause = useCallback(() => setPlayState(false), [setPlayState]);
+
   useEffect(() => {
     if (!player) {
       setPlayer(
@@ -57,6 +61,8 @@ const index: React.FC = () => {
         onAppReady,
         onSongMapLoad,
         onVideoReady,
+        onPlay,
+        onPause,
       });
     }
   }, [
@@ -67,9 +73,11 @@ const index: React.FC = () => {
     onAppReady,
     onSongMapLoad,
     onVideoReady,
+    onPlay,
+    onPause,
   ]);
 
-  const onClickPlayerCurrentButton = useCallback<
+  const onClickPlayerToggleButton = useCallback<
     MouseEventHandler<HTMLDivElement>
   >(() => {
     if (!player) return;
@@ -81,6 +89,14 @@ const index: React.FC = () => {
     }
   }, [player]);
 
+  const onClickPlayerStopButton = useCallback<
+    MouseEventHandler<HTMLDivElement>
+  >(() => {
+    if (!player) return;
+
+    player.requestStop();
+  }, [player]);
+
   return (
     <>
       <div className={styles.media}>
@@ -90,14 +106,23 @@ const index: React.FC = () => {
             <ControllerButton
               src="/images/icons/replay.svg"
               balloonText="最初に戻す"
+              onClick={onClickPlayerStopButton}
             />
           </div>
           <div>
-            <ControllerButton
-              src="/images/icons/play.svg"
-              balloonText="再生"
-              onClick={onClickPlayerCurrentButton}
-            />
+            {isPlaying ? (
+              <ControllerButton
+                src="/images/icons/pause.svg"
+                balloonText="一時停止"
+                onClick={onClickPlayerToggleButton}
+              />
+            ) : (
+              <ControllerButton
+                src="/images/icons/play.svg"
+                balloonText="再生"
+                onClick={onClickPlayerToggleButton}
+              />
+            )}
           </div>
           <div>
             <VolumeControllerButton />
