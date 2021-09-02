@@ -84,7 +84,6 @@ const index: React.FC = () => {
       });
 
       const v = parseInt(localStorage.getItem("volume"));
-      const bv = parseInt(localStorage.getItem("beforeMuteVolume"));
       const isMute = localStorage.getItem("mute") === "true";
       setInitialVolume(isNaN(v) ? 50 : v);
       setInitialMuteState(isMute);
