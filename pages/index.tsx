@@ -75,7 +75,7 @@ const index: React.FC = () => {
           <div>
             <ControllerButton src="/images/icons/play.svg" balloonText="再生" />
           </div>
-          <div className={styles.rightItemContainer}>
+          <div>
             <VolumeControllerButton />
           </div>
         </div>
