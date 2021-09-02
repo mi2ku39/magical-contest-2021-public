@@ -1,15 +1,19 @@
 import clsx from "clsx";
-import React, { useCallback, useState } from "react";
+import React, { MouseEventHandler, useCallback, useState } from "react";
 import style from "./ControllerButton.module.scss";
 
 type Props = {
   src: string;
   balloonText?: string;
-  onClick?: () => void;
+  onClick?: MouseEventHandler<HTMLDivElement>;
+  onMouseEnter?: MouseEventHandler<HTMLDivElement>;
+  onMouseLeave?: MouseEventHandler<HTMLDivElement>;
 };
 
 const ControllerButton: React.FC<Props> = ({
   onClick,
+  onMouseEnter,
+  onMouseLeave,
   src,
   balloonText,
 }: Props) => {
@@ -23,10 +27,13 @@ const ControllerButton: React.FC<Props> = ({
       }, 500);
     });
   }, [isRipplePlaying, setRipplePlayingState]);
-  const onComponentClick = useCallback(() => {
-    playRipple();
-    if (onClick) onClick();
-  }, [onClick]);
+  const onComponentClick = useCallback<MouseEventHandler<HTMLDivElement>>(
+    (attr) => {
+      playRipple();
+      if (onClick) onClick(attr);
+    },
+    [onClick]
+  );
 
   return (
     <div
@@ -35,6 +42,8 @@ const ControllerButton: React.FC<Props> = ({
         isRipplePlaying && style.ripplePlaying,
       ])}
       onClick={onComponentClick}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
     >
       {balloonText && <div className={style.balloon}>{balloonText}</div>}
       <img src={src} />
