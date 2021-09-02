@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  MouseEventHandler,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { IPlayerApp, ISongMap, IVideo, Player } from "textalive-app-api";
 import styles from "@/pages/index.module.scss";
 import ControllerButton from "~/components/ControllerButton";
@@ -13,6 +19,8 @@ const index: React.FC = () => {
 
   const mediaElement = useRef<HTMLDivElement>();
   const mediaBannerElement = useRef<HTMLDivElement>();
+
+  const animate = useCallback(() => {}, []);
 
   const onAppReady = useCallback<(app: IPlayerApp) => void>(
     (app) => {
@@ -31,7 +39,7 @@ const index: React.FC = () => {
 
   const onVideoReady = useCallback<(v?: IVideo) => void>((v) => {
     if (!v) return;
-    console.dir(v.firstPhrase);
+    console.dir(v.firstWord);
   }, []);
 
   useEffect(() => {
@@ -61,6 +69,18 @@ const index: React.FC = () => {
     onVideoReady,
   ]);
 
+  const onClickPlayerCurrentButton = useCallback<
+    MouseEventHandler<HTMLDivElement>
+  >(() => {
+    if (!player) return;
+
+    if (player.isPlaying) {
+      player.requestPause();
+    } else {
+      player.requestPlay();
+    }
+  }, [player]);
+
   return (
     <>
       <div className={styles.media}>
@@ -73,7 +93,11 @@ const index: React.FC = () => {
             />
           </div>
           <div>
-            <ControllerButton src="/images/icons/play.svg" balloonText="再生" />
+            <ControllerButton
+              src="/images/icons/play.svg"
+              balloonText="再生"
+              onClick={onClickPlayerCurrentButton}
+            />
           </div>
           <div>
             <VolumeControllerButton />
