@@ -2,11 +2,10 @@ import React, {
   MouseEventHandler,
   useCallback,
   useEffect,
-  useMemo,
   useRef,
   useState,
 } from "react";
-import { IPlayerApp, ISongMap, IVideo, Player } from "textalive-app-api";
+import { IPlayerApp, ISongMap, IVideo, IWord, Player } from "textalive-app-api";
 import styles from "@/pages/index.module.scss";
 import ControllerButton from "~/components/ControllerButton";
 import VolumeControllerButton from "~/components/VolumeControllerButton";
@@ -21,7 +20,17 @@ const index: React.FC = () => {
   const mediaElement = useRef<HTMLDivElement>();
   const mediaBannerElement = useRef<HTMLDivElement>();
 
-  const animate = useCallback(() => {}, []);
+  const [lyric, setLyric] = useState("");
+  const animate = useCallback(
+    (now: number, unit: IWord) => {
+      if (!unit.contains(now)) return;
+      setLyric((prev) => {
+        console.log(prev);
+        return `${unit.text}`;
+      });
+    },
+    [setLyric]
+  );
 
   const onAppReady = useCallback<(app: IPlayerApp) => void>(
     (app) => {
@@ -38,10 +47,18 @@ const index: React.FC = () => {
     console.dir(songMap);
   }, []);
 
-  const onVideoReady = useCallback<(v?: IVideo) => void>((v) => {
-    if (!v) return;
-    console.dir(v.firstWord);
-  }, []);
+  const onVideoReady = useCallback<(v?: IVideo) => void>(
+    (v) => {
+      if (!(player && v)) return;
+
+      let word = player.video.firstWord;
+      while (word) {
+        word.animate = animate;
+        word = word.next;
+      }
+    },
+    [player, animate]
+  );
 
   const onPlay = useCallback(() => setPlayState(true), [setPlayState]);
   const onPause = useCallback(() => setPlayState(false), [setPlayState]);
@@ -99,6 +116,8 @@ const index: React.FC = () => {
 
   return (
     <>
+      <div>{lyric}</div>
+
       <div className={styles.media}>
         <div ref={mediaElement}></div>
         <div className={styles.controllerContainer}>
