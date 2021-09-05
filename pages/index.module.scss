@@ -2,19 +2,4 @@
     position: fixed;
     bottom: 0;
     right: 0;
-    margin-bottom: 1rem;
-    margin-right: 1rem;
-    background-color: #fff;
-    filter: drop-shadow(0 0.25rem 0.125rem rgba(#000, 0.125));
-    border-radius: 0 0 0.5rem 0.5rem;
-}
-
-.controllerContainer {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-
-    & > div {
-        flex-shrink: 0;
-    }
 }

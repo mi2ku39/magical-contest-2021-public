@@ -1,14 +1,13 @@
 import React, {
   MouseEventHandler,
+  MutableRefObject,
   useCallback,
   useEffect,
-  useRef,
   useState,
 } from "react";
 import { IPlayerApp, ISongMap, IVideo, IWord, Player } from "textalive-app-api";
 import styles from "@/pages/index.module.scss";
-import ControllerButton from "~/components/ControllerButton";
-import VolumeControllerButton from "~/components/VolumeControllerButton";
+import MediaController from "~/components/MediaController";
 
 const index: React.FC = () => {
   const [token] = useState<string>(process.env.NEXT_PUBLIC_TEXTALIVE_APP_TOKEN);
@@ -19,7 +18,8 @@ const index: React.FC = () => {
   const [isPlaying, setPlayState] = useState(false);
   const [isInitialMute, setInitialMuteState] = useState(false);
   const [initialVolume, setInitialVolume] = useState(50);
-  const mediaElement = useRef<HTMLDivElement>();
+  const [mediaElement, setMediaElement] =
+    useState<MutableRefObject<HTMLDivElement>>(null);
 
   const [lyric, setLyric] = useState("");
   const animate = useCallback(
@@ -65,6 +65,8 @@ const index: React.FC = () => {
   const onPause = useCallback(() => setPlayState(false), [setPlayState]);
 
   useEffect(() => {
+    if (!mediaElement) return;
+
     if (!player) {
       setPlayer(
         new Player({
@@ -90,100 +92,20 @@ const index: React.FC = () => {
 
       player.volume = isMute ? 0 : v;
     }
-  }, [token, player]);
-
-  const onClickPlayerToggleButton = useCallback<
-    MouseEventHandler<HTMLDivElement>
-  >(() => {
-    if (!player) return;
-
-    if (player.isPlaying) {
-      player.requestPause();
-    } else {
-      player.requestPlay();
-    }
-  }, [player]);
-
-  const onClickPlayerStopButton = useCallback<
-    MouseEventHandler<HTMLDivElement>
-  >(() => {
-    if (!player) return;
-
-    player.requestStop();
-  }, [player]);
-
-  const onChangingVolume = useCallback(
-    (volume: number) => {
-      if (!player) return;
-      player.volume = volume;
-    },
-    [player]
-  );
-  const onChangedVolume = useCallback(
-    (volume: number) => {
-      if (!player) return;
-      player.volume = volume;
-      localStorage.setItem("volume", volume.toString());
-    },
-    [player]
-  );
-  const onMute = useCallback(
-    (volume: number) => {
-      if (!player) return;
-      localStorage.setItem("beforeMuteVolume", volume.toString());
-      localStorage.setItem("mute", "true");
-      player.volume = 0;
-    },
-    [player]
-  );
-  const onUnmute = useCallback<() => number>(() => {
-    if (!player) return;
-    const volume = parseInt(localStorage.getItem("beforeMuteVolume"));
-    localStorage.setItem("mute", "false");
-    player.volume = isNaN(volume) ? 50 : volume;
-    return isNaN(volume) ? 50 : volume;
-  }, [player]);
+  }, [token, player, mediaElement]);
 
   return (
     <>
       <div>{lyric}</div>
 
       <div className={styles.media}>
-        <div ref={mediaElement}></div>
-        <div className={styles.controllerContainer}>
-          <div>
-            <ControllerButton
-              src="/images/icons/replay.svg"
-              balloonText="最初に戻す"
-              onClick={onClickPlayerStopButton}
-            />
-          </div>
-          <div>
-            {isPlaying ? (
-              <ControllerButton
-                src="/images/icons/pause.svg"
-                balloonText="一時停止"
-                onClick={onClickPlayerToggleButton}
-              />
-            ) : (
-              <ControllerButton
-                src="/images/icons/play.svg"
-                balloonText="再生"
-                onClick={onClickPlayerToggleButton}
-              />
-            )}
-          </div>
-          <div>
-            <VolumeControllerButton
-              onChangingVolume={onChangingVolume}
-              onChangedVolume={onChangedVolume}
-              onMute={onMute}
-              onUnmute={onUnmute}
-              initialMuteState={isInitialMute}
-              initialVolume={initialVolume}
-            />
-          </div>
-        </div>
+        <MediaController
+          player={player}
+          onUpdateMediaDom={setMediaElement}
+          initialMuteState={isInitialMute}
+          initialVolume={initialVolume}
+          isPlaying={isPlaying}
+        />
       </div>
     </>
   );
