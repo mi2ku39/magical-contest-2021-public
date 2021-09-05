@@ -8,6 +8,7 @@ import {
   useRef,
   useState,
 } from "react";
+import Icon from "~/constants/Icon";
 import ControllerButton from "../ControllerButton";
 import styles from "./VolumeControllerButton.module.scss";
 
@@ -91,15 +92,15 @@ const VolumeControllerButton: React.FC<Props> = ({
 
   const volumeIcon = useMemo<string>(() => {
     if (isMute) {
-      return "/images/icons/volume_off.svg";
+      return Icon.volumeOff;
     }
 
     if (volume <= 0) {
-      return "/images/icons/volume_mute.svg";
+      return Icon.volumeMinimum;
     } else if (volume >= 1 && volume < 50) {
-      return "/images/icons/volume_down.svg";
+      return Icon.volumeDown;
     } else {
-      return "/images/icons/volume_up.svg";
+      return Icon.volumeUp;
     }
   }, [volume, isMute]);
 
