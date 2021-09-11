@@ -31,7 +31,7 @@ const SegumentScreen: React.FC<Props> = ({
       transform: `translateX(${
         guageWidth * scaler(now) > guageWidth
           ? guageWidth
-          : guageWidth * scaler(now)
+          : guageWidth * scaler(now) - 1
       }px)`,
     };
   }, [now, guageWidth]);
