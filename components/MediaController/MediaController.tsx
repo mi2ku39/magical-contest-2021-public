@@ -22,6 +22,7 @@ type Props = {
   initialVolume?: number;
   isPlaying: boolean;
   player: Player;
+  isEnablePlayButton?: boolean;
 };
 
 const MediaController: React.FC<Props> = ({
@@ -30,6 +31,7 @@ const MediaController: React.FC<Props> = ({
   initialMuteState,
   initialVolume,
   isPlaying,
+  isEnablePlayButton = true,
 }) => {
   const mediaElement = useRef<HTMLDivElement>();
 
@@ -106,12 +108,14 @@ const MediaController: React.FC<Props> = ({
               src="/images/icons/pause.svg"
               balloonText="一時停止"
               onClick={onClickPlayerToggleButton}
+              enabled={isEnablePlayButton}
             />
           ) : (
             <ControllerButton
               src="/images/icons/play.svg"
               balloonText="再生"
               onClick={onClickPlayerToggleButton}
+              enabled={isEnablePlayButton}
             />
           )}
         </div>

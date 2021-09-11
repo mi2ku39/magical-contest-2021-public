@@ -8,6 +8,7 @@ type Props = {
   onClick?: MouseEventHandler<HTMLDivElement>;
   onMouseEnter?: MouseEventHandler<HTMLDivElement>;
   onMouseLeave?: MouseEventHandler<HTMLDivElement>;
+  enabled?: boolean;
 };
 
 const ControllerButton: React.FC<Props> = ({
@@ -16,6 +17,7 @@ const ControllerButton: React.FC<Props> = ({
   onMouseLeave,
   src,
   balloonText,
+  enabled = true,
 }: Props) => {
   const [isRipplePlaying, setRipplePlayingState] = useState(false);
   const playRipple = useCallback(() => {
@@ -29,16 +31,19 @@ const ControllerButton: React.FC<Props> = ({
   }, [isRipplePlaying, setRipplePlayingState]);
   const onComponentClick = useCallback<MouseEventHandler<HTMLDivElement>>(
     (attr) => {
+      if (!enabled) return;
+
       playRipple();
       if (onClick) onClick(attr);
     },
-    [onClick]
+    [onClick, enabled]
   );
 
   return (
     <div
       className={clsx([
-        style.container,
+        enabled && style.container,
+        !enabled && style.disabled,
         isRipplePlaying && style.ripplePlaying,
       ])}
       onClick={onComponentClick}
