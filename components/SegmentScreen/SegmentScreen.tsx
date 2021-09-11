@@ -21,26 +21,29 @@ const SegumentScreen: React.FC<Props> = ({
     () => guage?.current?.clientWidth ?? 0,
     [guage, guage?.current?.clientWidth ?? 0]
   );
-  const scaler = useCallback<(time: number) => number>(
-    (time) => (time - startTime) / (endTime - startTime),
+  const scaler = useCallback<
+    (time: number, isEanbleOffset?: boolean) => number
+  >(
+    (time, isEnableOffset = false) =>
+      (time - (isEnableOffset ? startTime : 0)) / (endTime - startTime),
     [startTime, endTime]
   );
 
   const progressBarStyle = useMemo<CSSProperties>(() => {
     return {
       transform: `translateX(${
-        guageWidth * scaler(now) > guageWidth
+        guageWidth * scaler(now, true) > guageWidth
           ? guageWidth
-          : guageWidth * scaler(now) - 1
+          : guageWidth * scaler(now, true) - 1
       }px)`,
     };
   }, [now, guageWidth]);
 
-  const segumentStyle = useCallback<
+  const segmentStyle = useCallback<
     (startTime: number, duration: number) => CSSProperties
   >(
     (startTime, duration) => {
-      const translate = guageWidth * scaler(startTime);
+      const translate = guageWidth * scaler(startTime, true);
       const width = guageWidth * scaler(duration);
 
       return {
@@ -49,19 +52,6 @@ const SegumentScreen: React.FC<Props> = ({
       };
     },
     [scaler, guageWidth]
-  );
-
-  const beatStyle = useCallback<(time: number) => CSSProperties>(
-    (time) => {
-      return {
-        transform: `translateX(${
-          guageWidth * scaler(time) > guageWidth
-            ? guageWidth
-            : guageWidth * scaler(time)
-        }px)`,
-      };
-    },
-    [guageWidth]
   );
 
   return (
@@ -92,9 +82,9 @@ const SegumentScreen: React.FC<Props> = ({
             return parentSegument.segments.map((it, j) => (
               <div
                 key={`${i}-${j}`}
-                className={styles.segument}
+                className={styles.segment}
                 style={{
-                  ...segumentStyle(it.startTime, parentSegument.duration),
+                  ...segmentStyle(it.startTime, parentSegument.duration),
                   borderColor,
                 }}
               >
