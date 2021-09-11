@@ -18,11 +18,23 @@ export default class QuantizedSegment {
     this._endBar = endBar;
   }
 
+  get startBar() {
+    return this._startBar;
+  }
+
+  get endBar() {
+    return this._endBar;
+  }
+
   get current() {
     return this._current;
   }
 
   get parent() {
     return this._parent;
+  }
+
+  get duration() {
+    return this.endBar.startTime - this.startBar.startTime;
   }
 }

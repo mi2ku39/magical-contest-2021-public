@@ -68,11 +68,8 @@ export default class QuantizedSong {
   ) {
     segments.segments.forEach((segment) => {
       const [startBar, endBar] = this.searchNearBars(bars, segment);
-      startBar.segment = new QuantizedSegment(
-        segment,
-        segments,
-        startBar,
-        endBar
+      startBar.segments.push(
+        new QuantizedSegment(segment, segments, startBar, endBar)
       );
     });
   }
@@ -99,5 +96,9 @@ export default class QuantizedSong {
     }, null);
 
     return [startBar, endBar];
+  }
+
+  public find(index: number) {
+    return this._map ? this._map.get(index) : null;
   }
 }

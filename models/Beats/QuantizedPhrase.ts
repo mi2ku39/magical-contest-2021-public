@@ -29,6 +29,18 @@ export default class QuantizedPhrase {
   }
 
   get startTime() {
-    return this.phrase.startTime;
+    return this.startBar.startTime;
+  }
+
+  get endTime() {
+    return this.endBar.startTime;
+  }
+
+  get duration() {
+    return this.endBar.startTime - this.startBar.startTime;
+  }
+
+  contains(position: number): boolean {
+    return this.startTime < position && this.endTime > position;
   }
 }
