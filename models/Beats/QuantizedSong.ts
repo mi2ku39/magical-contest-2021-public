@@ -1,6 +1,7 @@
 import {
   IBeat,
   IPhrase,
+  IRepetitiveSegment,
   IRepetitiveSegments,
   TimedObject,
 } from "textalive-app-api";
@@ -41,7 +42,8 @@ export default class QuantizedSong {
       this.quantizeSegments(bars, it);
     });
 
-    this.adjust(bars);
+    this.adjustPhrases(bars);
+    this.adjustSegments(bars);
 
     this._map = new Map();
     bars.forEach((it) => this._map.set(it.firstBeat.index, it));
@@ -81,6 +83,58 @@ export default class QuantizedSong {
     });
   }
 
+  protected adjustSegments(bars: QuantizedBars[]) {
+    const s: QuantizedSegment[] = [];
+    bars.forEach(({ segments }) => {
+      if (segments)
+        segments.forEach((it) => {
+          s.push(it);
+        });
+    });
+
+    const joinedSegments: QuantizedSegment[] = [];
+    s.forEach((i) => {
+      s.forEach((j) => {
+        // 同じセグメント同士の比較あるいは処理済みセグメントならば何も行わない
+        if (i === j || joinedSegments.includes(i) || joinedSegments.includes(j))
+          return;
+
+        // セグメントの区間が重なっていたら結合する
+        if (
+          i.startBar.index <= j.startBar.index &&
+          j.startBar.index <= i.endBar.index
+        ) {
+          i.endBar = j.endBar;
+          joinedSegments.push(j);
+        }
+      });
+    });
+
+    // 結合したセグメントを削除
+    joinedSegments.forEach((it) => {
+      it.startBar.segments = it.startBar.segments.filter(
+        (segment) => segment !== it
+      );
+    });
+
+    // セグメントとセグメントの間に1小節だけ隙間があったら前のセグメントを伸ばして埋める
+    const adjusted: QuantizedSegment[] = [];
+    bars.forEach(({ segments }) => {
+      if (segments)
+        segments.forEach((it) => {
+          adjusted.push(it);
+        });
+    });
+    adjusted.forEach((segment, i) => {
+      const next = adjusted[i + 1];
+      if (!next) return;
+
+      if (next.startBar.index - segment.endBar.index === 1) {
+        segment.endBar = next.startBar;
+      }
+    });
+  }
+
   protected searchNearBars(bars: QuantizedBars[], obj: TimedObject) {
     const startBar = bars.reduce((min, current) => {
       if (min) {
@@ -105,22 +159,17 @@ export default class QuantizedSong {
     return [startBar, endBar];
   }
 
-  protected adjust(bars: QuantizedBars[]) {
+  protected adjustPhrases(bars: QuantizedBars[]) {
     const ps = this.plucPhrases(bars);
 
     ps.forEach((phrase, i) => {
       const next = ps[i + 1];
-
-      if (next?.phrase && phrase) {
-        console.log(`${next.startBar.index} ${phrase.endBar.index}`);
-      }
 
       if (
         next?.phrase &&
         phrase &&
         next.startBar.index - phrase.endBar.index === 1
       ) {
-        console.log("のびる");
         phrase.endBar = next.startBar;
       }
     });

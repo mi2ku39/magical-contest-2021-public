@@ -4,8 +4,8 @@ import QuantizedBars from "./QuantizedBars";
 export default class QuantizedSegment {
   protected _current: IRepetitiveSegment;
   protected _parent: IRepetitiveSegments;
-  protected _startBar: QuantizedBars;
-  protected _endBar: QuantizedBars;
+  public startBar: QuantizedBars;
+  public endBar: QuantizedBars;
   constructor(
     currentSegment: IRepetitiveSegment,
     parentSegment: IRepetitiveSegments,
@@ -14,16 +14,8 @@ export default class QuantizedSegment {
   ) {
     this._current = currentSegment;
     this._parent = parentSegment;
-    this._startBar = startBar;
-    this._endBar = endBar;
-  }
-
-  get startBar() {
-    return this._startBar;
-  }
-
-  get endBar() {
-    return this._endBar;
+    this.startBar = startBar;
+    this.endBar = endBar;
   }
 
   get current() {

@@ -102,7 +102,7 @@ const QuantizedSongScreen: React.FC<Props> = ({
                 />
               )
           )}
-          {/* {quantizedSong.bars.map(
+          {quantizedSong.bars.map(
             ({ startTime, segments }) =>
               segments &&
               segments.map((segment, i) => (
@@ -115,7 +115,7 @@ const QuantizedSongScreen: React.FC<Props> = ({
                   }}
                 />
               ))
-          )} */}
+          )}
         </>
       ),
     [quantizedSong, beatStyle, segmentStyle]

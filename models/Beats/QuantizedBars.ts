@@ -7,7 +7,7 @@ export default class QuantizedBars {
   protected _firstBeat: IBeat;
   protected _bars: IBeat[];
   public phrase?: QuantizedPhrase;
-  protected _segments: QuantizedSegment[];
+  public segments: QuantizedSegment[];
 
   constructor(
     index: number,
@@ -20,7 +20,7 @@ export default class QuantizedBars {
     this._firstBeat = firstBeat;
     this._bars = bars;
     this.phrase = phrase;
-    this._segments = segments ?? [];
+    this.segments = segments ?? [];
   }
 
   get index(): number {
@@ -37,10 +37,6 @@ export default class QuantizedBars {
 
   get length(): number {
     return this._bars.reduce((total, it) => total + it.length, 0);
-  }
-
-  get segments() {
-    return this._segments;
   }
 
   toString() {
