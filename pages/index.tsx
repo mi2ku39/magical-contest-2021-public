@@ -87,6 +87,8 @@ const index: React.FC = () => {
 
   const onTimeUpdate = useCallback<(position: number) => void>(
     (position) => {
+      console.log(`${position}ms`);
+
       const beat = player.findBeat(position);
       setBeat(beat);
       setChord(player.findChord(position));
@@ -110,6 +112,26 @@ const index: React.FC = () => {
     setTime(null);
   }, []);
 
+  const listeners = useMemo(() => {
+    return {
+      onAppReady,
+      onVideoReady,
+      onPlay,
+      onPause,
+      onStop,
+      onTimeUpdate,
+      onTimerReady,
+    };
+  }, [
+    onAppReady,
+    onVideoReady,
+    onPlay,
+    onPause,
+    onStop,
+    onTimeUpdate,
+    onTimerReady,
+  ]);
+
   useEffect(() => {
     if (!mediaElement) return;
 
@@ -123,24 +145,19 @@ const index: React.FC = () => {
         })
       );
     } else {
-      player.addListener({
-        onAppReady,
-        onVideoReady,
-        onPlay,
-        onPause,
-        onStop,
-        onTimeUpdate,
-        onTimerReady,
-      });
-
       const v = parseInt(localStorage.getItem("volume"));
       const isMute = localStorage.getItem("mute") === "true";
       setInitialVolume(isNaN(v) ? 50 : v);
       setInitialMuteState(isMute);
-
       player.volume = isMute ? 0 : v;
+
+      player.addListener(listeners);
     }
-  }, [token, player, mediaElement, onTimeUpdate]);
+
+    return () => {
+      player?.removeListener(listeners);
+    };
+  }, [token, player, mediaElement, listeners]);
 
   return (
     <div>
@@ -149,13 +166,13 @@ const index: React.FC = () => {
       <div>bars : {displayBars}</div>
       <div>chord: {chord ? chord.name : "-"}</div>
       <div>{phrase ? phrase.phrase.text : "-"}</div>
-      <SegumentScreen
+      {/* <SegumentScreen
         startTime={startTime}
         endTime={endTime}
         now={now}
         seguments={seguments}
         hiddenDetailTable
-      />
+      /> */}
 
       <QuantizedSongScreen
         startTime={startTime}
