@@ -39,7 +39,17 @@ const QuantizedSongScreen: React.FC<Props> = ({
           : guageWidth * scaler(now, true) - 1
       }px)`,
     };
-  }, [now, guageWidth]);
+  }, [now, scaler, guageWidth]);
+
+  const displayProgressNum = useMemo<string>(
+    () =>
+      `${
+        Math.round(scaler(now) * 100) > 100
+          ? 100
+          : Math.round(scaler(now) * 100)
+      }%`,
+    [scaler, now]
+  );
 
   const segmentStyle = useCallback<
     (startTime: number, duration: number) => CSSProperties
@@ -52,7 +62,7 @@ const QuantizedSongScreen: React.FC<Props> = ({
         width: `${width}px`,
       };
     },
-    [scaler, guageWidth, quantizedSong]
+    [scaler, guageWidth]
   );
 
   const beatStyle = useCallback<(time: number) => CSSProperties>(
@@ -65,17 +75,82 @@ const QuantizedSongScreen: React.FC<Props> = ({
         }px)`,
       };
     },
-    [scaler, guageWidth, quantizedSong]
+    [scaler, guageWidth]
   );
 
-  const displayProgressNum = useMemo<string>(
+  const screenDom = useMemo(
     () =>
-      `${
-        Math.round(scaler(now) * 100) > 100
-          ? 100
-          : Math.round(scaler(now) * 100)
-      }%`,
-    [scaler, now]
+      quantizedSong && (
+        <>
+          {quantizedSong.bars.map(({ index, startTime }) => (
+            <div
+              key={index}
+              className={styles.beatBar}
+              style={beatStyle(startTime)}
+            />
+          ))}
+          {quantizedSong.bars.map(
+            ({ index, phrase }) =>
+              phrase && (
+                <div
+                  key={index}
+                  className={styles.segment}
+                  style={{
+                    ...segmentStyle(phrase.startBar.startTime, phrase.duration),
+                    borderColor: "rgba(132,255,255,0.7)",
+                  }}
+                />
+              )
+          )}
+          {/* {quantizedSong.bars.map(
+            ({ startTime, segments }) =>
+              segments &&
+              segments.map((segment, i) => (
+                <div
+                  key={i}
+                  className={styles.segment}
+                  style={{
+                    ...segmentStyle(startTime, segment.duration),
+                    borderColor: "rgba(255,0,255,0.7)",
+                  }}
+                />
+              ))
+          )} */}
+        </>
+      ),
+    [quantizedSong, beatStyle, segmentStyle]
+  );
+
+  const detailsTableDom = useMemo(
+    () =>
+      quantizedSong &&
+      quantizedSong.bars.map((it) => (
+        <tr key={it.index}>
+          <td>{it.toString()}</td>
+          <td>{it.startTime} ms</td>
+          {it.phrase ? (
+            <td>
+              {`${it.phrase.phrase.text}`}
+              <br />(
+              {`${it.phrase.startBar.toString()} ~ ${it.phrase.endBar.toString()}`}
+              )
+            </td>
+          ) : (
+            <td>
+              -<br />
+              ()
+            </td>
+          )}
+          {it.segments?.map((segment) => (
+            <td>
+              {segment.startBar.toString()} ~ {segment.endBar.toString()}
+              <br />({Math.round(segment.current.startTime)}ms ~{" "}
+              {Math.round(segment.current.endTime)}ms)
+            </td>
+          ))}
+        </tr>
+      )),
+    [quantizedSong]
   );
 
   return (
@@ -84,81 +159,12 @@ const QuantizedSongScreen: React.FC<Props> = ({
         <div className={styles.nowBar} style={progressBarStyle}>
           {displayBars ? displayBars : displayProgressNum}
         </div>
-        {quantizedSong && (
-          <>
-            {quantizedSong.bars.map((bars, i) => (
-              <>
-                <div
-                  className={styles.beatBar}
-                  style={beatStyle(bars.startTime)}
-                />
-                {bars.phrase && (
-                  <div
-                    className={styles.segment}
-                    style={{
-                      ...segmentStyle(
-                        bars.phrase.startBar.startTime,
-                        bars.phrase.duration
-                      ),
-                      borderColor: "rgba(255,255,0,0.5)",
-                    }}
-                  />
-                )}
-                {bars.segments &&
-                  bars.segments.map((segment) => (
-                    <div
-                      className={styles.segment}
-                      style={{
-                        ...segmentStyle(bars.startTime, segment.duration),
-                        borderColor: "rgba(255,0,255,0.5)",
-                      }}
-                    />
-                  ))}
-              </>
-            ))}
-          </>
-        )}
+        {screenDom}
       </div>
-      {quantizedSong && !hiddenDetailTable && (
-        <div>
-          <table>
-            <tbody>
-              {quantizedSong.bars.map((it) => (
-                <tr>
-                  <td>{it.toString()}</td>
-                  <td>{it.startTime} ms</td>
-                  <td>
-                    {it.phrase ? (
-                      <>
-                        {`${it.phrase.phrase.text}`}
-                        <br />(
-                        {`${Math.round(
-                          it.phrase.phrase.startTime
-                        )}ms ~ ${Math.round(it.phrase.phrase.endTime)}ms`}
-                        )
-                      </>
-                    ) : (
-                      <>
-                        -<br />
-                        ()
-                      </>
-                    )}
-                  </td>
-                  {it.segments?.map((segment) => (
-                    <>
-                      <td>
-                        {segment.startBar.toString()} ~{" "}
-                        {segment.endBar.toString()}
-                        <br />({Math.round(segment.current.startTime)}ms ~{" "}
-                        {Math.round(segment.current.endTime)}ms)
-                      </td>
-                    </>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+      {!hiddenDetailTable && (
+        <table>
+          <tbody>{detailsTableDom}</tbody>
+        </table>
       )}
     </>
   );

@@ -3,17 +3,20 @@ import QuantizedPhrase from "./QuantizedPhrase";
 import QuantizedSegment from "./QuantizedSegment";
 
 export default class QuantizedBars {
+  protected _index: number;
   protected _firstBeat: IBeat;
   protected _bars: IBeat[];
   public phrase?: QuantizedPhrase;
   protected _segments: QuantizedSegment[];
 
   constructor(
+    index: number,
     firstBeat: IBeat,
     bars: IBeat[],
     phrase?: QuantizedPhrase,
     segments?: QuantizedSegment[]
   ) {
+    this._index = index;
     this._firstBeat = firstBeat;
     this._bars = bars;
     this.phrase = phrase;
@@ -21,7 +24,7 @@ export default class QuantizedBars {
   }
 
   get index(): number {
-    return this._firstBeat.index;
+    return this._index;
   }
 
   get firstBeat(): IBeat {
@@ -41,8 +44,6 @@ export default class QuantizedBars {
   }
 
   toString() {
-    return `${Math.floor(this.firstBeat.index / this.firstBeat.length)}.${
-      this.firstBeat.position
-    } Bars`;
+    return `${this.index}.${this.firstBeat.position} Bars`;
   }
 }

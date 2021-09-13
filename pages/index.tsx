@@ -43,7 +43,7 @@ const index: React.FC = () => {
   const displayBars = useMemo<string>(
     () =>
       beat
-        ? `${Math.floor(beat.index / beat.length)}.${beat.position} Bars`
+        ? `${Math.floor(beat.index / beat.length) + 1}.${beat.position} Bars`
         : "-",
     [beat]
   );
@@ -76,7 +76,6 @@ const index: React.FC = () => {
       );
       qs.quantize();
       setQuantizedSong(qs);
-      console.log(qs);
     },
     [player]
   );
@@ -87,8 +86,6 @@ const index: React.FC = () => {
 
   const onTimeUpdate = useCallback<(position: number) => void>(
     (position) => {
-      console.log(`${position}ms`);
-
       const beat = player.findBeat(position);
       setBeat(beat);
       setChord(player.findChord(position));

@@ -20,6 +20,10 @@ export default class QuantizedSong {
       : [];
   }
 
+  get phrases() {
+    return this.bars ? this.plucPhrases(this.bars) : [];
+  }
+
   public constructor(
     beats: IBeat[],
     phrases: IPhrase[],
@@ -37,19 +41,22 @@ export default class QuantizedSong {
       this.quantizeSegments(bars, it);
     });
 
+    this.adjust(bars);
+
     this._map = new Map();
-    bars.forEach((it) => this._map.set(it.index, it));
+    bars.forEach((it) => this._map.set(it.firstBeat.index, it));
   }
 
   protected parseBars(beats: IBeat[]): QuantizedBars[] {
     const array: QuantizedBars[] = [];
+    let barsIndex = 1;
     beats.forEach((beat) => {
       if (beat.position === 1) {
         const bars: IBeat[] = [beat];
         for (let it = beat.next; it && it.position !== 1; it = it.next) {
           bars.push(it);
         }
-        array.push(new QuantizedBars(beat, bars));
+        array.push(new QuantizedBars(barsIndex++, beat, bars));
       }
     });
     return array;
@@ -96,6 +103,31 @@ export default class QuantizedSong {
     }, null);
 
     return [startBar, endBar];
+  }
+
+  protected adjust(bars: QuantizedBars[]) {
+    const ps = this.plucPhrases(bars);
+
+    ps.forEach((phrase, i) => {
+      const next = ps[i + 1];
+
+      if (next?.phrase && phrase) {
+        console.log(`${next.startBar.index} ${phrase.endBar.index}`);
+      }
+
+      if (
+        next?.phrase &&
+        phrase &&
+        next.startBar.index - phrase.endBar.index === 1
+      ) {
+        console.log("のびる");
+        phrase.endBar = next.startBar;
+      }
+    });
+  }
+
+  protected plucPhrases(bars: QuantizedBars[]) {
+    return bars.map((it) => it.phrase).filter((it) => !!it);
   }
 
   public find(index: number) {
