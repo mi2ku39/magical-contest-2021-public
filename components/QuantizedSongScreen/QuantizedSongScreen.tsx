@@ -113,7 +113,9 @@ const QuantizedSongScreen: React.FC<Props> = ({
                     ...segmentStyle(startTime, segment.duration),
                     borderColor: "rgba(255,0,255,0.7)",
                   }}
-                />
+                >
+                  {segment.isSabi ? "サビ" : null}
+                </div>
               ))
           )}
         </>

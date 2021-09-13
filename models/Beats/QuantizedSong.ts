@@ -78,7 +78,13 @@ export default class QuantizedSong {
     segments.segments.forEach((segment) => {
       const [startBar, endBar] = this.searchNearBars(bars, segment);
       startBar.segments.push(
-        new QuantizedSegment(segment, segments, startBar, endBar)
+        new QuantizedSegment(
+          segment,
+          segments,
+          startBar,
+          endBar,
+          segments.chorus
+        )
       );
     });
   }
@@ -102,9 +108,11 @@ export default class QuantizedSong {
         // セグメントの区間が重なっていたら結合する
         if (
           i.startBar.index <= j.startBar.index &&
-          j.startBar.index <= i.endBar.index
+          j.startBar.index < i.endBar.index
         ) {
           i.endBar = j.endBar;
+          i.isSabi = i.isSabi || j.isSabi;
+
           joinedSegments.push(j);
         }
       });

@@ -6,16 +6,20 @@ export default class QuantizedSegment {
   protected _parent: IRepetitiveSegments;
   public startBar: QuantizedBars;
   public endBar: QuantizedBars;
+  public isSabi: boolean = false;
   constructor(
     currentSegment: IRepetitiveSegment,
     parentSegment: IRepetitiveSegments,
     startBar: QuantizedBars,
-    endBar: QuantizedBars
+    endBar: QuantizedBars,
+    isSabi?: boolean
   ) {
     this._current = currentSegment;
     this._parent = parentSegment;
     this.startBar = startBar;
     this.endBar = endBar;
+
+    this.isSabi = isSabi ?? false;
   }
 
   get current() {
