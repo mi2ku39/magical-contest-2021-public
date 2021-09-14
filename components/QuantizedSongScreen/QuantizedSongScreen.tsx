@@ -102,10 +102,11 @@ const QuantizedSongScreen: React.FC<Props> = ({
                 />
               )
           )}
-          {quantizedSong.bars.map(
+          {/* {quantizedSong.bars.map(
             ({ startTime, segment }) =>
               segment && (
                 <div
+                  key={segment.startBar.index}
                   className={styles.segment}
                   style={{
                     ...segmentStyle(startTime, segment.duration),
@@ -113,6 +114,23 @@ const QuantizedSongScreen: React.FC<Props> = ({
                   }}
                 >
                   {segment.isSabi ? "サビ" : null}
+                </div>
+              )
+          )} */}
+          {quantizedSong.bars.map(
+            ({ startTime, part }) =>
+              part && (
+                <div
+                  key={part.index}
+                  className={styles.segment}
+                  style={{
+                    ...segmentStyle(startTime, part.duration),
+                    borderColor: "rgba(0,0,0,1)",
+                  }}
+                >
+                  {part.hasPhrase ? "うた" : null}
+                  {part.hasPhrase && part.isSabi && <br />}
+                  {part.isSabi ? "サビ" : null}
                 </div>
               )
           )}
@@ -141,12 +159,21 @@ const QuantizedSongScreen: React.FC<Props> = ({
               ()
             </td>
           )}
-          {it.segment && (
+          {it.segment ? (
             <td>
               {it.segment.startBar.toString()} ~ {it.segment.endBar.toString()}
               <br />({Math.round(it.segment.current.startTime)}ms ~{" "}
               {Math.round(it.segment.current.endTime)}ms)
             </td>
+          ) : (
+            <td></td>
+          )}
+          {it.part ? (
+            <td>
+              {it.part.startBar.toString()} ~ {it.part.endBar.toString()}
+            </td>
+          ) : (
+            <td></td>
           )}
         </tr>
       )),

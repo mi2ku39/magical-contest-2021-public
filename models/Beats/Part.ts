@@ -19,9 +19,10 @@ export default class Part {
   protected _startBar: QuantizedBar;
   protected _endBar: QuantizedBar;
   protected _isSabi: boolean;
-  public partType: PartType;
-  public next: Part;
-  public previous: Part;
+  protected _hasPhrase: boolean;
+  public partType?: PartType;
+  public next?: Part;
+  public previous?: Part;
 
   get index() {
     return this._index;
@@ -35,16 +36,30 @@ export default class Part {
     return this._endBar;
   }
 
+  get isSabi() {
+    return this._isSabi;
+  }
+
+  get hasPhrase() {
+    return this._hasPhrase;
+  }
+
+  get duration() {
+    return this.endBar.startTime - this.startBar.startTime;
+  }
+
   constructor(
     index: number,
     startBar: QuantizedBar,
     endBar: QuantizedBar,
-    isSabi?: boolean
+    isSabi?: boolean,
+    hasPhrase?: boolean
   ) {
     this._index = index;
     this._startBar = startBar;
     this._endBar = endBar;
     this._isSabi = isSabi ?? false;
+    this._hasPhrase = hasPhrase ?? false;
   }
 
   contains(position: number) {

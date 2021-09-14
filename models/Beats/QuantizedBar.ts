@@ -1,4 +1,5 @@
 import { IBeat } from "textalive-app-api";
+import Part from "./Part";
 import QuantizedPhrase from "./QuantizedPhrase";
 import QuantizedSegment from "./QuantizedSegment";
 
@@ -8,6 +9,7 @@ export default class QuantizedBar {
   protected _beats: IBeat[];
   phrase?: QuantizedPhrase;
   segment?: QuantizedSegment;
+  part?: Part;
 
   constructor(
     index: number,
