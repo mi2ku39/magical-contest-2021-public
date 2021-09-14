@@ -41,44 +41,7 @@ export default class QuantizedSong {
     });
     Quantizer.adjustPhrases(bars);
     Quantizer.adjustSegments(bars);
-
-    const quantizingMap = new Map<number, ParsingBar>();
-    const quantizedMap = new Map<number, QuantizedBar>();
-    const quantizedBars: QuantizedBar[] = bars.map((it) => {
-      const quantized = new QuantizedBar(it.index, it.firstBeat, it.beats);
-      quantizingMap.set(it.index, it);
-      quantizedMap.set(quantized.index, quantized);
-      return quantized;
-    });
-    quantizedBars.forEach((bar) => {
-      const before = quantizingMap.get(bar.index);
-      if (!before) return;
-
-      if (before.phrase) {
-        const startBar = quantizedMap.get(before.phrase.startBar.index);
-        const endBar = quantizedMap.get(before.phrase.endBar.index);
-
-        bar.phrase = new QuantizedPhrase(
-          before.phrase.phrase,
-          startBar,
-          endBar
-        );
-      }
-
-      if (before.segments.length > 0) {
-        const segment = before.segments[0];
-        const startBar = quantizedMap.get(segment.startBar.index);
-        const endBar = quantizedMap.get(segment.endBar.index);
-
-        bar.segment = new QuantizedSegment(
-          segment.current,
-          segment.parent,
-          startBar,
-          endBar,
-          segment.isSabi
-        );
-      }
-    });
+    const quantizedBars = Quantizer.refill(bars);
 
     this._map = new Map();
     quantizedBars.forEach((it) => this._map.set(it.firstBeat.index, it));

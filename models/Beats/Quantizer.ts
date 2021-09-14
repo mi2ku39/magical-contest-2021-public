@@ -7,6 +7,9 @@ import {
 import ParsingBar from "./ParsingBar";
 import ParsingPhrase from "./ParsingPhrase";
 import ParsingSegment from "./ParsingSegment";
+import QuantizedBar from "./QuantizedBar";
+import QuantizedPhrase from "./QuantizedPhrase";
+import QuantizedSegment from "./QuantizedSegment";
 
 const searchNearBars = (
   bars: ParsingBar[],
@@ -181,6 +184,44 @@ const adjustSegments = (bars: ParsingBar[]) => {
   });
 };
 
+const refill = (bars: ParsingBar[]): QuantizedBar[] => {
+  const quantizingMap = new Map<number, ParsingBar>();
+  const quantizedMap = new Map<number, QuantizedBar>();
+  const quantizedBars: QuantizedBar[] = bars.map((it) => {
+    const quantized = new QuantizedBar(it.index, it.firstBeat, it.beats);
+    quantizingMap.set(it.index, it);
+    quantizedMap.set(quantized.index, quantized);
+    return quantized;
+  });
+  return quantizedBars.map((bar) => {
+    const before = quantizingMap.get(bar.index);
+    if (!before) return;
+
+    if (before.phrase) {
+      const startBar = quantizedMap.get(before.phrase.startBar.index);
+      const endBar = quantizedMap.get(before.phrase.endBar.index);
+
+      bar.phrase = new QuantizedPhrase(before.phrase.phrase, startBar, endBar);
+    }
+
+    if (before.segments.length > 0) {
+      const segment = before.segments[0];
+      const startBar = quantizedMap.get(segment.startBar.index);
+      const endBar = quantizedMap.get(segment.endBar.index);
+
+      bar.segment = new QuantizedSegment(
+        segment.current,
+        segment.parent,
+        startBar,
+        endBar,
+        segment.isSabi
+      );
+    }
+
+    return bar;
+  });
+};
+
 export default {
   plucPhrases,
   parseBars,
@@ -188,4 +229,5 @@ export default {
   quantizeSegments,
   adjustPhrases,
   adjustSegments,
+  refill,
 };
