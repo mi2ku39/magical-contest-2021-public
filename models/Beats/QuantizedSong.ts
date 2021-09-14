@@ -1,12 +1,13 @@
 import { IBeat, IPhrase, IRepetitiveSegments } from "textalive-app-api";
 import QuantizingBars from "./QuantizingBars";
 import Quantizer from "./Quantizer";
+import QuantizedBars from "./QuantizedBars";
 
 export default class QuantizedSong {
   protected _beats: IBeat[];
   protected _rawPhrases: IPhrase[];
   protected _rawSegments: IRepetitiveSegments[];
-  protected _map?: Map<number, QuantizingBars>;
+  protected _map?: Map<number, QuantizedBars>;
 
   get bars() {
     return this._map
@@ -15,7 +16,9 @@ export default class QuantizedSong {
   }
 
   get phrases() {
-    return this.bars ? Quantizer.plucPhrases(this.bars) : [];
+    return this.bars
+      ? this.bars.map((it) => it.phrase).filter((it) => !!it)
+      : [];
   }
 
   public constructor(
@@ -38,7 +41,7 @@ export default class QuantizedSong {
     Quantizer.adjustSegments(bars);
 
     this._map = new Map();
-    bars.forEach((it) => this._map.set(it.firstBeat.index, it));
+    bars.forEach((it) => this._map.set(it.firstBeat.index, it.quantizedBars));
   }
 
   public find(index: number) {

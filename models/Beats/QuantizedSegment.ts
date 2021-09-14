@@ -18,7 +18,6 @@ export default class QuantizedSegment {
     this._parent = parentSegment;
     this.startBar = startBar;
     this.endBar = endBar;
-
     this.isSabi = isSabi ?? false;
   }
 

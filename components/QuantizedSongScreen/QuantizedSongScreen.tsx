@@ -103,11 +103,9 @@ const QuantizedSongScreen: React.FC<Props> = ({
               )
           )}
           {quantizedSong.bars.map(
-            ({ startTime, segments }) =>
-              segments &&
-              segments.map((segment, i) => (
+            ({ startTime, segment }) =>
+              segment && (
                 <div
-                  key={i}
                   className={styles.segment}
                   style={{
                     ...segmentStyle(startTime, segment.duration),
@@ -116,7 +114,7 @@ const QuantizedSongScreen: React.FC<Props> = ({
                 >
                   {segment.isSabi ? "サビ" : null}
                 </div>
-              ))
+              )
           )}
         </>
       ),
@@ -143,13 +141,13 @@ const QuantizedSongScreen: React.FC<Props> = ({
               ()
             </td>
           )}
-          {it.segments?.map((segment) => (
+          {it.segment && (
             <td>
-              {segment.startBar.toString()} ~ {segment.endBar.toString()}
-              <br />({Math.round(segment.current.startTime)}ms ~{" "}
-              {Math.round(segment.current.endTime)}ms)
+              {it.segment.startBar.toString()} ~ {it.segment.endBar.toString()}
+              <br />({Math.round(it.segment.current.startTime)}ms ~{" "}
+              {Math.round(it.segment.current.endTime)}ms)
             </td>
-          ))}
+          )}
         </tr>
       )),
     [quantizedSong]
