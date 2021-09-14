@@ -1,4 +1,4 @@
-import Part from "./Part";
+import Part, { PartTypes } from "./Part";
 import QuantizedBar from "./QuantizedBar";
 import QuantizedPhrase from "./QuantizedPhrase";
 import QuantizedSegment from "./QuantizedSegment";
@@ -28,6 +28,93 @@ const containsPhrase = (index: number, phrases: QuantizedPhrase[]) =>
     .map((it) => it.startBar.index < index && index < it.endBar.index)
     .includes(true);
 
+const getRandomInt = (max) => Math.floor(Math.random() * max);
+
+const assignPartType = (parts: Part[]) => {
+  let sabiCount: number = 0;
+  parts.forEach((it) => {
+    if (!it.previous) {
+      it.partType = PartTypes.A;
+      return;
+    }
+
+    if (!it.next) {
+      it.partType = PartTypes.J;
+      return;
+    }
+
+    if (it.previous?.partType === PartTypes.A && it.hasPhrase) {
+      it.partType = PartTypes.B;
+      return;
+    }
+
+    if (it.next.isSabi && sabiCount === 0) {
+      it.partType = PartTypes.C;
+      return;
+    }
+
+    if (it.isSabi && sabiCount === 0) {
+      it.partType = PartTypes.D;
+      sabiCount++;
+      return;
+    }
+
+    if (it.previous?.isSabi && !it.hasPhrase && sabiCount === 1) {
+      it.partType = PartTypes.D;
+      return;
+    }
+
+    if (
+      it.next.isSabi &&
+      it.next?.next.isSabi &&
+      it.next?.next?.next.isSabi &&
+      it.hasPhrase
+    ) {
+      it.partType = PartTypes.G;
+      return;
+    }
+
+    if (it.next?.isSabi && it.next?.next?.isSabi && it.hasPhrase) {
+      it.partType = PartTypes.H;
+      return;
+    }
+
+    if (sabiCount >= 1 && it.hasPhrase && it.isSabi) {
+      sabiCount++;
+      it.partType = PartTypes.I;
+      return;
+    }
+
+    if (sabiCount >= 2 && it.previous?.isSabi && !it.hasPhrase) {
+      it.partType = PartTypes.I;
+      return;
+    }
+
+    if (!it.next?.hasPhrase && !it.isSabi) {
+      it.partType = PartTypes.E;
+      return;
+    }
+
+    if (!it.hasPhrase && !it.previous?.isSabi) {
+      it.partType = PartTypes.F;
+      return;
+    }
+
+    switch (getRandomInt(3)) {
+      case 0:
+        it.partType = PartTypes.B;
+        break;
+      case 1:
+        it.partType = PartTypes.C;
+        break;
+      case 2:
+      default:
+        it.partType = PartTypes.E;
+    }
+  });
+  return parts;
+};
+
 const parseParts = (
   bars: QuantizedBar[],
   phrases: QuantizedPhrase[],
@@ -39,9 +126,7 @@ const parseParts = (
   let prevPart: Part = null;
 
   bars.forEach((bar) => {
-    if (bar.index < skips) return;
-
-    console.log(bar.index);
+    if (bar.index < skips || bars.indexOf(bar) === bars.length - 1) return;
 
     if (bar.index === 1) {
       if (bar.segment) {
@@ -155,9 +240,7 @@ const parseParts = (
       return;
     }
   });
-
-  console.dir(parts);
-
+  assignPartType(parts);
   return parts;
 };
 

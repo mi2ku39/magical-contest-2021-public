@@ -1,6 +1,6 @@
 import QuantizedBar from "./QuantizedBar";
 
-const partTypes = {
+export const PartTypes = {
   A: "A",
   B: "B",
   C: "C",
@@ -12,7 +12,7 @@ const partTypes = {
   I: "I",
   J: "J",
 };
-export type PartType = typeof partTypes[keyof typeof partTypes];
+export type PartType = typeof PartTypes[keyof typeof PartTypes];
 
 export default class Part {
   protected _index: number;

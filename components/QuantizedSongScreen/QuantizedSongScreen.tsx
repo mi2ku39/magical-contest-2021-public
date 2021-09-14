@@ -128,9 +128,7 @@ const QuantizedSongScreen: React.FC<Props> = ({
                     borderColor: "rgba(0,0,0,1)",
                   }}
                 >
-                  {part.hasPhrase ? "うた" : null}
-                  {part.hasPhrase && part.isSabi && <br />}
-                  {part.isSabi ? "サビ" : null}
+                  {part.partType}
                 </div>
               )
           )}
