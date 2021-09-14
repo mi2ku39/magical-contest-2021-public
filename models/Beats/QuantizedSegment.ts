@@ -1,17 +1,17 @@
 import { IRepetitiveSegment, IRepetitiveSegments } from "textalive-app-api";
-import QuantizedBars from "./QuantizedBars";
+import QuantizingBars from "./QuantizingBars";
 
 export default class QuantizedSegment {
   protected _current: IRepetitiveSegment;
   protected _parent: IRepetitiveSegments;
-  public startBar: QuantizedBars;
-  public endBar: QuantizedBars;
+  public startBar: QuantizingBars;
+  public endBar: QuantizingBars;
   public isSabi: boolean = false;
   constructor(
     currentSegment: IRepetitiveSegment,
     parentSegment: IRepetitiveSegments,
-    startBar: QuantizedBars,
-    endBar: QuantizedBars,
+    startBar: QuantizingBars,
+    endBar: QuantizingBars,
     isSabi?: boolean
   ) {
     this._current = currentSegment;

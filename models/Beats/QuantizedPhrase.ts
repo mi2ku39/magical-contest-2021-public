@@ -1,15 +1,15 @@
 import { IPhrase } from "textalive-app-api";
-import QuantizedBars from "./QuantizedBars";
+import QuantizingBars from "./QuantizingBars";
 
 export default class QuantizedPhrase {
-  public startBar: QuantizedBars;
-  public endBar: QuantizedBars;
+  public startBar: QuantizingBars;
+  public endBar: QuantizingBars;
   protected _phrase: IPhrase;
 
   constructor(
     phrase: IPhrase,
-    startBars: QuantizedBars,
-    endBar: QuantizedBars
+    startBars: QuantizingBars,
+    endBar: QuantizingBars
   ) {
     this.startBar = startBars;
     this.endBar = endBar;

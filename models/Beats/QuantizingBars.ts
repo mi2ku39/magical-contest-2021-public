@@ -2,7 +2,7 @@ import { IBeat } from "textalive-app-api";
 import QuantizedPhrase from "./QuantizedPhrase";
 import QuantizedSegment from "./QuantizedSegment";
 
-export default class QuantizedBars {
+export default class QuantizingBars {
   protected _index: number;
   protected _firstBeat: IBeat;
   protected _bars: IBeat[];
