@@ -90,13 +90,14 @@ export default class QuantizedSong {
   }
 
   protected adjustSegments(bars: QuantizedBars[]) {
-    const s: QuantizedSegment[] = [];
+    let s: QuantizedSegment[] = [];
     bars.forEach(({ segments }) => {
       if (segments)
         segments.forEach((it) => {
           s.push(it);
         });
     });
+    s = s.sort((a, b) => a.startBar.index - b.startBar.index);
 
     const joinedSegments: QuantizedSegment[] = [];
     s.forEach((i) => {
@@ -110,9 +111,10 @@ export default class QuantizedSong {
           i.startBar.index <= j.startBar.index &&
           j.startBar.index < i.endBar.index
         ) {
-          i.endBar = j.endBar;
+          if (i.endBar.index < j.endBar.index) {
+            i.endBar = j.endBar;
+          }
           i.isSabi = i.isSabi || j.isSabi;
-
           joinedSegments.push(j);
         }
       });

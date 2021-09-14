@@ -164,13 +164,13 @@ const index: React.FC = () => {
       <div>bars : {displayBars}</div>
       <div>chord: {chord ? chord.name : "-"}</div>
       <div>{phrase ? phrase.phrase.text : "-"}</div>
-      {/* <SegumentScreen
+      <SegumentScreen
         startTime={startTime}
         endTime={endTime}
         now={now}
         seguments={seguments}
         hiddenDetailTable
-      /> */}
+      />
 
       <QuantizedSongScreen
         startTime={startTime}
