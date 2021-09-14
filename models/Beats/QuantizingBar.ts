@@ -1,9 +1,10 @@
 import { IBeat } from "textalive-app-api";
+import IBar from "./IBar";
 import QuantizedBar from "./QuantizedBar";
 import QuantizedPhrase from "./QuantizedPhrase";
 import QuantizedSegment from "./QuantizedSegment";
 
-export default class QuantizingBar {
+export default class QuantizingBar implements IBar {
   protected _index: number;
   protected _firstBeat: IBeat;
   protected _bars: IBeat[];
@@ -43,6 +44,10 @@ export default class QuantizingBar {
 
   get length(): number {
     return this._bars.reduce((total, it) => total + it.length, 0);
+  }
+
+  get segment() {
+    return null;
   }
 
   get quantizedBars(): QuantizedBar {
