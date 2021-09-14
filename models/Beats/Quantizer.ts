@@ -4,14 +4,14 @@ import {
   IRepetitiveSegments,
   TimedObject,
 } from "textalive-app-api";
-import QuantizingBar from "./QuantizingBar";
-import QuantizedPhrase from "./QuantizedPhrase";
-import QuantizedSegment from "./QuantizedSegment";
+import ParsingBar from "./ParsingBar";
+import ParsingPhrase from "./ParsingPhrase";
+import ParsingSegment from "./ParsingSegment";
 
 const searchNearBars = (
-  bars: QuantizingBar[],
+  bars: ParsingBar[],
   obj: TimedObject
-): [QuantizingBar, QuantizingBar] => {
+): [ParsingBar, ParsingBar] => {
   const startBar = bars.reduce((min, current) => {
     if (min) {
       const diffMin = Math.abs(min.startTime - obj.startTime);
@@ -35,12 +35,12 @@ const searchNearBars = (
   return [startBar, endBar];
 };
 
-const plucPhrases = (bars: QuantizingBar[]): QuantizedPhrase[] => {
+const plucPhrases = (bars: ParsingBar[]): ParsingPhrase[] => {
   return bars.map((it) => it.phrase).filter((it) => !!it);
 };
 
-const parseBars = (beats: IBeat[]): QuantizingBar[] => {
-  const array: QuantizingBar[] = [];
+const parseBars = (beats: IBeat[]): ParsingBar[] => {
+  const array: ParsingBar[] = [];
   let barsIndex = 1;
   beats.forEach((beat) => {
     if (beat.position === 1) {
@@ -48,30 +48,30 @@ const parseBars = (beats: IBeat[]): QuantizingBar[] => {
       for (let it = beat.next; it && it.position !== 1; it = it.next) {
         bars.push(it);
       }
-      array.push(new QuantizingBar(barsIndex++, beat, bars));
+      array.push(new ParsingBar(barsIndex++, beat, bars));
     }
   });
   return array;
 };
 
-const quantizePhrases = (bars: QuantizingBar[], phrases: IPhrase[]): void =>
+const quantizePhrases = (bars: ParsingBar[], phrases: IPhrase[]): void =>
   phrases.forEach((phrase) => {
     const [startBar, endBar] = searchNearBars(bars, phrase);
-    startBar.phrase = new QuantizedPhrase(phrase, startBar, endBar);
+    startBar.phrase = new ParsingPhrase(phrase, startBar, endBar);
   });
 
 const quantizeSegments = (
-  bars: QuantizingBar[],
+  bars: ParsingBar[],
   segments: IRepetitiveSegments
 ): void =>
   segments.segments.forEach((segment) => {
     const [startBar, endBar] = searchNearBars(bars, segment);
     startBar.segments.push(
-      new QuantizedSegment(segment, segments, startBar, endBar, segments.chorus)
+      new ParsingSegment(segment, segments, startBar, endBar, segments.chorus)
     );
   });
 
-const adjustPhrases = (bars: QuantizingBar[]) => {
+const adjustPhrases = (bars: ParsingBar[]) => {
   const ps = plucPhrases(bars);
 
   ps.forEach((phrase, i) => {
@@ -87,8 +87,8 @@ const adjustPhrases = (bars: QuantizingBar[]) => {
   });
 };
 
-const adjustSegments = (bars: QuantizingBar[]) => {
-  let s: QuantizedSegment[] = [];
+const adjustSegments = (bars: ParsingBar[]) => {
+  let s: ParsingSegment[] = [];
   bars.forEach(({ segments }) => {
     if (segments)
       segments.forEach((it) => {
@@ -97,7 +97,7 @@ const adjustSegments = (bars: QuantizingBar[]) => {
   });
   s = s.sort((a, b) => a.startBar.index - b.startBar.index);
 
-  const removingSegment: QuantizedSegment[] = [];
+  const removingSegment: ParsingSegment[] = [];
   s.forEach((i) => {
     s.forEach((j) => {
       // 同じセグメント同士の比較あるいは処理済みセグメントならば何も行わない
@@ -164,7 +164,7 @@ const adjustSegments = (bars: QuantizingBar[]) => {
   });
 
   // セグメントとセグメントの間に1小節だけ隙間があったら前のセグメントを伸ばして埋める
-  const adjusted: QuantizedSegment[] = [];
+  const adjusted: ParsingSegment[] = [];
   bars.forEach(({ segments }) => {
     if (segments)
       segments.forEach((it) => {

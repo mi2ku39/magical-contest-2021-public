@@ -1,26 +1,26 @@
 import { IBeat } from "textalive-app-api";
-import QuantizedPhrase from "./QuantizedPhrase";
-import QuantizedSegment from "./QuantizedSegment";
+import ParsingPhrase from "./ParsingPhrase";
+import ParsingSegment from "./ParsingSegment";
 
-export default class QuantizedBar {
+export default class ParsingBar {
   protected _index: number;
   protected _firstBeat: IBeat;
   protected _beats: IBeat[];
-  phrase?: QuantizedPhrase;
-  segment?: QuantizedSegment;
+  public phrase?: ParsingPhrase;
+  public segments: ParsingSegment[];
 
   constructor(
     index: number,
     firstBeat: IBeat,
-    beats: IBeat[],
-    phrase?: QuantizedPhrase,
-    segment?: QuantizedSegment
+    bars: IBeat[],
+    phrase?: ParsingPhrase,
+    segments?: ParsingSegment[]
   ) {
     this._index = index;
     this._firstBeat = firstBeat;
-    this._beats = beats;
+    this._beats = bars;
     this.phrase = phrase;
-    this.segment = segment;
+    this.segments = segments ?? [];
   }
 
   get index(): number {
@@ -35,12 +35,12 @@ export default class QuantizedBar {
     return this._firstBeat.startTime;
   }
 
-  get length(): number {
-    return this._beats.reduce((total, it) => total + it.length, 0);
+  get beats(): IBeat[] {
+    return this._beats;
   }
 
-  get beats() {
-    return this._beats;
+  get length(): number {
+    return this._beats.reduce((total, it) => total + it.length, 0);
   }
 
   toString() {
