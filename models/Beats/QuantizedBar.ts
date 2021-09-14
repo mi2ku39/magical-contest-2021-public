@@ -1,28 +1,26 @@
 import { IBeat } from "textalive-app-api";
-import QuantizedBars from "./QuantizedBars";
 import QuantizedPhrase from "./QuantizedPhrase";
 import QuantizedSegment from "./QuantizedSegment";
 
-export default class QuantizingBars {
+export default class QuantizedBar {
   protected _index: number;
   protected _firstBeat: IBeat;
   protected _bars: IBeat[];
-  protected _quantized: QuantizedBars;
-  public phrase?: QuantizedPhrase;
-  public segments: QuantizedSegment[];
+  protected _phrase?: QuantizedPhrase;
+  protected _segment: QuantizedSegment;
 
   constructor(
     index: number,
     firstBeat: IBeat,
     bars: IBeat[],
     phrase?: QuantizedPhrase,
-    segments?: QuantizedSegment[]
+    segment?: QuantizedSegment
   ) {
     this._index = index;
     this._firstBeat = firstBeat;
     this._bars = bars;
-    this.phrase = phrase;
-    this.segments = segments ?? [];
+    this._phrase = phrase;
+    this._segment = segment;
   }
 
   get index(): number {
@@ -37,26 +35,16 @@ export default class QuantizingBars {
     return this._firstBeat.startTime;
   }
 
-  get bars(): IBeat[] {
-    return this._bars;
-  }
-
   get length(): number {
     return this._bars.reduce((total, it) => total + it.length, 0);
   }
 
-  get quantizedBars(): QuantizedBars {
-    if (!this._quantized) {
-      const s: QuantizedSegment = this.segments ? this.segments[0] : null;
-      this._quantized = new QuantizedBars(
-        this.index,
-        this.firstBeat,
-        this.bars,
-        this.phrase,
-        s
-      );
-    }
-    return this._quantized;
+  get phrase() {
+    return this._phrase;
+  }
+
+  get segment() {
+    return this._segment;
   }
 
   toString() {

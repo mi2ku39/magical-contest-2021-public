@@ -4,14 +4,14 @@ import {
   IRepetitiveSegments,
   TimedObject,
 } from "textalive-app-api";
-import QuantizingBars from "./QuantizingBars";
+import QuantizingBar from "./QuantizingBar";
 import QuantizedPhrase from "./QuantizedPhrase";
 import QuantizedSegment from "./QuantizedSegment";
 
 const searchNearBars = (
-  bars: QuantizingBars[],
+  bars: QuantizingBar[],
   obj: TimedObject
-): [QuantizingBars, QuantizingBars] => {
+): [QuantizingBar, QuantizingBar] => {
   const startBar = bars.reduce((min, current) => {
     if (min) {
       const diffMin = Math.abs(min.startTime - obj.startTime);
@@ -35,12 +35,12 @@ const searchNearBars = (
   return [startBar, endBar];
 };
 
-const plucPhrases = (bars: QuantizingBars[]): QuantizedPhrase[] => {
+const plucPhrases = (bars: QuantizingBar[]): QuantizedPhrase[] => {
   return bars.map((it) => it.phrase).filter((it) => !!it);
 };
 
-const parseBars = (beats: IBeat[]): QuantizingBars[] => {
-  const array: QuantizingBars[] = [];
+const parseBars = (beats: IBeat[]): QuantizingBar[] => {
+  const array: QuantizingBar[] = [];
   let barsIndex = 1;
   beats.forEach((beat) => {
     if (beat.position === 1) {
@@ -48,20 +48,20 @@ const parseBars = (beats: IBeat[]): QuantizingBars[] => {
       for (let it = beat.next; it && it.position !== 1; it = it.next) {
         bars.push(it);
       }
-      array.push(new QuantizingBars(barsIndex++, beat, bars));
+      array.push(new QuantizingBar(barsIndex++, beat, bars));
     }
   });
   return array;
 };
 
-const quantizePhrases = (bars: QuantizingBars[], phrases: IPhrase[]): void =>
+const quantizePhrases = (bars: QuantizingBar[], phrases: IPhrase[]): void =>
   phrases.forEach((phrase) => {
     const [startBar, endBar] = searchNearBars(bars, phrase);
     startBar.phrase = new QuantizedPhrase(phrase, startBar, endBar);
   });
 
 const quantizeSegments = (
-  bars: QuantizingBars[],
+  bars: QuantizingBar[],
   segments: IRepetitiveSegments
 ): void =>
   segments.segments.forEach((segment) => {
@@ -71,7 +71,7 @@ const quantizeSegments = (
     );
   });
 
-const adjustPhrases = (bars: QuantizingBars[]) => {
+const adjustPhrases = (bars: QuantizingBar[]) => {
   const ps = plucPhrases(bars);
 
   ps.forEach((phrase, i) => {
@@ -87,7 +87,7 @@ const adjustPhrases = (bars: QuantizingBars[]) => {
   });
 };
 
-const adjustSegments = (bars: QuantizingBars[]) => {
+const adjustSegments = (bars: QuantizingBar[]) => {
   let s: QuantizedSegment[] = [];
   bars.forEach(({ segments }) => {
     if (segments)
