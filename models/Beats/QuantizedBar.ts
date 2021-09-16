@@ -7,6 +7,8 @@ export default class QuantizedBar {
   protected _index: number;
   protected _firstBeat: IBeat;
   protected _beats: IBeat[];
+  previous?: QuantizedBar;
+  next?: QuantizedBar;
   phrase?: QuantizedPhrase;
   segment?: QuantizedSegment;
   part?: Part;

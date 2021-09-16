@@ -4,9 +4,9 @@ import QuantizedBar from "./QuantizedBar";
 export default class QuantizedSegment {
   protected _current: IRepetitiveSegment;
   protected _parent: IRepetitiveSegments;
-  public startBar: QuantizedBar;
-  public endBar: QuantizedBar;
-  public isSabi: boolean = false;
+  protected _startBar: QuantizedBar;
+  protected _endBar: QuantizedBar;
+  protected _isSabi: boolean = false;
   constructor(
     currentSegment: IRepetitiveSegment,
     parentSegment: IRepetitiveSegments,
@@ -16,9 +16,21 @@ export default class QuantizedSegment {
   ) {
     this._current = currentSegment;
     this._parent = parentSegment;
-    this.startBar = startBar;
-    this.endBar = endBar;
-    this.isSabi = isSabi ?? false;
+    this._startBar = startBar;
+    this._endBar = endBar;
+    this._isSabi = isSabi ?? false;
+  }
+
+  get startBar(): QuantizedBar {
+    return this._startBar;
+  }
+
+  get endBar(): QuantizedBar {
+    return this._endBar;
+  }
+
+  get isSabi(): boolean {
+    return this._isSabi;
   }
 
   get current() {

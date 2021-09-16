@@ -187,12 +187,20 @@ const adjustSegments = (bars: ParsingBar[]) => {
 const refill = (bars: ParsingBar[]): QuantizedBar[] => {
   const quantizingMap = new Map<number, ParsingBar>();
   const quantizedMap = new Map<number, QuantizedBar>();
+
+  let previousBar: QuantizedBar = null;
   const quantizedBars: QuantizedBar[] = bars.map((it) => {
     const quantized = new QuantizedBar(it.index, it.firstBeat, it.beats);
+    if (previousBar) {
+      previousBar.next = quantized;
+      quantized.previous = previousBar;
+    }
+    previousBar = quantized;
     quantizingMap.set(it.index, it);
     quantizedMap.set(quantized.index, quantized);
     return quantized;
   });
+
   return quantizedBars.map((bar) => {
     const before = quantizingMap.get(bar.index);
     if (!before) return;
