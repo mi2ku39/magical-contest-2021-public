@@ -50,4 +50,11 @@ export default class QuantizedBar {
   toString() {
     return `${this.index}.${this.firstBeat.position} Bars`;
   }
+
+  contains(position: number): boolean {
+    return (
+      this.startTime < position &&
+      (!this.next || position < this.next.startTime)
+    );
+  }
 }

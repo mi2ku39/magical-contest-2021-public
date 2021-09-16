@@ -44,4 +44,11 @@ export default class QuantizedSegment {
   get duration() {
     return this.endBar.startTime - this.startBar.startTime;
   }
+
+  contains(position: number): boolean {
+    return (
+      this.startBar.startTime < position &&
+      (!this.endBar.next || position < this.endBar.next.startTime)
+    );
+  }
 }

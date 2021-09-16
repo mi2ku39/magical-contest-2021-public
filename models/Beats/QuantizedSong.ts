@@ -11,12 +11,10 @@ export default class QuantizedSong {
   protected _beats: IBeat[];
   protected _rawPhrases: IPhrase[];
   protected _rawSegments: IRepetitiveSegments[];
-  protected _map?: Map<number, QuantizedBar>;
+  protected _bars: QuantizedBar[] = [];
 
   get bars(): QuantizedBar[] {
-    return this._map
-      ? Array.from(this._map.entries()).map(([key, value]) => value)
-      : [];
+    return this._bars;
   }
 
   get phrases(): QuantizedPhrase[] {
@@ -53,14 +51,15 @@ export default class QuantizedSong {
     });
     Quantizer.adjustPhrases(bars);
     Quantizer.adjustSegments(bars);
-    const quantizedBars = Quantizer.refill(bars);
-
-    this._map = new Map();
-    quantizedBars.forEach((it) => this._map.set(it.firstBeat.index, it));
+    this._bars = Quantizer.refill(bars);
     PartParser.parseParts(this.bars, this.phrases, this.segments);
   }
 
-  public find(index: number) {
-    return this._map ? this._map.get(index) : null;
+  findBar(position: number) {
+    return this.bars.filter(
+      (it) =>
+        it.firstBeat.startTime < position &&
+        (!it.next || position < it.next.startTime)
+    )[0];
   }
 }
