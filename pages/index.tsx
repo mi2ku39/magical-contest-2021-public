@@ -16,10 +16,11 @@ import {
 } from "textalive-app-api";
 import styles from "@/pages/index.module.scss";
 import MediaController from "~/components/MediaController";
-import SegumentScreen from "~/components/SegmentScreen";
 import QuantizedSong from "~/models/Beats/QuantizedSong";
-import QuantizedSongScreen from "~/components/QuantizedSongScreen";
 import QuantizedPhrase from "~/models/Beats/QuantizedPhrase";
+import Part from "~/models/Beats/Part";
+import QuantizedBar from "~/models/Beats/QuantizedBar";
+import SceneScreen from "~/components/SceneScreen";
 
 const index: React.FC = () => {
   const [token] = useState<string>(process.env.NEXT_PUBLIC_TEXTALIVE_APP_TOKEN);
@@ -34,22 +35,12 @@ const index: React.FC = () => {
     useState<MutableRefObject<HTMLDivElement>>(null);
   const [isEnablePlayButton, setPlayButtonEnabled] = useState(false);
 
-  const [startTime, setStartTime] = useState<number>();
-  const [endTime, setEndTime] = useState<number>();
-  const [now, setTime] = useState<number>();
-  const [beat, setBeat] = useState<IBeat>();
-  const [chord, setChord] = useState<IChord>();
-  const [phrase, setPhrase] = useState<QuantizedPhrase>();
-  const displayBars = useMemo<string>(
-    () =>
-      beat
-        ? `${Math.floor(beat.index / beat.length) + 1}.${beat.position} Bars`
-        : "-",
-    [beat]
-  );
-
-  const [seguments, setSeguments] = useState<IRepetitiveSegments[]>([]);
   const [quantizedSong, setQuantizedSong] = useState<QuantizedSong>();
+  const [position, setPosition] = useState<number>();
+  const [beat, setBeat] = useState<IBeat>();
+  const [bar, setBar] = useState<QuantizedBar>();
+  const [part, setPart] = useState<Part>();
+  const [phrase, setPhrase] = useState<QuantizedPhrase>();
 
   const onAppReady = useCallback<(app: IPlayerApp) => void>(
     (app) => {
@@ -65,10 +56,6 @@ const index: React.FC = () => {
   const onVideoReady = useCallback<(v?: IVideo) => void>(
     (v) => {
       if (!player) return;
-      const beats = player.data.songMap.beats;
-      setStartTime(beats[0].startTime);
-      setEndTime(beats[beats.length - 1].endTime);
-      setSeguments(player.data.songMap.segments);
 
       const qs = new QuantizedSong(
         player.data.songMap.beats,
@@ -77,6 +64,7 @@ const index: React.FC = () => {
       );
       qs.quantize();
       setQuantizedSong(qs);
+      console.dir(qs);
     },
     [player]
   );
@@ -87,17 +75,30 @@ const index: React.FC = () => {
 
   const onTimeUpdate = useCallback<(position: number) => void>(
     (position) => {
-      const beat = player.findBeat(position);
-      setBeat(beat);
-      setChord(player.findChord(position));
-      setTime(position);
+      setPosition(position);
 
-      const p = quantizedSong?.find(beat.index)?.phrase ?? null;
-      if (p) {
-        setPhrase(p);
-      } else {
-        setPhrase((prev) => (prev?.contains(position) ? prev : null));
-      }
+      const nowBeat = player.findBeat(position);
+      if (!(quantizedSong && nowBeat)) return;
+
+      setBeat(nowBeat);
+
+      const nowBar = quantizedSong.findBar(position);
+      setBar(nowBar);
+
+      setPart((prev) => {
+        if (nowBar?.part) {
+          return nowBar.part;
+        }
+        return prev?.contains(position) ? prev : null;
+      });
+
+      const nowPhrase = nowBar?.phrase ?? null;
+      setPhrase((prev) => {
+        if (nowPhrase) {
+          return nowPhrase;
+        }
+        return prev?.contains(position) ? prev : null;
+      });
     },
     [player, quantizedSong]
   );
@@ -106,8 +107,9 @@ const index: React.FC = () => {
   const onPause = useCallback(() => setPlayState(false), []);
   const onStop = useCallback(() => {
     setBeat(null);
-    setChord(null);
-    setTime(null);
+    setBar(null);
+    setPart(null);
+    setPhrase(null);
   }, []);
 
   const listeners = useMemo(() => {
@@ -135,17 +137,16 @@ const index: React.FC = () => {
 
     if (!player) {
       const p = new Player({
-          app: {
-            token,
-          },
-          mediaElement: mediaElement.current,
+        app: {
+          token,
+        },
+        mediaElement: mediaElement.current,
       });
       const storedVolume = parseInt(localStorage.getItem("volume"));
       const storedIsMute = localStorage.getItem("mute") === "true";
       setInitialVolume(isNaN(storedVolume) ? 50 : storedVolume);
       setInitialMuteState(storedIsMute);
       p.volume = storedIsMute ? 0 : storedVolume;
-
       setPlayer(p);
     } else {
       player.addListener(listeners);
@@ -158,27 +159,13 @@ const index: React.FC = () => {
 
   return (
     <div>
-      <div>start time: {startTime}</div>
-      <div>time: {now ? Math.round(now) : "-"}</div>
-      <div>bars : {displayBars}</div>
-      <div>chord: {chord ? chord.name : "-"}</div>
-      <div>{phrase ? phrase.phrase.text : "-"}</div>
-      <SegumentScreen
-        startTime={startTime}
-        endTime={endTime}
-        now={now}
-        seguments={seguments}
-        hiddenDetailTable
+      <SceneScreen
+        position={position}
+        beat={beat}
+        bar={bar}
+        part={part}
+        phrase={phrase}
       />
-
-      <QuantizedSongScreen
-        startTime={startTime}
-        endTime={endTime}
-        now={now}
-        quantizedSong={quantizedSong}
-        displayBars={displayBars}
-      />
-
       <div className={styles.media}>
         <MediaController
           player={player}
