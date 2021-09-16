@@ -134,21 +134,20 @@ const index: React.FC = () => {
     if (!mediaElement) return;
 
     if (!player) {
-      setPlayer(
-        new Player({
+      const p = new Player({
           app: {
             token,
           },
           mediaElement: mediaElement.current,
-        })
-      );
-    } else {
-      const v = parseInt(localStorage.getItem("volume"));
-      const isMute = localStorage.getItem("mute") === "true";
-      setInitialVolume(isNaN(v) ? 50 : v);
-      setInitialMuteState(isMute);
-      player.volume = isMute ? 0 : v;
+      });
+      const storedVolume = parseInt(localStorage.getItem("volume"));
+      const storedIsMute = localStorage.getItem("mute") === "true";
+      setInitialVolume(isNaN(storedVolume) ? 50 : storedVolume);
+      setInitialMuteState(storedIsMute);
+      p.volume = storedIsMute ? 0 : storedVolume;
 
+      setPlayer(p);
+    } else {
       player.addListener(listeners);
     }
 
