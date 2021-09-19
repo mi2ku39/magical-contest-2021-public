@@ -1,3 +1,5 @@
+@import "~/styles/css/utilities.scss";
+
 @keyframes ripple {
     0% {
         filter: opacity(0);
@@ -58,6 +60,7 @@
         filter: opacity(0);
 
         pointer-events: none;
+        @include unselectable;
     }
 
     & > .balloonTop {

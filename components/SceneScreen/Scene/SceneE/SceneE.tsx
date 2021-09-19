@@ -1,13 +1,12 @@
 import { SceneProps } from "../../SceneScreen";
+import sceneStyle from "../general.module.scss";
 
 const SceneE: React.FC<SceneProps> = ({ position, beat, bar, phrase }) => {
   return (
-    <div>
-      <div>
-        {beat && bar ? `${bar.index}.${beat.position} Bars` : "bar null"}
+    <div className={sceneStyle.container}>
+      <div className={sceneStyle.phraseContainer}>
+        <div className={sceneStyle.phrase}>{phrase && phrase.phrase.text}</div>
       </div>
-      <div>{phrase ? phrase.phrase.text : "phrase null"}</div>
-      <div>part A</div>
     </div>
   );
 };
