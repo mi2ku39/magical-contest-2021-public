@@ -1,4 +1,3 @@
-import React from "react";
 import { IBeat } from "textalive-app-api";
 import Part from "~/models/Beats/Part";
 import QuantizedBar from "~/models/Beats/QuantizedBar";
@@ -12,6 +11,13 @@ type Props = {
   phrase?: QuantizedPhrase;
 };
 
+export type SceneProps = {
+  position?: number;
+  beat?: IBeat;
+  bar?: QuantizedBar;
+  phrase?: QuantizedPhrase;
+};
+
 const SceneScreen: React.FC<Props> = ({
   position,
   beat,
@@ -21,9 +27,11 @@ const SceneScreen: React.FC<Props> = ({
 }) => {
   return (
     <div>
-      <div>{beat && bar && `${bar.index}.${beat.position} Bars`}</div>
-      <div>{phrase && phrase.phrase.text}</div>
-      <div>{part && part.partType && part.partType}</div>
+      <div>
+        {beat && bar ? `${bar.index}.${beat.position} Bars` : "bar null"}
+      </div>
+      <div>{phrase ? phrase.phrase.text : "phrase null"}</div>
+      <div>{part ? part.partType : "part null"}</div>
     </div>
   );
 };

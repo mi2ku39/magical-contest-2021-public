@@ -64,7 +64,6 @@ const index: React.FC = () => {
       );
       qs.quantize();
       setQuantizedSong(qs);
-      console.dir(qs);
     },
     [player]
   );
@@ -106,6 +105,7 @@ const index: React.FC = () => {
   const onPlay = useCallback(() => setPlayState(true), []);
   const onPause = useCallback(() => setPlayState(false), []);
   const onStop = useCallback(() => {
+    setPosition(null);
     setBeat(null);
     setBar(null);
     setPart(null);
