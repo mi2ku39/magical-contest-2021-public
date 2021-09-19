@@ -23,8 +23,10 @@ export type SceneProps = {
 };
 
 const SceneRender: React.FC<Props> = (props) => {
-  switch (props.part?.partType) {
+  const partType = useMemo(() => props.part?.partType ?? null, [props.part]);
+  switch (partType) {
     case PartTypes.A:
+      return <SceneA {...props} />;
 
     case PartTypes.B:
 
@@ -57,8 +59,8 @@ const SceneScreen: React.FC<Props> = ({
   phrase,
 }) => {
   const props = useMemo(() => {
-    return { position, beat, bar, phrase };
-  }, [position, beat, bar, phrase]);
+    return { position, beat, bar, part, phrase };
+  }, [position, beat, bar, part, phrase]);
 
   return (
     <div className={styles.container}>
