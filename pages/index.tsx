@@ -21,6 +21,10 @@ import QuantizedPhrase from "~/models/Beats/QuantizedPhrase";
 import Part from "~/models/Beats/Part";
 import QuantizedBar from "~/models/Beats/QuantizedBar";
 import SceneScreen from "~/components/SceneScreen";
+import ModalDialog from "~/components/ModalDialog";
+import ControllerButton from "~/components/ControllerButton";
+import Icon from "~/constants/Icon";
+import InformationModalDialog from "~/components/InformationModalDialog";
 
 const index: React.FC = () => {
   const [token] = useState<string>(process.env.NEXT_PUBLIC_TEXTALIVE_APP_TOKEN);
@@ -159,13 +163,25 @@ const index: React.FC = () => {
 
   return (
     <div>
-      <SceneScreen
-        position={position}
-        beat={beat}
-        bar={bar}
-        part={part}
-        phrase={phrase}
-      />
+      <ModalDialog title="モーダルダイアログ" />
+
+      <div className={styles.container}>
+        <div></div>
+        <div>
+          <SceneScreen
+            position={position}
+            beat={beat}
+            bar={bar}
+            part={part}
+            phrase={phrase}
+          />
+        </div>
+        <div className={styles.information}>
+          <div>
+            <InformationModalDialog />
+          </div>
+        </div>
+      </div>
       <div className={styles.media}>
         <MediaController
           player={player}

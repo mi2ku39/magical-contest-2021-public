@@ -1,10 +1,10 @@
-@import url("https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Kiwi+Maru:wght@300;500&display=swap");
+@import "~/styles/css/fonts";
 
 body {
     margin: 0;
     font-size: 1em;
-    font-weight: 500;
-    font-family: "Kiwi Maru", serif;
+    @include notoSansJP;
 }
 
 .textalive-banner {

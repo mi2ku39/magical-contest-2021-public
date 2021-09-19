@@ -6,6 +6,7 @@ import React, {
   useRef,
 } from "react";
 import { Player } from "textalive-app-api";
+import Icon from "~/constants/Icon";
 import ControllerButton from "../ControllerButton";
 import VolumeControllerButton from "../VolumeControllerButton";
 import styles from "./MediaController.module.scss";
@@ -97,7 +98,7 @@ const MediaController: React.FC<Props> = ({
       <div className={styles.controllerContainer}>
         <div>
           <ControllerButton
-            src="/images/icons/replay.svg"
+            src={Icon.replay}
             balloonText="最初に戻す"
             onClick={onClickPlayerStopButton}
           />
@@ -105,14 +106,14 @@ const MediaController: React.FC<Props> = ({
         <div>
           {isPlaying ? (
             <ControllerButton
-              src="/images/icons/pause.svg"
+              src={Icon.pause}
               balloonText="一時停止"
               onClick={onClickPlayerToggleButton}
               enabled={isEnablePlayButton}
             />
           ) : (
             <ControllerButton
-              src="/images/icons/play.svg"
+              src={Icon.play}
               balloonText="再生"
               onClick={onClickPlayerToggleButton}
               enabled={isEnablePlayButton}

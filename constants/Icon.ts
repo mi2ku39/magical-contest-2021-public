@@ -1,11 +1,14 @@
 const basePath = "/images/icons";
 
 export default {
-  replay: `${basePath}/replay.svg`,
+  close: `${basePath}/close.svg`,
+  ghostserver: `${basePath}/gs.svg`,
+  info: `${basePath}/info.svg`,
   pause: `${basePath}/pause.svg`,
   play: `${basePath}/play.svg`,
-  volumeOff: `${basePath}/volume_off.svg`,
+  replay: `${basePath}/replay.svg`,
   volumeDown: `${basePath}/volume_down.svg`,
-  volumeUp: `${basePath}/volume_up.svg`,
   volumeMinimum: `${basePath}/volume_minimum.svg`,
+  volumeOff: `${basePath}/volume_off.svg`,
+  volumeUp: `${basePath}/volume_up.svg`,
 };

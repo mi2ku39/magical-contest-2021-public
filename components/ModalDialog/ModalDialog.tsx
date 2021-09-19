@@ -1,0 +1,35 @@
+import clsx from "clsx";
+import ControllerButton from "../ControllerButton";
+import styles from "./ModalDialog.module.scss";
+type Props = {
+  title: string;
+  closer: () => void;
+  open?: boolean;
+};
+
+const ModalDialog: React.FC<Props> = ({
+  title,
+  open = false,
+  closer,
+  children,
+}) => (
+  <div className={clsx(styles.container, !open && styles.hidden)}>
+    <div className={styles.formContainer}>
+      <div className={styles.closer} onClick={closer} />
+      <div className={styles.form}>
+        <div className={styles.formControl}>
+          <div>{title}</div>
+          <div>
+            <ControllerButton
+              src="/images/icons/close.svg"
+              balloonText="閉じる"
+              onClick={closer}
+            />
+          </div>
+        </div>
+        <div>{children}</div>
+      </div>
+    </div>
+  </div>
+);
+export default ModalDialog;

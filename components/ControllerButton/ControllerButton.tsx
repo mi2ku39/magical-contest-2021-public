@@ -1,5 +1,10 @@
 import clsx from "clsx";
-import React, { MouseEventHandler, useCallback, useState } from "react";
+import React, {
+  MouseEventHandler,
+  useCallback,
+  useMemo,
+  useState,
+} from "react";
 import style from "./ControllerButton.module.scss";
 
 type Props = {
@@ -9,6 +14,7 @@ type Props = {
   onMouseEnter?: MouseEventHandler<HTMLDivElement>;
   onMouseLeave?: MouseEventHandler<HTMLDivElement>;
   enabled?: boolean;
+  right?: boolean;
 };
 
 const ControllerButton: React.FC<Props> = ({
@@ -18,6 +24,7 @@ const ControllerButton: React.FC<Props> = ({
   src,
   balloonText,
   enabled = true,
+  right = false,
 }: Props) => {
   const [isRipplePlaying, setRipplePlayingState] = useState(false);
   const playRipple = useCallback(() => {
@@ -50,7 +57,16 @@ const ControllerButton: React.FC<Props> = ({
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
-      {balloonText && <div className={style.balloon}>{balloonText}</div>}
+      {balloonText && (
+        <div
+          className={clsx(
+            style.balloon,
+            right ? style.balloonRight : style.balloonTop
+          )}
+        >
+          {balloonText}
+        </div>
+      )}
       <img src={src} />
     </div>
   );
