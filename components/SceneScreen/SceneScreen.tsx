@@ -1,7 +1,11 @@
+import { useMemo } from "react";
 import { IBeat } from "textalive-app-api";
-import Part from "~/models/Beats/Part";
+import Part, { PartTypes } from "~/models/Beats/Part";
 import QuantizedBar from "~/models/Beats/QuantizedBar";
 import QuantizedPhrase from "~/models/Beats/QuantizedPhrase";
+import DefaultScene from "./Scene/DefaultScene";
+import SceneA from "./Scene/SceneA";
+import styles from "./SceneScreen.module.scss";
 
 type Props = {
   position?: number;
@@ -18,6 +22,33 @@ export type SceneProps = {
   phrase?: QuantizedPhrase;
 };
 
+const SceneRender: React.FC<Props> = (props) => {
+  switch (props.part?.partType) {
+    case PartTypes.A:
+
+    case PartTypes.B:
+
+    case PartTypes.C:
+
+    case PartTypes.D:
+
+    case PartTypes.D:
+
+    case PartTypes.E:
+
+    case PartTypes.F:
+
+    case PartTypes.G:
+
+    case PartTypes.H:
+
+    case PartTypes.I:
+
+    default:
+      return <DefaultScene {...props} />;
+  }
+};
+
 const SceneScreen: React.FC<Props> = ({
   position,
   beat,
@@ -25,13 +56,13 @@ const SceneScreen: React.FC<Props> = ({
   part,
   phrase,
 }) => {
+  const props = useMemo(() => {
+    return { position, beat, bar, phrase };
+  }, [position, beat, bar, phrase]);
+
   return (
-    <div>
-      <div>
-        {beat && bar ? `${bar.index}.${beat.position} Bars` : "bar null"}
-      </div>
-      <div>{phrase ? phrase.phrase.text : "phrase null"}</div>
-      <div>{part ? part.partType : "part null"}</div>
+    <div className={styles.container}>
+      <SceneRender {...props} />
     </div>
   );
 };
