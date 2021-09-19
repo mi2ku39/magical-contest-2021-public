@@ -1,0 +1,42 @@
+@import "styles/css/fonts";
+
+.modalContainer {
+    margin: 0.5rem 1rem;
+
+    .title {
+        font-size: 1.5rem;
+        line-height: 1.75rem;
+        @include notoSansJP(700);
+    }
+
+    .description {
+        color: rgba(0, 0, 0, 0.6);
+    }
+
+    .contributorContainer {
+        margin: 1rem 0;
+
+        .contributeCategory {
+            font-size: 1rem;
+            line-height: 1.25rem;
+            color: rgba(0, 0, 0, 0.6);
+        }
+
+        .contributorName {
+            font-size: 1.5rem;
+            line-height: 1.75rem;
+            @include notoSansJP(700);
+        }
+    }
+
+    .small {
+        font-size: 1.25rem;
+    }
+
+    .copyright {
+        margin: 0.5rem 0;
+        font-size: 0.75rem;
+        line-height: 0.75rem;
+        color: rgba(0, 0, 0, 0.6);
+    }
+}

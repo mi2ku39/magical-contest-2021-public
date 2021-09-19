@@ -27,7 +27,7 @@ const ModalDialog: React.FC<Props> = ({
             />
           </div>
         </div>
-        <div>{children}</div>
+        <div className={styles.formInner}>{children}</div>
       </div>
     </div>
   </div>

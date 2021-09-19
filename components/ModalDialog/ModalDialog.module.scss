@@ -45,20 +45,24 @@
     .form {
         min-height: 50vh;
         max-height: 80vh;
-        min-width: 90vw;
+        max-width: 90vw;
         background-color: #ffffff;
         border-radius: 0.5rem;
         transition: filter 200ms linear, transform 200ms ease, min-width 50ms ease;
         filter: opacity(1);
         transform: scale(1);
+        display: flex;
+        flex-direction: column;
 
         @media screen and (min-width: 992px) {
             & {
-                min-width: 70vw;
+                max-width: 70vw;
             }
         }
 
         .formControl {
+            flex-grow: 0;
+            flex-shrink: 0;
             display: flex;
             align-items: center;
             height: 3rem;
@@ -76,6 +80,30 @@
                 padding: 0 1rem;
                 display: flex;
                 align-items: center;
+            }
+        }
+
+        .formInner {
+            flex-grow: 1;
+            overflow: auto;
+
+            &::-webkit-scrollbar {
+                width: 10px;
+            }
+
+            &::-webkit-scrollbar-track {
+                border-radius: 10px;
+            }
+
+            &::-webkit-scrollbar-thumb {
+                background-color: #bdbdbd;
+                border-radius: 10px;
+                box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.3);
+                transition: background-color 200ms ease;
+
+                &:hover {
+                    background-color: #9e9e9e;
+                }
             }
         }
     }

@@ -163,8 +163,6 @@ const index: React.FC = () => {
 
   return (
     <div>
-      <ModalDialog title="モーダルダイアログ" />
-
       <div className={styles.container}>
         <div></div>
         <div>

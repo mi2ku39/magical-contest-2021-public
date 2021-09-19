@@ -7,6 +7,19 @@ body {
     @include notoSansJP;
 }
 
+a {
+    &:link,
+    &:visited {
+        color: #2196f3;
+        transition: color 200ms linear;
+        text-decoration: none;
+    }
+
+    &:hover {
+        color: #e91e63;
+    }
+}
+
 .textalive-banner {
     margin: 0 !important;
 }
