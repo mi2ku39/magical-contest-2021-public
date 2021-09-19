@@ -16,7 +16,7 @@ const InformationModalDialog: React.FC = () => {
   return (
     <>
       <ControllerButton
-        src={Icon.ghostserver}
+        src={Icon.info}
         balloonText="このサイトについて"
         right
         onClick={onClick}
