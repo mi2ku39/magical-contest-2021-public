@@ -12,6 +12,7 @@ import {
   IRepetitiveSegments,
   IVideo,
   Player,
+  Song,
   SongleTimer,
 } from "textalive-app-api";
 import styles from "@/pages/index.module.scss";
@@ -39,6 +40,7 @@ const index: React.FC = () => {
     useState<MutableRefObject<HTMLDivElement>>(null);
   const [isEnablePlayButton, setPlayButtonEnabled] = useState(false);
 
+  const [song, setSong] = useState<Song>();
   const [quantizedSong, setQuantizedSong] = useState<QuantizedSong>();
   const [position, setPosition] = useState<number>();
   const [beat, setBeat] = useState<IBeat>();
@@ -61,6 +63,7 @@ const index: React.FC = () => {
     (v) => {
       if (!player) return;
 
+      setSong(player.data.song);
       const qs = new QuantizedSong(
         player.data.songMap.beats,
         player.video.phrases,
@@ -108,13 +111,20 @@ const index: React.FC = () => {
 
   const onPlay = useCallback(() => setPlayState(true), []);
   const onPause = useCallback(() => setPlayState(false), []);
-  const onStop = useCallback(() => {
+  const onStop = useCallback(() => setPlayState(false), []);
+  const onRequestedStop = useCallback(() => {
     setPosition(null);
     setBeat(null);
     setBar(null);
     setPart(null);
     setPhrase(null);
   }, []);
+  const requestPlay = useCallback<() => boolean>(() => {
+    if (player) {
+      return player.requestPlay();
+    }
+    return false;
+  }, [player]);
 
   const listeners = useMemo(() => {
     return {
@@ -172,6 +182,9 @@ const index: React.FC = () => {
             bar={bar}
             part={part}
             phrase={phrase}
+            song={song}
+            isPlayable={isEnablePlayButton}
+            requestPlay={requestPlay}
           />
         </div>
         <div className={styles.information}>
@@ -184,6 +197,7 @@ const index: React.FC = () => {
         <MediaController
           player={player}
           onUpdateMediaDom={setMediaElement}
+          onRequestedStop={onRequestedStop}
           initialMuteState={isInitialMute}
           initialVolume={initialVolume}
           isPlaying={isPlaying}

@@ -19,6 +19,7 @@ type Props = {
   onChangedVolume?: (volume: number) => void;
   onMute?: (volumeBeforeMute: number) => void;
   onUnmute?: () => number;
+  onRequestedStop?: () => void;
   initialMuteState?: boolean;
   initialVolume?: number;
   isPlaying: boolean;
@@ -33,6 +34,7 @@ const MediaController: React.FC<Props> = ({
   initialVolume,
   isPlaying,
   isEnablePlayButton = true,
+  onRequestedStop,
 }) => {
   const mediaElement = useRef<HTMLDivElement>();
 
@@ -53,8 +55,10 @@ const MediaController: React.FC<Props> = ({
   >(() => {
     if (!player) return;
 
-    player.requestStop();
-  }, [player]);
+    if (player.requestStop()) {
+      if (onRequestedStop) onRequestedStop();
+    }
+  }, [player, onRequestedStop]);
 
   const onChangingVolume = useCallback(
     (volume: number) => {

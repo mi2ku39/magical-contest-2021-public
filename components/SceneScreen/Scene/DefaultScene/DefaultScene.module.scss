@@ -1,5 +1,36 @@
 @import "~/styles/css/colors.scss";
+@import "~/styles/css/fonts.scss";
 
 .container {
-    background-color: $accent-yellow;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    .songInfoContainer {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        .title {
+            font-size: 4rem;
+            color: $accent-red;
+            @include kiwiMaru(500);
+        }
+
+        .composer {
+            font-size: 3rem;
+            @include kiwiMaru(500);
+        }
+    }
+
+    .startHint {
+        margin-top: 5rem;
+        font-size: 1.5rem;
+        font-weight: 700;
+        filter: opacity(0.88);
+    }
 }

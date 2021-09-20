@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { IBeat } from "textalive-app-api";
+import { IBeat, Song } from "textalive-app-api";
 import Part, { PartTypes } from "~/models/Beats/Part";
 import QuantizedBar from "~/models/Beats/QuantizedBar";
 import QuantizedPhrase from "~/models/Beats/QuantizedPhrase";
@@ -21,14 +21,12 @@ type Props = {
   bar?: QuantizedBar;
   part?: Part;
   phrase?: QuantizedPhrase;
+  song?: Song;
+  requestPlay?: () => boolean;
+  isPlayable?: boolean;
 };
 
-export type SceneProps = {
-  position?: number;
-  beat?: IBeat;
-  bar?: QuantizedBar;
-  phrase?: QuantizedPhrase;
-};
+export type SceneProps = Omit<Props, "part">;
 
 const SceneRender: React.FC<Props> = (props) => {
   const partType = useMemo(() => props.part?.partType ?? null, [props.part]);
@@ -68,17 +66,7 @@ const SceneRender: React.FC<Props> = (props) => {
   }
 };
 
-const SceneScreen: React.FC<Props> = ({
-  position,
-  beat,
-  bar,
-  part,
-  phrase,
-}) => {
-  const props = useMemo(() => {
-    return { position, beat, bar, part, phrase };
-  }, [position, beat, bar, part, phrase]);
-
+const SceneScreen: React.FC<Props> = (props) => {
   return (
     <div className={styles.container}>
       <SceneRender {...props} />
