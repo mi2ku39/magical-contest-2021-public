@@ -15,7 +15,7 @@ import SceneH from "./Scene/SceneH";
 import SceneI from "./Scene/SceneI";
 import styles from "./SceneScreen.module.scss";
 
-type Props = {
+export type SceneProps = {
   position?: number;
   beat?: IBeat;
   bar?: QuantizedBar;
@@ -24,11 +24,10 @@ type Props = {
   song?: Song;
   requestPlay?: () => boolean;
   isPlayable?: boolean;
+  isPlaying: boolean;
 };
 
-export type SceneProps = Omit<Props, "part">;
-
-const SceneRender: React.FC<Props> = (props) => {
+const SceneRender: React.FC<SceneProps> = (props) => {
   const partType = useMemo(() => props.part?.partType ?? null, [props.part]);
   switch (partType) {
     case PartTypes.A:
@@ -66,7 +65,7 @@ const SceneRender: React.FC<Props> = (props) => {
   }
 };
 
-const SceneScreen: React.FC<Props> = (props) => {
+const SceneScreen: React.FC<SceneProps> = (props) => {
   return (
     <div className={styles.container}>
       <SceneRender {...props} />

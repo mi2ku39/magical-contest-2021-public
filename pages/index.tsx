@@ -40,13 +40,13 @@ const index: React.FC = () => {
     useState<MutableRefObject<HTMLDivElement>>(null);
   const [isEnablePlayButton, setPlayButtonEnabled] = useState(false);
 
-  const [song, setSong] = useState<Song>();
-  const [quantizedSong, setQuantizedSong] = useState<QuantizedSong>();
-  const [position, setPosition] = useState<number>();
-  const [beat, setBeat] = useState<IBeat>();
-  const [bar, setBar] = useState<QuantizedBar>();
-  const [part, setPart] = useState<Part>();
-  const [phrase, setPhrase] = useState<QuantizedPhrase>();
+  const [song, setSong] = useState<Song>(null);
+  const [quantizedSong, setQuantizedSong] = useState<QuantizedSong>(null);
+  const [position, setPosition] = useState<number>(null);
+  const [beat, setBeat] = useState<IBeat>(null);
+  const [bar, setBar] = useState<QuantizedBar>(null);
+  const [part, setPart] = useState<Part>(null);
+  const [phrase, setPhrase] = useState<QuantizedPhrase>(null);
 
   const onAppReady = useCallback<(app: IPlayerApp) => void>(
     (app) => {
@@ -184,6 +184,7 @@ const index: React.FC = () => {
             phrase={phrase}
             song={song}
             isPlayable={isEnablePlayButton}
+            isPlaying={isPlaying}
             requestPlay={requestPlay}
           />
         </div>

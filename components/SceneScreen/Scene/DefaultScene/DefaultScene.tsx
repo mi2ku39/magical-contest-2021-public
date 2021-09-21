@@ -11,7 +11,6 @@ const DefaultScene: React.FC<SceneProps> = ({
   const onKeydown = useCallback(
     (event: KeyboardEvent) => {
       if (event.code === "Space") {
-        console.dir(requestPlay);
         if (requestPlay && isPlayable) requestPlay();
       }
     },

@@ -1,15 +1,189 @@
+import { useEffect, useMemo, useState } from "react";
+import { SongleTimer } from "textalive-app-api";
+import Illustration from "~/constants/Illustration";
 import { SceneProps } from "../../SceneScreen";
 import sceneStyle from "../general.module.scss";
 import styles from "./SceneA.module.scss";
 
-const SceneA: React.FC<SceneProps> = ({ position, beat, bar, phrase }) => {
+const SceneParts = { A: 1, B: 2, C: 3 };
+type ScenePart = typeof SceneParts[keyof typeof SceneParts];
+
+const SceneA: React.FC<SceneProps> = ({
+  position,
+  beat,
+  bar,
+  phrase,
+  part,
+  isPlaying,
+  song,
+}) => {
+  const isVisible = useMemo(
+    () => position >= part.startBar.firstBeat.startTime,
+    [position]
+  );
+
+  const animationPlayState = useMemo<string>(
+    () => (isPlaying ? "running" : "paused"),
+    [isPlaying]
+  );
+
+  const offset = useMemo(() => part.startBar.firstBeat.startTime, [part]);
+  const [mikuThrowDuration, setMikuThrowDuration] = useState<number>(0);
+  const [mainThrowDelay, setMainThrowDelay] = useState<number>(0);
+  const [mainThrowDuration, setMainThrowDuration] = useState<number>(0);
+  const [titleCharacterDelay, setTitleCharacterDelay] = useState<number>(0);
+  const [titleCharacterDuration, setTitleCharacterDuration] =
+    useState<number>(0);
+  const [titleDelay, setTitleDelay] = useState<number>(0);
+  const [titleDuration, setTitleDuration] = useState<number>(0);
+  const [walkDuration, setWalkDuration] = useState<number>(0);
+  const [walkCharacterSwitchBarIndex, setWalkCharacterSwitchBarIndex] =
+    useState<number>(null);
+  const isOddBeatPosition = useMemo<boolean>(
+    () => beat.position % 2 === 1,
+    [beat]
+  );
+  const walkIllust = useMemo<string>(() => {
+    return bar.index < walkCharacterSwitchBarIndex
+      ? isOddBeatPosition
+        ? Illustration.miku.walkAlt
+        : Illustration.miku.walk
+      : isOddBeatPosition
+      ? Illustration.main.walk
+      : Illustration.main.walkAlt;
+  }, [isOddBeatPosition, walkCharacterSwitchBarIndex, bar]);
+
+  const scene = useMemo(() => {
+    const localIndex = bar.index - part.startBar.index + 1;
+    if (part.barLength <= 4) {
+      return SceneParts.A;
+    } else {
+      if (localIndex <= 3) {
+        return SceneParts.A;
+      }
+      if (localIndex === 4) {
+        return SceneParts.B;
+      }
+
+      return SceneParts.C;
+    }
+  }, [part, bar]);
+
+  useEffect(() => {
+    if (!part) {
+    } else if (part.barLength <= 4) {
+      setTitleCharacterDelay(0);
+      setTitleCharacterDuration(
+        part.endBar.startTime - part.startBar.startTime
+      );
+    } else {
+      setMikuThrowDuration(
+        part.startBar.firstBeat.next.startTime -
+          part.startBar.firstBeat.startTime
+      );
+
+      setMainThrowDelay(part.startBar.firstBeat.next.startTime - offset);
+      setMainThrowDuration(
+        part.startBar.firstBeat.next.next.endTime -
+          part.startBar.firstBeat.next.startTime
+      );
+
+      setTitleCharacterDelay(
+        part.startBar.firstBeat.next.next.endTime -
+          offset +
+          part.startBar.firstBeat.next.next.duration / 2
+      );
+      setTitleCharacterDuration(part.startBar.firstBeat.next.next.duration / 2);
+
+      setTitleDelay(part.startBar.next.startTime - offset);
+      setTitleDuration(
+        part.startBar.next.next.next.startTime - part.startBar.next.startTime
+      );
+
+      const walkBar = part.startBar.next?.next?.next;
+      if (walkBar) {
+        const switchBarIndex = Math.floor(part.endBar.index - 4 / 2);
+        if (switchBarIndex >= 1) setWalkCharacterSwitchBarIndex(switchBarIndex);
+
+        setWalkDuration(walkBar.firstBeat.duration);
+      }
+    }
+  }, [part]);
+
   return (
     <div className={sceneStyle.container}>
-      <div>
-        {beat && bar ? `${bar.index}.${beat.position} Bars` : "bar null"}
-      </div>
-      <div>{phrase ? phrase.phrase.text : "phrase null"}</div>
-      <div>SceneA</div>
+      {isVisible && (
+        <>
+          {scene === SceneParts.A && (
+            <>
+              <div className={styles.throwImgContainer}>
+                <div
+                  className={styles.mikuImgContainer}
+                  style={{
+                    animationDuration: `${mikuThrowDuration}ms`,
+                    animationPlayState: animationPlayState,
+                  }}
+                >
+                  <img src={Illustration.miku.walk} />
+                </div>
+                <div
+                  className={styles.mainImgContainer}
+                  style={{
+                    animationDelay: `${mainThrowDelay}ms`,
+                    animationDuration: `${mainThrowDuration}ms`,
+                    animationPlayState: animationPlayState,
+                  }}
+                >
+                  <img src={Illustration.main.fly} />
+                </div>
+              </div>
+              <div
+                className={styles.titleCharacterContainer}
+                style={{
+                  animationDelay: `${titleCharacterDelay}ms`,
+                  animationDuration: `${titleCharacterDuration}ms`,
+                  animationPlayState: animationPlayState,
+                }}
+              >
+                <div className={styles.imgContainer}>
+                  <img src={Illustration.miku.ftonSmileyColored} />
+                </div>
+              </div>
+              <div className={styles.titleContainer}>
+                <div
+                  style={{
+                    animationDelay: `${titleDelay}ms`,
+                    animationDuration: `${titleDuration}ms`,
+                    animationPlayState: animationPlayState,
+                  }}
+                >
+                  {song.name}
+                </div>
+              </div>
+            </>
+          )}
+          {scene === SceneParts.B && (
+            <div className={styles.countContainer}>
+              <div>{beat.position}</div>
+            </div>
+          )}
+          {scene === SceneParts.C && (
+            <div className={styles.walkContainer}>
+              <div>
+                <img
+                  style={{
+                    animationDuration: `${walkDuration}ms`,
+                    animationPlayState: animationPlayState,
+                  }}
+                  src={walkIllust}
+                />
+              </div>
+            </div>
+          )}
+
+          <div>{scene}</div>
+        </>
+      )}
     </div>
   );
 };

@@ -4,7 +4,7 @@ export default {
   main: {
     fly: `${basePath}/main/fly.png`,
     walk: `${basePath}/main/walk.png`,
-    walkAlt: `${basePath}/main/walk-alt.png}`,
+    walkAlt: `${basePath}/main/walk-alt.png`,
   },
   miku: {
     fron: `${basePath}/miku/front.png`,
