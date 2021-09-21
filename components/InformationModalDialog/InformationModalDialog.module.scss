@@ -7,6 +7,7 @@
         font-size: 1.5rem;
         line-height: 1.75rem;
         @include notoSansJP(700);
+        margin-bottom: 0.25rem;
     }
 
     .description {
@@ -34,7 +35,7 @@
     }
 
     .copyright {
-        margin: 0.5rem 0;
+        margin: 1rem 0;
         font-size: 0.75rem;
         line-height: 0.75rem;
         color: rgba(0, 0, 0, 0.6);

@@ -138,6 +138,7 @@ const VolumeControllerButton: React.FC<Props> = ({
         onClick={onButtonClick}
         onMouseEnter={onMouseEnterButton}
         onMouseLeave={onMouseLeaveButton}
+        balloonText={isMute ? "ミュート解除" : "ミュートする"}
       />
     </div>
   );

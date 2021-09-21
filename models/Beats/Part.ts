@@ -48,6 +48,10 @@ export default class Part {
     return this.endBar.startTime - this.startBar.startTime;
   }
 
+  get barLength() {
+    return this.endBar.index - this.startBar.index;
+  }
+
   constructor(
     index: number,
     startBar: QuantizedBar,
