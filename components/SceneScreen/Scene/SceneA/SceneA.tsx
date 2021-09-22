@@ -180,8 +180,6 @@ const SceneA: React.FC<SceneProps> = ({
               </div>
             </div>
           )}
-
-          <div>{scene}</div>
         </>
       )}
     </div>
