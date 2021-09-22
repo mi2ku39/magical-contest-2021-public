@@ -36,7 +36,6 @@ const SceneA: React.FC<SceneProps> = ({
     useState<number>(0);
   const [titleDelay, setTitleDelay] = useState<number>(0);
   const [titleDuration, setTitleDuration] = useState<number>(0);
-  const [walkDuration, setWalkDuration] = useState<number>(0);
   const [walkCharacterSwitchBarIndex, setWalkCharacterSwitchBarIndex] =
     useState<number>(null);
   const isOddBeatPosition = useMemo<boolean>(
@@ -104,8 +103,6 @@ const SceneA: React.FC<SceneProps> = ({
       if (walkBar) {
         const switchBarIndex = Math.floor(part.endBar.index - 4 / 2);
         if (switchBarIndex >= 1) setWalkCharacterSwitchBarIndex(switchBarIndex);
-
-        setWalkDuration(walkBar.firstBeat.duration);
       }
     }
   }, [part]);
@@ -172,7 +169,7 @@ const SceneA: React.FC<SceneProps> = ({
               <div>
                 <img
                   style={{
-                    animationDuration: `${walkDuration}ms`,
+                    animationDuration: `${beat.duration}ms`,
                     animationPlayState: animationPlayState,
                   }}
                   src={walkIllust}
