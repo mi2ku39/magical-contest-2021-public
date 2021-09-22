@@ -219,7 +219,7 @@ const parseParts = (
       return;
     } else if (
       isContainPhrase ||
-      nextPhrase.startBar.index < nextSegment.startBar.index
+      (nextPhrase && nextPhrase.startBar.index < nextSegment.startBar.index)
     ) {
       const newPart = new Part(partIndex++, bar, nextPhrase.startBar);
       prevPart.next = newPart;
