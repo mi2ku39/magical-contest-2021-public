@@ -3,6 +3,7 @@
 
     & > .faderContainer {
         position: absolute;
+        z-index: 1;
 
         right: -144px;
         top: 50%;

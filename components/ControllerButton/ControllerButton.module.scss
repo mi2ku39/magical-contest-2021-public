@@ -71,6 +71,10 @@
         left: 100%;
     }
 
+    & > .balloonLeft {
+        right: 100%;
+    }
+
     &:hover > .balloon {
         display: block;
         filter: opacity(1);

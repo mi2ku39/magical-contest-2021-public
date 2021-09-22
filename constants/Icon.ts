@@ -11,4 +11,5 @@ export default {
   volumeMinimum: `${basePath}/volume_minimum.svg`,
   volumeOff: `${basePath}/volume_off.svg`,
   volumeUp: `${basePath}/volume_up.svg`,
+  mediaChange: `${basePath}/media-change.svg`,
 };

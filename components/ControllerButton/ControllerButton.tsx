@@ -15,6 +15,7 @@ type Props = {
   onMouseLeave?: MouseEventHandler<HTMLDivElement>;
   enabled?: boolean;
   right?: boolean;
+  left?: boolean;
 };
 
 const ControllerButton: React.FC<Props> = ({
@@ -25,6 +26,7 @@ const ControllerButton: React.FC<Props> = ({
   balloonText,
   enabled = true,
   right = false,
+  left = false,
 }: Props) => {
   const [isRipplePlaying, setRipplePlayingState] = useState(false);
   const playRipple = useCallback(() => {
@@ -61,7 +63,11 @@ const ControllerButton: React.FC<Props> = ({
         <div
           className={clsx(
             style.balloon,
-            right ? style.balloonRight : style.balloonTop
+            right
+              ? style.balloonRight
+              : left
+              ? style.balloonLeft
+              : style.balloonTop
           )}
         >
           {balloonText}

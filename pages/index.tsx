@@ -1,4 +1,5 @@
 import React, {
+  isValidElement,
   MutableRefObject,
   useCallback,
   useEffect,
@@ -14,6 +15,8 @@ import {
   Player,
   Song,
   SongleTimer,
+  stringToDataUrl,
+  VideoEntry,
 } from "textalive-app-api";
 import styles from "@/pages/index.module.scss";
 import MediaController from "~/components/MediaController";
@@ -22,10 +25,8 @@ import QuantizedPhrase from "~/models/Beats/QuantizedPhrase";
 import Part from "~/models/Beats/Part";
 import QuantizedBar from "~/models/Beats/QuantizedBar";
 import SceneScreen from "~/components/SceneScreen";
-import ModalDialog from "~/components/ModalDialog";
-import ControllerButton from "~/components/ControllerButton";
-import Icon from "~/constants/Icon";
 import InformationModalDialog from "~/components/InformationModalDialog";
+import MediaModalDialog from "~/components/MediaModalDialog";
 
 const index: React.FC = () => {
   const [token] = useState<string>(process.env.NEXT_PUBLIC_TEXTALIVE_APP_TOKEN);
@@ -39,6 +40,8 @@ const index: React.FC = () => {
   const [mediaElement, setMediaElement] =
     useState<MutableRefObject<HTMLDivElement>>(null);
   const [isEnablePlayButton, setPlayButtonEnabled] = useState(false);
+  const [isOpeningMediaModal, setMediaInfoModalOpeningState] = useState(false);
+  const [isParsableSong, setParsableState] = useState<boolean>(false);
 
   const [song, setSong] = useState<Song>(null);
   const [quantizedSong, setQuantizedSong] = useState<QuantizedSong>(null);
@@ -52,16 +55,45 @@ const index: React.FC = () => {
     (app) => {
       setPlayButtonEnabled(false);
       if (!app.songUrl) {
-        // player.createFromSongUrl("https://piapro.jp/t/Eywb/20100804205216");
         player.createFromSongUrl(fallbackSongUrl);
       }
     },
-    [player]
+    [player, fallbackSongUrl]
+  );
+
+  const onAppMediaChange = useCallback<
+    (songUrl: string, videoPromise?: Promise<IVideo>) => void
+  >(() => {
+    setPlayState(false);
+    setPlayButtonEnabled(false);
+  }, []);
+
+  const onVideoLoad = useCallback<(video: VideoEntry, reason?: Error) => void>(
+    (video, reason) => {
+      setPart(null);
+      setPosition(null);
+      setBeat(null);
+      setBar(null);
+      setPhrase(null);
+    },
+    []
   );
 
   const onVideoReady = useCallback<(v?: IVideo) => void>(
     (v) => {
       if (!player) return;
+
+      if (
+        !player.video.firstPhrase ||
+        player.data.songMap.segments.length <= 0 ||
+        player.data.songMap.beats.length <= 0
+      ) {
+        setParsableState(false);
+
+        return;
+      } else {
+        setParsableState(true);
+      }
 
       setSong(player.data.song);
       const qs = new QuantizedSong(
@@ -76,11 +108,13 @@ const index: React.FC = () => {
   );
 
   const onTimerReady = useCallback<(timer: SongleTimer) => void>(() => {
-    setPlayButtonEnabled(true);
-  }, [player]);
+    setPlayButtonEnabled(isParsableSong);
+  }, [player, isParsableSong]);
 
   const onTimeUpdate = useCallback<(position: number) => void>(
     (position) => {
+      if (!isParsableSong) return;
+
       setPosition(position);
 
       const nowBeat = player.findBeat(position);
@@ -106,7 +140,7 @@ const index: React.FC = () => {
         return prev?.contains(position) ? prev : null;
       });
     },
-    [player, quantizedSong]
+    [player, quantizedSong, isParsableSong]
   );
 
   const onPlay = useCallback(() => setPlayState(true), []);
@@ -125,10 +159,33 @@ const index: React.FC = () => {
     }
     return false;
   }, [player]);
+  const onClickMediaInfo = useCallback(() => {
+    setMediaInfoModalOpeningState(true);
+  }, []);
+  const mediaModalCloser = useCallback(() => {
+    setMediaInfoModalOpeningState(false);
+  }, []);
+  const onChangeUrl = useCallback<(url: string) => Promise<boolean | null>>(
+    async (url: string) => {
+      if (player && url) {
+        const res = await player.createFromSongUrl(url);
+
+        if (!res) return null;
+        return !!res.firstPhrase;
+      }
+      return null;
+    },
+    [player]
+  );
+  const restoreDefaultUrl = useCallback(() => {
+    if (player) player.createFromSongUrl(fallbackSongUrl);
+  }, [player, fallbackSongUrl]);
 
   const listeners = useMemo(() => {
     return {
       onAppReady,
+      onAppMediaChange,
+      onVideoLoad,
       onVideoReady,
       onPlay,
       onPause,
@@ -138,6 +195,8 @@ const index: React.FC = () => {
     };
   }, [
     onAppReady,
+    onAppMediaChange,
+    onVideoLoad,
     onVideoReady,
     onPlay,
     onPause,
@@ -203,8 +262,16 @@ const index: React.FC = () => {
           initialVolume={initialVolume}
           isPlaying={isPlaying}
           isEnablePlayButton={isEnablePlayButton}
+          onClickInfo={onClickMediaInfo}
         />
       </div>
+      <MediaModalDialog
+        song={song}
+        open={isOpeningMediaModal}
+        closer={mediaModalCloser}
+        onChangeUrl={onChangeUrl}
+        restoreDefaultUrl={restoreDefaultUrl}
+      />
     </div>
   );
 };

@@ -8,23 +8,19 @@ import React, {
 import { Player } from "textalive-app-api";
 import Icon from "~/constants/Icon";
 import ControllerButton from "../ControllerButton";
+import MediaModalDialog from "../MediaModalDialog";
 import VolumeControllerButton from "../VolumeControllerButton";
 import styles from "./MediaController.module.scss";
 
 type Props = {
   onUpdateMediaDom?: (ref: MutableRefObject<HTMLDivElement>) => void;
-  onClickPlayerStopButton?: MouseEventHandler<HTMLDivElement>;
-  onClickPlayerToggleButton?: MouseEventHandler<HTMLDivElement>;
-  onChangingVolume?: (volume: number) => void;
-  onChangedVolume?: (volume: number) => void;
-  onMute?: (volumeBeforeMute: number) => void;
-  onUnmute?: () => number;
   onRequestedStop?: () => void;
   initialMuteState?: boolean;
   initialVolume?: number;
   isPlaying: boolean;
   player: Player;
   isEnablePlayButton?: boolean;
+  onClickInfo?: () => void;
 };
 
 const MediaController: React.FC<Props> = ({
@@ -35,6 +31,7 @@ const MediaController: React.FC<Props> = ({
   isPlaying,
   isEnablePlayButton = true,
   onRequestedStop,
+  onClickInfo,
 }) => {
   const mediaElement = useRef<HTMLDivElement>();
 
@@ -133,6 +130,17 @@ const MediaController: React.FC<Props> = ({
             initialMuteState={initialMuteState}
             initialVolume={initialVolume}
           />
+        </div>
+        <div className={styles.alignEnd}>
+          <div>
+            <ControllerButton
+              src={Icon.mediaChange}
+              balloonText="楽曲を変える"
+              left
+              enabled={isEnablePlayButton}
+              onClick={onClickInfo}
+            />
+          </div>
         </div>
       </div>
     </div>
