@@ -1,4 +1,6 @@
 import { CSSProperties, useCallback, useMemo, useRef, useState } from "react";
+import { IBeat } from "textalive-app-api";
+import QuantizedBar from "~/models/Beats/QuantizedBar";
 import QuantizedSong from "~/models/Beats/QuantizedSong";
 import styles from "./QuantizedSongScreen.module.scss";
 
@@ -8,7 +10,8 @@ type Props = {
   now: number;
   quantizedSong: QuantizedSong;
   hiddenDetailTable?: boolean;
-  displayBars?: string;
+  bar: QuantizedBar;
+  beat: IBeat;
 };
 const QuantizedSongScreen: React.FC<Props> = ({
   startTime,
@@ -16,7 +19,8 @@ const QuantizedSongScreen: React.FC<Props> = ({
   now,
   quantizedSong,
   hiddenDetailTable = false,
-  displayBars,
+  bar,
+  beat,
 }) => {
   const guage = useRef<HTMLDivElement>();
   const guageWidth = useMemo<number>(
@@ -42,13 +46,8 @@ const QuantizedSongScreen: React.FC<Props> = ({
   }, [now, scaler, guageWidth]);
 
   const displayProgressNum = useMemo<string>(
-    () =>
-      `${
-        Math.round(scaler(now) * 100) > 100
-          ? 100
-          : Math.round(scaler(now) * 100)
-      }%`,
-    [scaler, now]
+    () => (bar && beat ? `${bar.index}.${beat.position} Bars` : "-"),
+    [bar, beat]
   );
 
   const segmentStyle = useCallback<
@@ -94,29 +93,13 @@ const QuantizedSongScreen: React.FC<Props> = ({
               phrase && (
                 <div
                   key={index}
-                  className={styles.segment}
+                  className={styles.phrase}
                   style={{
                     ...segmentStyle(phrase.startBar.startTime, phrase.duration),
-                    borderColor: "rgba(132,255,255,0.7)",
                   }}
                 />
               )
           )}
-          {/* {quantizedSong.bars.map(
-            ({ startTime, segment }) =>
-              segment && (
-                <div
-                  key={segment.startBar.index}
-                  className={styles.segment}
-                  style={{
-                    ...segmentStyle(startTime, segment.duration),
-                    borderColor: "rgba(255,0,255,0.7)",
-                  }}
-                >
-                  {segment.isSabi ? "サビ" : null}
-                </div>
-              )
-          )} */}
           {quantizedSong.bars.map(
             ({ startTime, part }) =>
               part && (
@@ -125,10 +108,14 @@ const QuantizedSongScreen: React.FC<Props> = ({
                   className={styles.segment}
                   style={{
                     ...segmentStyle(startTime, part.duration),
-                    borderColor: "rgba(0,0,0,1)",
                   }}
                 >
-                  {part.partType}
+                  <div>{part.partType}</div>
+                  {part.isSabi ? (
+                    <div>サビ</div>
+                  ) : part.hasPhrase ? (
+                    <div>うた</div>
+                  ) : null}
                 </div>
               )
           )}
@@ -182,7 +169,7 @@ const QuantizedSongScreen: React.FC<Props> = ({
     <>
       <div className={styles.container} ref={guage}>
         <div className={styles.nowBar} style={progressBarStyle}>
-          {displayBars ? displayBars : displayProgressNum}
+          {displayProgressNum}
         </div>
         {screenDom}
       </div>

@@ -6,9 +6,7 @@ import React, {
   useMemo,
   useState,
 } from "react";
-import { IVideo, Player, Song } from "textalive-app-api";
-import Icon from "~/constants/Icon";
-import ControllerButton from "../ControllerButton";
+import { Song } from "textalive-app-api";
 import ModalDialog from "../ModalDialog";
 import styles from "./MediaModalDialog.module.scss";
 
@@ -59,6 +57,10 @@ const MediaModalDialog: React.FC<Props> = ({
               );
               return;
             }
+
+            setErrorMessage(null);
+            closer();
+            return;
           })
           .finally(() => {
             setLoadingState(false);
@@ -92,10 +94,10 @@ const MediaModalDialog: React.FC<Props> = ({
           <a href="https://textalive.jp/songs" target="_blank">
             TextAlive
           </a>
-          に登録されている楽曲を読み込むことができます。
+          に登録されていて、歌詞データのある楽曲を読み込むことができます。
         </div>
         <div className={styles.caution}>
-          うまく動かない場合は申し訳ないですが別の楽曲でお試しください。
+          うまく動かない場合は別の楽曲でお試しください。
         </div>
         <form className={styles.form} onSubmit={onSubmit}>
           <div>

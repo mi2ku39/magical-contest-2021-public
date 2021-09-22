@@ -1,4 +1,5 @@
 @import "~/styles/css/colors";
+@import "~/styles/css/utilities";
 
 .media {
     position: fixed;
@@ -34,5 +35,20 @@
         box-sizing: border-box;
         display: flex;
         align-items: flex-end;
+    }
+}
+
+.guageContainer {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    @include unselectable;
+    & > div {
+        flex-grow: 1;
+        padding: 0.5rem;
+        box-sizing: border-box;
+        filter: opacity(0.5);
     }
 }

@@ -8,14 +8,11 @@ import React, {
 } from "react";
 import {
   IBeat,
-  IChord,
   IPlayerApp,
-  IRepetitiveSegments,
   IVideo,
   Player,
   Song,
   SongleTimer,
-  stringToDataUrl,
   VideoEntry,
 } from "textalive-app-api";
 import styles from "@/pages/index.module.scss";
@@ -27,6 +24,7 @@ import QuantizedBar from "~/models/Beats/QuantizedBar";
 import SceneScreen from "~/components/SceneScreen";
 import InformationModalDialog from "~/components/InformationModalDialog";
 import MediaModalDialog from "~/components/MediaModalDialog";
+import QuantizedSongScreen from "~/components/QuantizedSongScreen";
 
 const index: React.FC = () => {
   const [token] = useState<string>(process.env.NEXT_PUBLIC_TEXTALIVE_APP_TOKEN);
@@ -50,6 +48,9 @@ const index: React.FC = () => {
   const [bar, setBar] = useState<QuantizedBar>(null);
   const [part, setPart] = useState<Part>(null);
   const [phrase, setPhrase] = useState<QuantizedPhrase>(null);
+
+  const [startTime, setStartTime] = useState<number>(null);
+  const [endTime, setEndTime] = useState<number>(null);
 
   const onAppReady = useCallback<(app: IPlayerApp) => void>(
     (app) => {
@@ -103,6 +104,11 @@ const index: React.FC = () => {
       );
       qs.quantize();
       setQuantizedSong(qs);
+
+      setStartTime(player.data.songMap.beats[0].startTime);
+      setEndTime(
+        player.data.songMap.beats[player.data.songMap.beats.length - 1].endTime
+      );
     },
     [player]
   );
@@ -233,7 +239,19 @@ const index: React.FC = () => {
   return (
     <div>
       <div className={styles.container}>
-        <div></div>
+        <div className={styles.guageContainer}>
+          <div>
+            <QuantizedSongScreen
+              startTime={startTime}
+              endTime={endTime}
+              now={position}
+              quantizedSong={quantizedSong}
+              bar={bar}
+              beat={beat}
+              hiddenDetailTable
+            />
+          </div>
+        </div>
         <div>
           <SceneScreen
             position={position}
