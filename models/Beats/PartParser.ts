@@ -65,9 +65,10 @@ const assignPartType = (parts: Part[]) => {
     }
 
     if (
+      it.next &&
       it.next.isSabi &&
-      it.next?.next.isSabi &&
-      it.next?.next?.next.isSabi &&
+      it.next.next?.isSabi &&
+      it.next.next?.next?.isSabi &&
       it.hasPhrase
     ) {
       it.partType = PartTypes.G;

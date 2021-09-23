@@ -1,0 +1,25 @@
+@import "~/styles/css/colors";
+
+.container {
+    background-color: #ffffff;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 0.25rem;
+
+    & > img {
+        height: 1.5rem;
+        width: 1.5rem;
+        object-fit: contain;
+    }
+}
+
+.short {
+    padding: 0.25rem;
+}
+
+.long {
+    padding: 0.25rem 0.5rem;
+}
