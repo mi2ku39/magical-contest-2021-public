@@ -48,13 +48,13 @@ const SceneA: React.FC<SceneProps> = ({
         ? Illustration.miku.walkAlt
         : Illustration.miku.walk
       : isOddBeatPosition
-      ? Illustration.main.walk
-      : Illustration.main.walkAlt;
+      ? Illustration.main.walkAlt
+      : Illustration.main.walk;
   }, [isOddBeatPosition, walkCharacterSwitchBarIndex, bar]);
 
   const scene = useMemo(() => {
     const localIndex = bar.index - part.startBar.index + 1;
-    if (part.barLength <= 4) {
+    if (part.barLength < 4) {
       return SceneParts.A;
     } else {
       if (localIndex <= 3) {
@@ -70,10 +70,33 @@ const SceneA: React.FC<SceneProps> = ({
 
   useEffect(() => {
     if (!part) {
-    } else if (part.barLength <= 4) {
+    } else if (part.barLength < 4) {
       setTitleCharacterDelay(0);
       setTitleCharacterDuration(
         part.endBar.startTime - part.startBar.startTime
+      );
+    } else if (part.barLength === 4) {
+      setMikuThrowDuration(
+        part.startBar.firstBeat.next.startTime -
+          part.startBar.firstBeat.startTime
+      );
+
+      setMainThrowDelay(part.startBar.firstBeat.next.startTime - offset);
+      setMainThrowDuration(
+        part.startBar.firstBeat.next.next.endTime -
+          part.startBar.firstBeat.next.startTime
+      );
+
+      setTitleCharacterDelay(
+        part.startBar.firstBeat.next.next.endTime -
+          offset +
+          part.startBar.firstBeat.next.next.duration / 2
+      );
+      setTitleCharacterDuration(part.startBar.firstBeat.next.next.duration / 2);
+
+      setTitleDelay(part.startBar.next.startTime - offset);
+      setTitleDuration(
+        part.startBar.next.next.next.startTime - part.startBar.next.startTime
       );
     } else {
       setMikuThrowDuration(

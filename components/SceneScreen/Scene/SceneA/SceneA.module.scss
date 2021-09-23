@@ -244,7 +244,7 @@
 
         & > img {
             height: 1500px;
-            animation: walk 1s steps(4) infinite alternate both;
+            animation: walk steps(4) infinite alternate both;
         }
     }
 }
