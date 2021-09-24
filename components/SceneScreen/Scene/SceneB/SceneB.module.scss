@@ -69,3 +69,22 @@
         animation: hiddenHint 500ms linear both;
     }
 }
+
+.encountableContainer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2;
+
+    & > * {
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+
+        transform: translateX(-50%);
+
+        margin: 1rem 0;
+    }
+}

@@ -1,3 +1,4 @@
+import { IBeat } from "textalive-app-api";
 import QuantizedBar from "./QuantizedBar";
 
 export const PartTypes = {
@@ -34,6 +35,23 @@ export default class Part {
 
   get endBar() {
     return this._endBar;
+  }
+
+  get bars(): QuantizedBar[] {
+    const array: QuantizedBar[] = [];
+    let bar = this.startBar;
+    while (bar) {
+      array.push(bar);
+      bar = bar.next;
+    }
+    return array;
+  }
+
+  get beats(): IBeat[] {
+    const bars = this.bars;
+    const beats: IBeat[] = [];
+    bars.forEach((it) => beats.push(...it.beats));
+    return beats;
   }
 
   get isSabi() {
