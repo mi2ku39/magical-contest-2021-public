@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { IBeat, Song } from "textalive-app-api";
 import Part, { PartTypes } from "~/models/Beats/Part";
 import QuantizedBar from "~/models/Beats/QuantizedBar";
@@ -15,7 +15,7 @@ import SceneH from "./Scene/SceneH";
 import SceneI from "./Scene/SceneI";
 import styles from "./SceneScreen.module.scss";
 
-export type SceneProps = {
+export type SceneRenderProps = {
   position?: number;
   beat?: IBeat;
   bar?: QuantizedBar;
@@ -26,6 +26,12 @@ export type SceneProps = {
   isPlayable?: boolean;
   isPlaying: boolean;
 };
+
+export type SceneProps = {
+  isShowedArrowHint: boolean;
+  isShowedSpacebarHint: boolean;
+  pushShowedHint: (hint: Hint) => void;
+} & SceneRenderProps;
 
 const SceneRender: React.FC<SceneProps> = (props) => {
   const partType = useMemo(() => props.part?.partType ?? null, [props.part]);
@@ -65,10 +71,41 @@ const SceneRender: React.FC<SceneProps> = (props) => {
   }
 };
 
-const SceneScreen: React.FC<SceneProps> = (props) => {
+export const Hints = {
+  arrowHint: 1,
+  spacebarHint: 2,
+};
+export type Hint = typeof Hints[keyof typeof Hints];
+
+const SceneScreen: React.FC<SceneRenderProps> = (props) => {
+  const [showedHints, setShowedHints] = useState<Hint[]>([]);
+  const pushShowedHint = useCallback<(hint: Hint) => void>(
+    (hint) => {
+      if (!showedHints.includes(hint)) {
+        setShowedHints([...showedHints, hint]);
+      }
+    },
+    [showedHints]
+  );
+
+  const isShowedArrowHint = useMemo<boolean>(
+    () => showedHints.includes(Hints.arrowHint),
+    [showedHints]
+  );
+
+  const isShowedSpacebarHint = useMemo<boolean>(
+    () => showedHints.includes(Hints.spacebarHint),
+    [showedHints]
+  );
+
   return (
     <div className={styles.container}>
-      <SceneRender {...props} />
+      <SceneRender
+        {...props}
+        pushShowedHint={pushShowedHint}
+        isShowedArrowHint={isShowedArrowHint}
+        isShowedSpacebarHint={isShowedSpacebarHint}
+      />
     </div>
   );
 };

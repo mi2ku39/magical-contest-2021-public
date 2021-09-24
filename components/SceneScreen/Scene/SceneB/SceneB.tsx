@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import {
   CSSProperties,
   useCallback,
@@ -6,9 +7,8 @@ import {
   useState,
 } from "react";
 import KeyHint from "~/components/KeyHint";
-import Icon from "~/constants/Icon";
 import Illustration from "~/constants/Illustration";
-import { SceneProps } from "../../SceneScreen";
+import { Hints, SceneProps } from "../../SceneScreen";
 import sceneStyle from "../general.module.scss";
 import styles from "./SceneB.module.scss";
 
@@ -18,6 +18,8 @@ const SceneB: React.FC<SceneProps> = ({
   bar,
   phrase,
   isPlaying,
+  pushShowedHint,
+  isShowedArrowHint,
 }) => {
   const Inputs = {
     arrowRight: "ArrowRight",
@@ -40,6 +42,14 @@ const SceneB: React.FC<SceneProps> = ({
   );
 
   const mainCharacterMoveDirection = useMemo<Direction>(() => {
+    if (
+      (keys.arrowRight && keys.arrowLeft) ||
+      (!keys.arrowRight && !keys.arrowLeft) ||
+      !isPlaying
+    ) {
+      return Directions.none;
+    }
+
     if (keys.arrowRight && !keys.arrowLeft) {
       return Directions.right;
     }
@@ -47,14 +57,7 @@ const SceneB: React.FC<SceneProps> = ({
     if (keys.arrowLeft && !keys.arrowRight) {
       return Directions.left;
     }
-
-    if (
-      (keys.arrowRight && keys.arrowLeft) ||
-      (!keys.arrowRight && !keys.arrowLeft)
-    ) {
-      return Directions.none;
-    }
-  }, [keys]);
+  }, [keys, animationPlayState]);
 
   const isMoving = useMemo<boolean>(
     () => mainCharacterMoveDirection !== Directions.none,
@@ -84,6 +87,7 @@ const SceneB: React.FC<SceneProps> = ({
         transform: `rotateY(${isRight ? "180deg" : "0deg"}) rotateZ(${
           mainCharacterBeforeDeg ?? 0
         })`,
+        marginLeft: !isRight ? "10rem" : undefined,
       };
     }
 
@@ -100,6 +104,7 @@ const SceneB: React.FC<SceneProps> = ({
 
     return {
       transform: `rotateY(${isLeft ? "0deg" : "180deg"}) rotateZ(${deg}deg)`,
+      marginLeft: isLeft ? "10rem" : undefined,
     };
   }, [
     position,
@@ -112,10 +117,12 @@ const SceneB: React.FC<SceneProps> = ({
   const onKeydown = useCallback(
     ({ code }: KeyboardEvent) => {
       if (code === Inputs.arrowRight) {
+        pushShowedHint(Hints.arrowHint);
         setKeys({ ...keys, arrowRight: true });
       }
 
       if (code === Inputs.arrowLeft) {
+        pushShowedHint(Hints.arrowHint);
         setKeys({ ...keys, arrowLeft: true });
       }
     },
@@ -141,8 +148,8 @@ const SceneB: React.FC<SceneProps> = ({
     }
     return () => {
       if (document?.body) {
-        document.body.removeEventListener("keydown", onKeydown, false);
-        document.body.removeEventListener("keyup", onKeyup, false);
+        document.body.removeEventListener("keydown", onKeydown);
+        document.body.removeEventListener("keyup", onKeyup);
       }
     };
   }, [onKeydown, onKeyup]);
@@ -159,8 +166,15 @@ const SceneB: React.FC<SceneProps> = ({
       </div>
       <div className={styles.hintContainer}>
         <div className={styles.hintElement}>
-          <KeyHint left />
-          <div>を押してみよう！</div>
+          <div
+            className={clsx(
+              styles.hint,
+              isShowedArrowHint && styles.hiddenHint
+            )}
+          >
+            <KeyHint left />
+            <div>を押してみよう！</div>
+          </div>
         </div>
         <div className={styles.hintElement}></div>
       </div>

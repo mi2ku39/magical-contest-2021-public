@@ -1,13 +1,3 @@
-@keyframes walkMain {
-    from {
-        transform: rotateY(180deg) rotateZ(5deg);
-    }
-
-    to {
-        transform: rotateY(180deg) rotateZ(-5deg);
-    }
-}
-
 .characterContainer {
     position: absolute;
     top: 0;
@@ -24,13 +14,28 @@
     box-sizing: border-box;
 
     .mainCharacter {
-        height: 25rem;
+        height: 23rem;
 
         & > img {
             height: 100%;
             object-fit: contain;
-            // animation: walkMain 1s steps(4) infinite alternate both;
         }
+    }
+}
+
+@keyframes hiddenHint {
+    0% {
+        filter: opacity(1);
+    }
+
+    99% {
+        filter: opacity(0);
+        display: block;
+    }
+
+    100% {
+        filter: opacity(0);
+        display: none;
     }
 }
 
@@ -48,13 +53,19 @@
 
     .hintElement {
         width: 50%;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: center;
-        font-weight: 700;
-        & > div {
-            margin: 0 0.125rem;
+        .hint {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            & > div {
+                margin: 0 0.125rem;
+            }
         }
+    }
+
+    .hiddenHint {
+        animation: hiddenHint 500ms linear both;
     }
 }
