@@ -15,11 +15,52 @@
 
     .mainCharacter {
         height: 23rem;
+        position: relative;
 
         & > img {
             height: 100%;
             object-fit: contain;
         }
+    }
+}
+
+@keyframes popupSoundNote {
+    0% {
+        transform: translateY(0);
+        filter: opacity(1);
+    }
+
+    30% {
+        transform: translateY(-4rem);
+        filter: opacity(1);
+    }
+
+    60% {
+        transform: translateY(-4rem);
+        filter: opacity(1);
+    }
+
+    100% {
+        transform: translateY(-4rem);
+        filter: opacity(0);
+    }
+}
+
+.soundNote {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+
+    z-index: -1;
+    animation: popupSoundNote ease-in-out both;
+
+    & > img {
+        height: 3rem;
+        width: 3rem;
+        object-fit: contain;
     }
 }
 
@@ -70,6 +111,16 @@
     }
 }
 
+@keyframes hide {
+    from {
+        filter: opacity(1);
+    }
+
+    to {
+        filter: opacity(0);
+    }
+}
+
 .encountableContainer {
     position: absolute;
     top: 0;
@@ -77,6 +128,8 @@
     right: 0;
     bottom: 0;
     z-index: 2;
+
+    animation: hide linear both;
 
     & > * {
         position: absolute;

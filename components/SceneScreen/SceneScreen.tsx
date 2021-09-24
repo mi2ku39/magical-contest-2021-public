@@ -31,6 +31,8 @@ export type SceneProps = {
   isShowedArrowHint: boolean;
   isShowedSpacebarHint: boolean;
   pushShowedHint: (hint: Hint) => void;
+  noteCount: number;
+  addNoteCount: (num?: number) => void;
 } & SceneRenderProps;
 
 const SceneRender: React.FC<SceneProps> = (props) => {
@@ -79,13 +81,20 @@ export type Hint = typeof Hints[keyof typeof Hints];
 
 const SceneScreen: React.FC<SceneRenderProps> = (props) => {
   const [showedHints, setShowedHints] = useState<Hint[]>([]);
-  const pushShowedHint = useCallback<(hint: Hint) => void>(
-    (hint) => {
-      if (!showedHints.includes(hint)) {
-        setShowedHints([...showedHints, hint]);
+  const [noteCount, setNoteCount] = useState<number>(0);
+
+  const pushShowedHint = useCallback<(hint: Hint) => void>((hint) => {
+    setShowedHints((prev) => {
+      if (!prev.includes(hint)) {
+        return [...prev, hint];
       }
-    },
-    [showedHints]
+      return prev;
+    });
+  }, []);
+
+  const addNoteCount = useCallback<(num?: number) => void>(
+    (num = 1) => setNoteCount((prev) => prev + num),
+    []
   );
 
   const isShowedArrowHint = useMemo<boolean>(
@@ -105,6 +114,8 @@ const SceneScreen: React.FC<SceneRenderProps> = (props) => {
         pushShowedHint={pushShowedHint}
         isShowedArrowHint={isShowedArrowHint}
         isShowedSpacebarHint={isShowedSpacebarHint}
+        noteCount={noteCount}
+        addNoteCount={addNoteCount}
       />
     </div>
   );

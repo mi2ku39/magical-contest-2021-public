@@ -11,5 +11,5 @@ export default {
   volumeOff: `${basePath}/volume-off.svg`,
   volumeUp: `${basePath}/volume-up.svg`,
   mediaChange: `${basePath}/media-change.svg`,
-  musicNote: `${basePath}/music-note.svg`,
+  musicNoteWH: `${basePath}/music-note.svg`,
 };
