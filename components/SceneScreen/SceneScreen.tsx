@@ -1,5 +1,6 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { IBeat, Song } from "textalive-app-api";
+import Icon from "~/constants/Icon";
 import Part, { PartTypes } from "~/models/Beats/Part";
 import QuantizedBar from "~/models/Beats/QuantizedBar";
 import QuantizedPhrase from "~/models/Beats/QuantizedPhrase";
@@ -25,6 +26,7 @@ export type SceneRenderProps = {
   requestPlay?: () => boolean;
   isPlayable?: boolean;
   isPlaying: boolean;
+  isReset: boolean;
 };
 
 export type SceneProps = {
@@ -107,6 +109,13 @@ const SceneScreen: React.FC<SceneRenderProps> = (props) => {
     [showedHints]
   );
 
+  useEffect(() => {
+    if (props.isReset) {
+      setShowedHints([]);
+      setNoteCount(0);
+    }
+  }, [props.isReset]);
+
   return (
     <div className={styles.container}>
       <SceneRender
@@ -117,6 +126,11 @@ const SceneScreen: React.FC<SceneRenderProps> = (props) => {
         noteCount={noteCount}
         addNoteCount={addNoteCount}
       />
+      <div className={styles.musicNoteCounterContainer}>
+        <img className={styles.big} src={Icon.musicNoteWH} />
+        <img src={Icon.closeWH} />
+        <span>{noteCount}</span>
+      </div>
     </div>
   );
 };

@@ -33,6 +33,7 @@ const index: React.FC = () => {
   );
   const [player, setPlayer] = useState<Player | null>(null);
   const [isPlaying, setPlayState] = useState(false);
+  const [isReset, setResetState] = useState(true);
   const [isInitialMute, setInitialMuteState] = useState(false);
   const [initialVolume, setInitialVolume] = useState(50);
   const [mediaElement, setMediaElement] =
@@ -149,7 +150,10 @@ const index: React.FC = () => {
     [player, quantizedSong, isParsableSong]
   );
 
-  const onPlay = useCallback(() => setPlayState(true), []);
+  const onPlay = useCallback(() => {
+    setPlayState(true);
+    setResetState(false);
+  }, []);
   const onPause = useCallback(() => setPlayState(false), []);
   const onStop = useCallback(() => setPlayState(false), []);
   const onRequestedStop = useCallback(() => {
@@ -158,6 +162,7 @@ const index: React.FC = () => {
     setBar(null);
     setPart(null);
     setPhrase(null);
+    setResetState(true);
   }, []);
   const requestPlay = useCallback<() => boolean>(() => {
     if (player) {
@@ -262,6 +267,7 @@ const index: React.FC = () => {
             song={song}
             isPlayable={isEnablePlayButton}
             isPlaying={isPlaying}
+            isReset={isReset}
             requestPlay={requestPlay}
           />
         </div>
