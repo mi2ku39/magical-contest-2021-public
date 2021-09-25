@@ -18,7 +18,7 @@ const SceneA: React.FC<SceneProps> = ({
   song,
 }) => {
   const isVisible = useMemo(
-    () => position >= part.startBar.firstBeat.startTime,
+    () => position >= part.startBar.startBeat.startTime,
     [position]
   );
 
@@ -27,7 +27,7 @@ const SceneA: React.FC<SceneProps> = ({
     [isPlaying]
   );
 
-  const offset = useMemo(() => part.startBar.firstBeat.startTime, [part]);
+  const offset = useMemo(() => part.startBar.startBeat.startTime, [part]);
   const [mikuThrowDuration, setMikuThrowDuration] = useState<number>(0);
   const [mainThrowDelay, setMainThrowDelay] = useState<number>(0);
   const [mainThrowDuration, setMainThrowDuration] = useState<number>(0);
@@ -77,22 +77,22 @@ const SceneA: React.FC<SceneProps> = ({
       );
     } else if (part.barLength === 4) {
       setMikuThrowDuration(
-        part.startBar.firstBeat.next.startTime -
-          part.startBar.firstBeat.startTime
+        part.startBar.startBeat.next.startTime -
+          part.startBar.startBeat.startTime
       );
 
-      setMainThrowDelay(part.startBar.firstBeat.next.startTime - offset);
+      setMainThrowDelay(part.startBar.startBeat.next.startTime - offset);
       setMainThrowDuration(
-        part.startBar.firstBeat.next.next.endTime -
-          part.startBar.firstBeat.next.startTime
+        part.startBar.startBeat.next.next.endTime -
+          part.startBar.startBeat.next.startTime
       );
 
       setTitleCharacterDelay(
-        part.startBar.firstBeat.next.next.endTime -
+        part.startBar.startBeat.next.next.endTime -
           offset +
-          part.startBar.firstBeat.next.next.duration / 2
+          part.startBar.startBeat.next.next.duration / 2
       );
-      setTitleCharacterDuration(part.startBar.firstBeat.next.next.duration / 2);
+      setTitleCharacterDuration(part.startBar.startBeat.next.next.duration / 2);
 
       setTitleDelay(part.startBar.next.startTime - offset);
       setTitleDuration(
@@ -100,22 +100,22 @@ const SceneA: React.FC<SceneProps> = ({
       );
     } else {
       setMikuThrowDuration(
-        part.startBar.firstBeat.next.startTime -
-          part.startBar.firstBeat.startTime
+        part.startBar.startBeat.next.startTime -
+          part.startBar.startBeat.startTime
       );
 
-      setMainThrowDelay(part.startBar.firstBeat.next.startTime - offset);
+      setMainThrowDelay(part.startBar.startBeat.next.startTime - offset);
       setMainThrowDuration(
-        part.startBar.firstBeat.next.next.endTime -
-          part.startBar.firstBeat.next.startTime
+        part.startBar.startBeat.next.next.endTime -
+          part.startBar.startBeat.next.startTime
       );
 
       setTitleCharacterDelay(
-        part.startBar.firstBeat.next.next.endTime -
+        part.startBar.startBeat.next.next.endTime -
           offset +
-          part.startBar.firstBeat.next.next.duration / 2
+          part.startBar.startBeat.next.next.duration / 2
       );
-      setTitleCharacterDuration(part.startBar.firstBeat.next.next.duration / 2);
+      setTitleCharacterDuration(part.startBar.startBeat.next.next.duration / 2);
 
       setTitleDelay(part.startBar.next.startTime - offset);
       setTitleDuration(

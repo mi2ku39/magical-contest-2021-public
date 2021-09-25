@@ -31,12 +31,20 @@ export default class QuantizedBar {
     return this._index;
   }
 
-  get firstBeat(): IBeat {
+  get startBeat(): IBeat {
     return this._firstBeat;
+  }
+
+  get endBeat(): IBeat {
+    return this.beats[this.beats.length - 1];
   }
 
   get startTime(): number {
     return this._firstBeat.startTime;
+  }
+
+  get endTime(): number {
+    return this.endBeat.endTime;
   }
 
   get length(): number {
@@ -48,7 +56,7 @@ export default class QuantizedBar {
   }
 
   toString() {
-    return `${this.index}.${this.firstBeat.position} Bars`;
+    return `${this.index}.${this.startBeat.position} Bars`;
   }
 
   contains(position: number): boolean {

@@ -58,7 +58,7 @@ export default class QuantizedSong {
   findBar(position: number) {
     return this.bars.filter(
       (it) =>
-        it.firstBeat.startTime < position &&
+        it.startBeat.startTime < position &&
         (!it.next || position < it.next.startTime)
     )[0];
   }

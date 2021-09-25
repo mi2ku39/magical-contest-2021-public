@@ -1,6 +1,5 @@
 import clsx from "clsx";
 import {
-  createElement,
   CSSProperties,
   useCallback,
   useEffect,
@@ -39,16 +38,16 @@ const SceneB: React.FC<SceneProps> = ({
   };
   type Direction = typeof Directions[keyof typeof Directions];
 
-  const LocalParts = {
+  const LocalScenes = {
     A: 1,
     B: 2,
   };
-  type LocalPart = typeof LocalParts[keyof typeof LocalParts];
-  const scene = useMemo<LocalPart>(() => {
+  type LocalScene = typeof LocalScenes[keyof typeof LocalScenes];
+  const scene = useMemo<LocalScene>(() => {
     if (part.endBar.index - 1 === bar.index) {
-      return LocalParts.B;
+      return LocalScenes.B;
     }
-    return LocalParts.A;
+    return LocalScenes.A;
   }, [part, bar]);
 
   const [keys, setKeys] = useState<{ arrowRight: boolean; arrowLeft: boolean }>(
@@ -112,7 +111,8 @@ const SceneB: React.FC<SceneProps> = ({
   const [mainMovedDistance, setMainMovedDistance] = useState<number>(0);
 
   useMemo(() => {
-    if (mainMoveDirection === Directions.none && scene === LocalParts.A) return;
+    if (mainMoveDirection === Directions.none && scene === LocalScenes.A)
+      return;
 
     let diff = 0;
     if (mainBeforeMovedTime === null) {
@@ -121,7 +121,7 @@ const SceneB: React.FC<SceneProps> = ({
       diff = position - mainBeforeMovedTime;
     }
     const movingTime = (diff / beat.duration) * 50;
-    if (mainMoveDirection === Directions.left || scene === LocalParts.B) {
+    if (mainMoveDirection === Directions.left || scene === LocalScenes.B) {
       setMainMovedDistance(mainMovedDistance + movingTime);
     }
 
@@ -133,7 +133,7 @@ const SceneB: React.FC<SceneProps> = ({
   }, [position]);
 
   useMemo(() => {
-    if (mainMoveDirection === Directions.left && scene === LocalParts.A) {
+    if (mainMoveDirection === Directions.left && scene === LocalScenes.A) {
       if (addNoteCount) {
         addNoteCount();
         popupWalkNote();
@@ -143,7 +143,7 @@ const SceneB: React.FC<SceneProps> = ({
 
   const mainIllust = useMemo(
     () =>
-      scene === LocalParts.A
+      scene === LocalScenes.A
         ? !beat || !isMoving || beat.position % 2 === 1
           ? Illustration.main.walkAlt
           : Illustration.main.walk
@@ -159,7 +159,7 @@ const SceneB: React.FC<SceneProps> = ({
   const mainStyle = useMemo<CSSProperties>(() => {
     if (!beat || !position) return {};
 
-    if (scene === LocalParts.B) {
+    if (scene === LocalScenes.B) {
       return {
         transform: `rotateY(0deg) rotateZ(0deg)`,
         marginLeft: "6rem",
@@ -276,7 +276,7 @@ const SceneB: React.FC<SceneProps> = ({
       setEncountableHiddenTime(
         part.endBar.previous.startTime - part.startBar.startTime
       );
-      setEncountableHiddenDuration(part.endBar.previous.firstBeat.duration);
+      setEncountableHiddenDuration(part.endBar.previous.startBeat.duration);
     }
 
     if (document?.body) {
@@ -313,7 +313,6 @@ const SceneB: React.FC<SceneProps> = ({
             <div>を押してみよう！</div>
           </div>
         </div>
-        <div className={styles.hintElement}></div>
       </div>
       <div className={styles.encountableContainer} style={encountableStyle}>
         <DummyImage width="5rem" height="10rem" />
