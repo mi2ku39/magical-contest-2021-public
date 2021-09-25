@@ -12,18 +12,19 @@ const DefaultScene: React.FC<SceneProps> = ({
     (event: KeyboardEvent) => {
       if (event.code === "Space") {
         if (requestPlay && isPlayable) requestPlay();
+        event.preventDefault();
       }
     },
     [requestPlay, isPlayable]
   );
 
   useEffect(() => {
-    if (document?.body) {
-      document.body.addEventListener("keydown", onKeydown, false);
+    if (window) {
+      window.addEventListener("keydown", onKeydown, false);
     }
     return () => {
-      if (document?.body) {
-        document.body.removeEventListener("keydown", onKeydown, false);
+      if (window) {
+        window.removeEventListener("keydown", onKeydown, false);
       }
     };
   }, [onKeydown]);

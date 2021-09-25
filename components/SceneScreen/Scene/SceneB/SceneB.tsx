@@ -227,36 +227,40 @@ const SceneB: React.FC<SceneProps> = ({
    */
 
   const onKeydown = useCallback(
-    ({ code }: KeyboardEvent) => {
-      if (code === Inputs.arrowRight) {
+    (e: KeyboardEvent) => {
+      if (e.code === Inputs.arrowRight) {
         if (isPlaying) pushShowedHint(Hints.arrowHint);
         setKeys((prev) => {
           return { ...prev, arrowRight: true };
         });
+        e.preventDefault();
       }
 
-      if (code === Inputs.arrowLeft) {
+      if (e.code === Inputs.arrowLeft) {
         if (isPlaying) pushShowedHint(Hints.arrowHint);
         setKeys((prev) => {
           return { ...prev, arrowLeft: true };
         });
+        e.preventDefault();
       }
     },
     [isPlaying, popupWalkNote]
   );
-  const onKeyup = useCallback(({ code }: KeyboardEvent) => {
-    if (code === Inputs.arrowRight) {
+  const onKeyup = useCallback((e: KeyboardEvent) => {
+    if (e.code === Inputs.arrowRight) {
       setKeys((prev) => {
         return { ...prev, arrowRight: false };
       });
       setMainBeforeMovedTime(null);
+      e.preventDefault();
     }
 
-    if (code === Inputs.arrowLeft) {
+    if (e.code === Inputs.arrowLeft) {
       setKeys((prev) => {
         return { ...prev, arrowLeft: false };
       });
       setMainBeforeMovedTime(null);
+      e.preventDefault();
     }
   }, []);
 
@@ -279,14 +283,14 @@ const SceneB: React.FC<SceneProps> = ({
       setEncountableHiddenDuration(part.endBar.previous.startBeat.duration);
     }
 
-    if (document?.body) {
-      document.body.addEventListener("keydown", onKeydown, false);
-      document.body.addEventListener("keyup", onKeyup, false);
+    if (window) {
+      window.addEventListener("keydown", onKeydown, false);
+      window.addEventListener("keyup", onKeyup, false);
     }
     return () => {
-      if (document?.body) {
-        document.body.removeEventListener("keydown", onKeydown);
-        document.body.removeEventListener("keyup", onKeyup);
+      if (window) {
+        window.removeEventListener("keydown", onKeydown);
+        window.removeEventListener("keyup", onKeyup);
       }
     };
   }, [onKeydown, onKeyup, part]);
