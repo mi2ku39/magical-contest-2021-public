@@ -126,11 +126,13 @@ const SceneScreen: React.FC<SceneRenderProps> = (props) => {
         noteCount={noteCount}
         addNoteCount={addNoteCount}
       />
-      <div className={styles.musicNoteCounterContainer}>
-        <img className={styles.big} src={Icon.musicNoteWH} />
-        <img src={Icon.closeWH} />
-        <span>{noteCount}</span>
-      </div>
+      {noteCount > 0 && (
+        <div className={styles.musicNoteCounterContainer}>
+          <img className={styles.big} src={Icon.musicNoteWH} />
+          <img src={Icon.closeWH} />
+          <span>{noteCount}</span>
+        </div>
+      )}
     </div>
   );
 };

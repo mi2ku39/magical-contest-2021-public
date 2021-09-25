@@ -1,4 +1,5 @@
 @import "~/styles/css/fonts";
+@import "~/styles/css/utilities";
 
 .container {
     height: 100%;
@@ -8,6 +9,7 @@
     grid-template-rows: 1fr;
     overflow: hidden;
     position: relative;
+    @include unselectable;
 
     .musicNoteCounterContainer {
         @include kiwiMaru(500);

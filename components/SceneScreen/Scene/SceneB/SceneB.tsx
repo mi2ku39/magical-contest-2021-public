@@ -112,7 +112,7 @@ const SceneB: React.FC<SceneProps> = ({
   const [mainMovedDistance, setMainMovedDistance] = useState<number>(0);
 
   useMemo(() => {
-    if (mainMoveDirection === Directions.none) return;
+    if (mainMoveDirection === Directions.none && scene === LocalParts.A) return;
 
     let diff = 0;
     if (mainBeforeMovedTime === null) {
@@ -121,7 +121,7 @@ const SceneB: React.FC<SceneProps> = ({
       diff = position - mainBeforeMovedTime;
     }
     const movingTime = (diff / beat.duration) * 50;
-    if (mainMoveDirection === Directions.left) {
+    if (mainMoveDirection === Directions.left || scene === LocalParts.B) {
       setMainMovedDistance(mainMovedDistance + movingTime);
     }
 
