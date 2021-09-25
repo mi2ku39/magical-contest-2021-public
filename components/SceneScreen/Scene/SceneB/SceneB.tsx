@@ -122,11 +122,11 @@ const SceneB: React.FC<SceneProps> = ({
     }
     const movingTime = (diff / beat.duration) * 50;
     if (mainMoveDirection === Directions.left || scene === LocalScenes.B) {
-      setMainMovedDistance(mainMovedDistance + movingTime);
+      setMainMovedDistance((prev) => prev + movingTime);
     }
 
     if (mainMoveDirection === Directions.right) {
-      setMainMovedDistance(mainMovedDistance - movingTime);
+      setMainMovedDistance((prev) => prev - movingTime);
     }
 
     setMainBeforeMovedTime(position);
@@ -214,12 +214,14 @@ const SceneB: React.FC<SceneProps> = ({
           }px)`,
           animationDelay: `${encountableHiddenTime}ms`,
           animationDuration: `${encountableHiddenDuration}ms`,
+          animationPlayState,
         };
   }, [
     encountablePosition,
     mainMovedDistance,
     encountableHiddenTime,
     encountableHiddenDuration,
+    animationPlayState,
   ]);
 
   /**

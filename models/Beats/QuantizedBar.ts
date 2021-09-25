@@ -55,6 +55,10 @@ export default class QuantizedBar {
     return this._beats;
   }
 
+  get duration(): number {
+    return this.beats.reduce((sum, it) => sum + it.duration, 0);
+  }
+
   toString() {
     return `${this.index}.${this.startBeat.position} Bars`;
   }

@@ -111,17 +111,42 @@
     }
 }
 
-@keyframes hide {
-    from {
-        filter: opacity(1);
+@keyframes slidein {
+    0% {
+        transform: translateX(100%) scale(1);
     }
 
-    to {
-        filter: opacity(0);
+    50% {
+        transform: translateX(0%) translateY(0%) scale(1);
+    }
+
+    62% {
+        transform: translateX(0%) translateY(0%) scale(1);
+    }
+    62.5% {
+        transform: translateX(0%) translateY(-25%) scale(1.5);
+    }
+
+    74.5% {
+        transform: translateX(0%) translateY(-25%) scale(1.5);
+    }
+    75% {
+        transform: translateX(0%) translateY(-12.5%) scale(1.25);
+    }
+    87% {
+        transform: translateX(0%) translateY(-12.5%) scale(1.25);
+    }
+
+    87.5% {
+        transform: translateX(0%) translateY(-50%) scale(2);
+    }
+
+    100% {
+        transform: translateX(0%) translateY(-50%) scale(2);
     }
 }
 
-.encountableContainer {
+.greenContainer {
     position: absolute;
     top: 0;
     left: 0;
@@ -129,7 +154,7 @@
     bottom: 0;
     z-index: 2;
 
-    animation: hide linear both;
+    animation: slidein linear both;
 
     & > * {
         position: absolute;

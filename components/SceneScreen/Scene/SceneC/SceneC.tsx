@@ -52,10 +52,6 @@ const SceneC: React.FC<SceneProps> = ({
     if (part.endBar.index - 2 === bar.index) {
       return LocalScenes.B;
     }
-
-    if (part.endBar.index - 1 === bar.index) {
-      return LocalScenes.C;
-    }
     return LocalScenes.A;
   }, [part, bar]);
 
@@ -138,7 +134,7 @@ const SceneC: React.FC<SceneProps> = ({
   const [mainMovedHeight, setMainMovedDistance] = useState<number>(0);
 
   useMemo(() => {
-    if (mainMoveHorizontalDirection === Directions.none) return;
+    if (mainMoveVerticalDirection === Directions.none) return;
 
     let diff = 0;
     if (mainBeforeMovedTime === null) {
@@ -148,22 +144,18 @@ const SceneC: React.FC<SceneProps> = ({
     }
     const movingTime = (diff / beat.duration) * 50;
     if (mainMoveVerticalDirection === Directions.down) {
-      setMainMovedDistance(mainMovedHeight + movingTime);
+      setMainMovedDistance((prev) => prev + movingTime);
     }
 
     if (mainMoveVerticalDirection === Directions.up) {
-      setMainMovedDistance(mainMovedHeight - movingTime);
+      setMainMovedDistance((prev) => prev - movingTime);
     }
 
     setMainBeforeMovedTime(position);
   }, [position]);
 
   useMemo(() => {
-    if (
-      (mainMoveHorizontalDirection === Directions.left ||
-        mainMoveVerticalDirection !== Directions.none) &&
-      scene === LocalScenes.A
-    ) {
+    if (mainBeforeDirection === Directions.left && scene === LocalScenes.A) {
       if (addNoteCount) {
         addNoteCount();
         popupWalkNote();
@@ -179,14 +171,10 @@ const SceneC: React.FC<SceneProps> = ({
   const mainStyle = useMemo<CSSProperties>(() => {
     if (!beat || !position) return {};
 
-    if (scene === LocalScenes.B) {
-      return {
-        transform: `rotateY(0deg) rotateZ(0deg)`,
-        marginLeft: "6rem",
-      };
-    }
-
-    if (mainMoveHorizontalDirection === Directions.none) {
+    if (
+      mainMoveHorizontalDirection === Directions.none &&
+      mainMoveVerticalDirection === Directions.none
+    ) {
       const isRight = mainBeforeDirection === Directions.right;
       return {
         transform: `rotateY(${isRight ? "180deg" : "0deg"}) rotateZ(${
@@ -200,9 +188,16 @@ const SceneC: React.FC<SceneProps> = ({
     const deg = (bar.index % 2 === 0 ? 1 : -1) * (10 * progress - 5);
     setMainBeforeDeg(deg);
 
-    const isLeft = mainMoveHorizontalDirection === Directions.left;
-
-    setMainBeforeDirection(isLeft ? Directions.left : Directions.right);
+    let isLeft = false;
+    if (mainMoveHorizontalDirection === Directions.left) {
+      isLeft = true;
+      setMainBeforeDirection(Directions.left);
+    } else if (mainMoveHorizontalDirection === Directions.right) {
+      isLeft = false;
+      setMainBeforeDirection(Directions.right);
+    } else {
+      isLeft = mainBeforeDirection === Directions.left;
+    }
 
     return {
       transform: `rotateY(${isLeft ? "0deg" : "180deg"}) rotateZ(${deg}deg)`,
@@ -215,6 +210,27 @@ const SceneC: React.FC<SceneProps> = ({
     mainBeforeDirection,
     mainMoveHorizontalDirection,
   ]);
+
+  const musicNoteStyle = useMemo<CSSProperties>(() => {
+    return { transform: `translateY(${mainMovedHeight}px)` };
+  }, [mainMovedHeight]);
+
+  /**
+   * 緑の子関係
+   */
+
+  const [greenDelay, setGreenDelay] = useState<number>(null);
+  const [greenDuration, setGreenDuration] = useState<number>(null);
+
+  const greenStyle = useMemo<CSSProperties>(() => {
+    return !greenDelay || !greenDuration
+      ? {}
+      : {
+          animationDelay: `${greenDelay}ms`,
+          animationDuration: `${greenDuration}ms`,
+          animationPlayState,
+        };
+  }, [greenDelay, greenDuration, animationPlayState]);
 
   /**
    * keyevent関係
@@ -247,7 +263,7 @@ const SceneC: React.FC<SceneProps> = ({
 
       if (e.code === Inputs.arrowDown) {
         setKeys((prev) => {
-          return { ...prev, arrowDown: false };
+          return { ...prev, arrowDown: true };
         });
         e.preventDefault();
       }
@@ -289,6 +305,20 @@ const SceneC: React.FC<SceneProps> = ({
   }, []);
 
   useEffect(() => {
+    if (part && (greenDuration === null || greenDelay === null)) {
+      if (part.endBar.previous?.previous) {
+        setGreenDelay(
+          part.endBar.previous.previous.startTime - part.startBar.startTime
+        );
+        setGreenDuration(
+          part.endBar.previous.previous.duration + part.endBar.previous.duration
+        );
+      } else {
+        setGreenDelay(part.endBar.startTime - part.startBar.startTime);
+        setGreenDuration(part.endBar.duration);
+      }
+    }
+
     if (window) {
       window.addEventListener("keydown", onKeydown, false);
       window.addEventListener("keyup", onKeyup, false);
@@ -306,7 +336,11 @@ const SceneC: React.FC<SceneProps> = ({
         <div className={sceneStyle.phrase}>{phrase && phrase.phrase.text}</div>
       </div>
       <div className={styles.characterContainer}>
-        <div className={styles.mainCharacter} ref={mainContainer}>
+        <div
+          className={styles.mainCharacter}
+          ref={mainContainer}
+          style={musicNoteStyle}
+        >
           <img src={Illustration.main.fly} style={mainStyle} />
         </div>
       </div>
@@ -322,6 +356,9 @@ const SceneC: React.FC<SceneProps> = ({
             <div>を押してみよう！</div>
           </div>
         </div>
+      </div>
+      <div className={styles.greenContainer} style={greenStyle}>
+        <DummyImage height="10rem" width="5rem" />
       </div>
     </div>
   );
