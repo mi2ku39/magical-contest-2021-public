@@ -10,7 +10,7 @@ type Props = {
   down?: boolean;
 };
 
-const basePath = "/images/icons";
+const basePath = `${process.env.BASE_PATH}/images/icons`;
 const icons = {
   space: `${basePath}/space-bar.svg`,
   arrowUp: `${basePath}/arrow-up.svg`,

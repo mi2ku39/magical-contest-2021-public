@@ -1,0 +1,69 @@
+@import "~/styles/css/utilities";
+
+.imageContainer {
+    position: absolute;
+    z-index: 0;
+    @include tlrb;
+
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+
+    .imageInner {
+        display: inline-flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-end;
+    }
+
+    .stageContainer {
+        margin-bottom: 5vh;
+    }
+
+    .onStageContainer {
+        position: relative;
+        flex-grow: 1;
+        align-self: stretch;
+    }
+
+    .machineContainer {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-end;
+        justify-content: center;
+
+        & > div {
+            width: 25%;
+            margin-bottom: 0.25rem;
+            display: flex;
+
+            &.rightSpeaker {
+                justify-content: center;
+            }
+
+            &.leftSpeaker {
+                justify-content: center;
+            }
+
+            &.rightMic {
+                justify-content: flex-end;
+            }
+
+            &.leftMic {
+                justify-content: flex-start;
+            }
+        }
+    }
+
+    .performerContainer {
+        position: absolute;
+        @include tlrb(none, 0, 0, 0);
+
+        display: flex;
+        justify-content: center;
+
+        & > div {
+            margin-bottom: 0.25rem;
+        }
+    }
+}

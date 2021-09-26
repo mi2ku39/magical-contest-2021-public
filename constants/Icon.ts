@@ -1,4 +1,4 @@
-const basePath = "/images/icons";
+const basePath = `${process.env.BASE_PATH}/images/icons`;
 
 export default {
   close: `${basePath}/close.svg`,

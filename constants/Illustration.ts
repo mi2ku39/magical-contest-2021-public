@@ -1,4 +1,4 @@
-const basePath = "/images/illustrations";
+const basePath = `${process.env.BASE_PATH}/images/illustrations`;
 
 export default {
   main: {
