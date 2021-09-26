@@ -276,7 +276,9 @@ const SceneB: React.FC<SceneProps> = ({
       );
       setEncountableHiddenDuration(part.endBar.previous.startBeat.duration);
     }
+  }, [part]);
 
+  useEffect(() => {
     if (window) {
       window.addEventListener("keydown", onKeydown, false);
       window.addEventListener("keyup", onKeyup, false);
@@ -287,7 +289,7 @@ const SceneB: React.FC<SceneProps> = ({
         window.removeEventListener("keyup", onKeyup);
       }
     };
-  }, [onKeydown, onKeyup, part]);
+  }, [onKeydown, onKeyup]);
 
   return (
     <div className={sceneStyle.container}>

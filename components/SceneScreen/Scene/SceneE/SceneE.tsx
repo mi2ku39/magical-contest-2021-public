@@ -71,16 +71,26 @@ const SceneE: React.FC<SceneProps> = ({
   const [goneCircles, setGoneCircles] = useState<Circle[]>([]);
   const nearCircle = useMemo<Circle>(
     () =>
-      circles.reduce((prev, it) =>
-        !prev ||
-        Math.abs(prev.position - position) > Math.abs(it.position - position)
-          ? it
-          : prev
+      circles.reduce(
+        (prev, it) =>
+          !prev ||
+          Math.abs(prev.position - position) > Math.abs(it.position - position)
+            ? it
+            : prev,
+        null
       ),
     [position, circles]
   );
 
-  const onKeydown = useCallback((event: KeyboardEvent) => {}, []);
+  const judgeCircle = useCallback<(position: number) => void>(() => {}, [
+    nearCircle,
+    goneCircles,
+  ]);
+
+  const onKeydown = useCallback(
+    (event: KeyboardEvent) => {},
+    [position, judgeCircle]
+  );
 
   useEffect(() => {
     if (part) {
@@ -93,7 +103,9 @@ const SceneE: React.FC<SceneProps> = ({
         });
       });
     }
+  }, [part]);
 
+  useEffect(() => {
     if (window) {
       window.addEventListener("keydown", onKeydown);
     }
@@ -103,7 +115,7 @@ const SceneE: React.FC<SceneProps> = ({
         window.removeEventListener("keydown", onKeydown);
       }
     };
-  }, [part]);
+  }, [onKeydown]);
 
   return (
     <div className={sceneStyle.container}>

@@ -316,7 +316,9 @@ const SceneC: React.FC<SceneProps> = ({
         setGreenDuration(part.endBar.duration);
       }
     }
+  }, [part]);
 
+  useEffect(() => {
     if (window) {
       window.addEventListener("keydown", onKeydown, false);
       window.addEventListener("keyup", onKeyup, false);
@@ -327,7 +329,8 @@ const SceneC: React.FC<SceneProps> = ({
         window.removeEventListener("keyup", onKeyup);
       }
     };
-  }, [onKeydown, onKeyup, part]);
+  }, [onKeydown, onKeyup]);
+
   return (
     <div className={sceneStyle.container} ref={containerDom}>
       <div className={sceneStyle.phraseContainer}>

@@ -146,7 +146,9 @@ const SceneScreen: React.FC<SceneRenderProps> = (props) => {
       setShowedHints([]);
       setNoteCount(0);
     }
+  }, [props.isReset]);
 
+  useEffect(() => {
     if (window) {
       window.addEventListener("keydown", onKeydown);
       window.addEventListener("keyup", onKeyup);
@@ -158,7 +160,7 @@ const SceneScreen: React.FC<SceneRenderProps> = (props) => {
         window.removeEventListener("keyup", onKeyup);
       }
     };
-  }, [props.isReset]);
+  }, [onKeydown, onKeyup]);
 
   return (
     <div className={styles.container}>
