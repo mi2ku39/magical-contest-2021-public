@@ -26,7 +26,7 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: yarn export
-        run: yarn export
+        run: yarn export -- -o docs/
 
       - name: git commit
         env:
