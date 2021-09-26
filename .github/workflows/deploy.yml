@@ -1,0 +1,50 @@
+name: deploy
+on:
+  push:
+    branches:
+      - production
+      - "setup/ci"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      tag_name: ${{ steps.create_tag.outputs.tag_name}}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set git username
+        env:
+          TZ: "Asia/Tokyo"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config --local user.email "production-build@example.com"
+          git config --local user.name "GItHub Actions $GITHUB_RUN_NUMBER"
+
+      - name: yarn install
+        run: yarn install --frozen-lockfile
+
+      - name: yarn export
+        run: yarn export
+
+      - name: git commit
+        env:
+          TZ: "Asia/Tokyo"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git add .
+          git commit -m "release commit"
+          git push
+
+      - name: Create release tag
+        id: create_tag
+        env:
+          TZ: "Asia/Tokyo"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          DATE=`date +"%Y%m%d"`
+          TAG_NAME="release/release_${DATE}_${GITHUB_RUN_NUMBER}"
+          git tag "$TAG_NAME"
+          git push origin "$TAG_NAME"
+          echo "::set-output name=tag_name::${TAG_NAME}"
