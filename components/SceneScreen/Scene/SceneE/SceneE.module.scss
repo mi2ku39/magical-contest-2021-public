@@ -20,9 +20,53 @@
     }
 }
 
+.hintContainer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    .hintElement {
+        width: 50%;
+        font-weight: 700;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .col {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .hint {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+
+            & > div {
+                margin: 0 0.125rem;
+            }
+        }
+    }
+
+    .hiddenHint {
+        animation: hiddenHint 500ms linear both;
+    }
+}
+
 .timingHint {
     position: absolute;
     @include tlrb;
+    z-index: -3;
 
     display: flex;
     align-items: center;
@@ -30,9 +74,25 @@
 
     &:after {
         content: "";
-        border: 0.125rem solid #fff;
+        border: 0.125rem solid rgba(255, 255, 255, 0.6);
         height: 60vh;
         width: 60vh;
         border-radius: 30vh;
     }
+}
+
+.circleContainer {
+    position: absolute;
+    @include tlrb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: -2;
+}
+
+.circle {
+    border: 0.25rem solid rgba(#18ffff, 1);
+    height: 60vh;
+    width: 60vh;
+    border-radius: 30vh;
 }

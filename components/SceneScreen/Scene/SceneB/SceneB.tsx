@@ -12,7 +12,7 @@ import KeyHint from "~/components/KeyHint";
 import Icon from "~/constants/Icon";
 import Illustration from "~/constants/Illustration";
 import QuantizedBar from "~/models/Beats/QuantizedBar";
-import { Hints, SceneProps } from "../../SceneScreen";
+import { Hints, Inputs, SceneProps } from "../../SceneScreen";
 import sceneStyle from "../general.module.scss";
 import styles from "./SceneB.module.scss";
 
@@ -27,10 +27,6 @@ const SceneB: React.FC<SceneProps> = ({
   isShowedArrowHint,
   addNoteCount,
 }) => {
-  const Inputs = {
-    arrowRight: "ArrowRight",
-    arrowLeft: "ArrowLeft",
-  };
   const Directions = {
     none: 0,
     right: 1,
@@ -235,7 +231,6 @@ const SceneB: React.FC<SceneProps> = ({
         setKeys((prev) => {
           return { ...prev, arrowRight: true };
         });
-        e.preventDefault();
       }
 
       if (e.code === Inputs.arrowLeft) {
@@ -243,7 +238,6 @@ const SceneB: React.FC<SceneProps> = ({
         setKeys((prev) => {
           return { ...prev, arrowLeft: true };
         });
-        e.preventDefault();
       }
     },
     [isPlaying, popupWalkNote]
@@ -254,7 +248,6 @@ const SceneB: React.FC<SceneProps> = ({
         return { ...prev, arrowRight: false };
       });
       setMainBeforeMovedTime(null);
-      e.preventDefault();
     }
 
     if (e.code === Inputs.arrowLeft) {
@@ -262,7 +255,6 @@ const SceneB: React.FC<SceneProps> = ({
         return { ...prev, arrowLeft: false };
       });
       setMainBeforeMovedTime(null);
-      e.preventDefault();
     }
   }, []);
 

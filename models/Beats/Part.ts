@@ -21,6 +21,8 @@ export default class Part {
   protected _endBar: QuantizedBar;
   protected _isSabi: boolean;
   protected _hasPhrase: boolean;
+  protected _bars: QuantizedBar[];
+  protected _beats: IBeat[];
   public partType?: PartType;
   public next?: Part;
   public previous?: Part;
@@ -38,20 +40,27 @@ export default class Part {
   }
 
   get bars(): QuantizedBar[] {
-    const array: QuantizedBar[] = [];
-    let bar = this.startBar;
-    while (bar) {
-      array.push(bar);
-      bar = bar.next;
+    if (!this._bars) {
+      const array: QuantizedBar[] = [];
+      let bar = this.startBar;
+      while (bar) {
+        array.push(bar);
+        bar = bar.next;
+      }
+      this._bars = array;
     }
-    return array;
+    return this._bars;
   }
 
   get beats(): IBeat[] {
-    const bars = this.bars;
-    const beats: IBeat[] = [];
-    bars.forEach((it) => beats.push(...it.beats));
-    return beats;
+    if (!this._beats) {
+      const bars = this.bars;
+      const beats: IBeat[] = [];
+      bars.forEach((it) => beats.push(...it.beats));
+      this._beats = beats;
+    }
+
+    return this._beats;
   }
 
   get isSabi() {
@@ -88,5 +97,10 @@ export default class Part {
     return (
       this.startBar.startTime <= position && this.endBar.startTime >= position
     );
+  }
+
+  fresh() {
+    this._bars = null;
+    this._beats = null;
   }
 }

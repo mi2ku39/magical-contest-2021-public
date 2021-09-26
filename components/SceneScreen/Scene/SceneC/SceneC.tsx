@@ -11,7 +11,7 @@ import DummyImage from "~/components/DummyImage";
 import KeyHint from "~/components/KeyHint";
 import Icon from "~/constants/Icon";
 import Illustration from "~/constants/Illustration";
-import { Hints, SceneProps } from "../../SceneScreen";
+import { Hints, Inputs, SceneProps } from "../../SceneScreen";
 import sceneStyle from "../general.module.scss";
 import styles from "./SceneC.module.scss";
 
@@ -26,12 +26,6 @@ const SceneC: React.FC<SceneProps> = ({
   isShowedArrowHint,
   addNoteCount,
 }) => {
-  const Inputs = {
-    arrowRight: "ArrowRight",
-    arrowLeft: "ArrowLeft",
-    arrowUp: "ArrowUp",
-    arrowDown: "ArrowDown",
-  };
   const Directions = {
     none: 0,
     right: 1,
@@ -249,7 +243,6 @@ const SceneC: React.FC<SceneProps> = ({
         setKeys((prev) => {
           return { ...prev, arrowRight: true };
         });
-        e.preventDefault();
       }
 
       if (e.code === Inputs.arrowLeft) {
@@ -257,21 +250,18 @@ const SceneC: React.FC<SceneProps> = ({
         setKeys((prev) => {
           return { ...prev, arrowLeft: true };
         });
-        e.preventDefault();
       }
 
       if (e.code === Inputs.arrowUp) {
         setKeys((prev) => {
           return { ...prev, arrowUp: true };
         });
-        e.preventDefault();
       }
 
       if (e.code === Inputs.arrowDown) {
         setKeys((prev) => {
           return { ...prev, arrowDown: true };
         });
-        e.preventDefault();
       }
     },
     [isPlaying, popupWalkNote]
@@ -282,7 +272,6 @@ const SceneC: React.FC<SceneProps> = ({
         return { ...prev, arrowRight: false };
       });
       setMainBeforeMovedTime(null);
-      e.preventDefault();
     }
 
     if (e.code === Inputs.arrowLeft) {
@@ -290,7 +279,6 @@ const SceneC: React.FC<SceneProps> = ({
         return { ...prev, arrowLeft: false };
       });
       setMainBeforeMovedTime(null);
-      e.preventDefault();
     }
 
     if (e.code === Inputs.arrowUp) {
@@ -298,7 +286,6 @@ const SceneC: React.FC<SceneProps> = ({
         return { ...prev, arrowUp: false };
       });
       setMainBeforeMovedTime(null);
-      e.preventDefault();
     }
 
     if (e.code === Inputs.arrowDown) {
@@ -306,7 +293,6 @@ const SceneC: React.FC<SceneProps> = ({
         return { ...prev, arrowDown: false };
       });
       setMainBeforeMovedTime(null);
-      e.preventDefault();
     }
   }, []);
 

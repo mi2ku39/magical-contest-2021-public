@@ -37,6 +37,14 @@ export type SceneProps = {
   addNoteCount: (num?: number) => void;
 } & SceneRenderProps;
 
+export const Inputs = {
+  arrowUp: "ArrowUp",
+  arrowLeft: "ArrowLeft",
+  arrowRight: "ArrowRight",
+  arrowDown: "ArrowDown",
+  space: "Space",
+};
+
 const SceneRender: React.FC<SceneProps> = (props) => {
   const partType = useMemo(() => props.part?.partType ?? null, [props.part]);
   switch (partType) {
@@ -111,11 +119,11 @@ const SceneScreen: React.FC<SceneRenderProps> = (props) => {
 
   const onKeydown = useCallback((event: KeyboardEvent) => {
     if (
-      event.code === "ArrowUp" ||
-      event.code === "ArrowLeft" ||
-      event.code === "ArrowRight" ||
-      event.code === "ArrowDown" ||
-      event.code === "Space"
+      event.code === Inputs.arrowUp ||
+      event.code === Inputs.arrowLeft ||
+      event.code === Inputs.arrowRight ||
+      event.code === Inputs.arrowDown ||
+      event.code === Inputs.space
     ) {
       event.preventDefault();
     }
@@ -123,11 +131,11 @@ const SceneScreen: React.FC<SceneRenderProps> = (props) => {
 
   const onKeyup = useCallback((event: KeyboardEvent) => {
     if (
-      event.code === "ArrowUp" ||
-      event.code === "ArrowLeft" ||
-      event.code === "ArrowRight" ||
-      event.code === "ArrowDown" ||
-      event.code === "Space"
+      event.code === Inputs.arrowUp ||
+      event.code === Inputs.arrowLeft ||
+      event.code === Inputs.arrowRight ||
+      event.code === Inputs.arrowDown ||
+      event.code === Inputs.space
     ) {
       event.preventDefault();
     }
