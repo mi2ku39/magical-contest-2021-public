@@ -26,7 +26,14 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: yarn export
-        run: yarn export -- -o docs/
+        env:
+          TZ: "Asia/Tokyo"
+          BASE_PATH: "/magical-contest-2021"
+          TEXTALIVE_APP_TOKEN: ${{ secrets.TEXTALIVE_APP_TOKEN }}
+          FALLBACK_SONG_URL: "https://www.youtube.com/watch?v=Ch4RQPG1Tmo"
+        run: |
+          yarn export -- -o docs/
+          touch docs/.nojekyll
 
       - name: git commit
         env:
