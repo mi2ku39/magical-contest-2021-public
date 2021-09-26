@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, {
+  MouseEventHandler,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { IBeat, Song } from "textalive-app-api";
 import Icon from "~/constants/Icon";
 import Part, { PartTypes } from "~/models/Beats/Part";
@@ -30,11 +36,15 @@ export type SceneRenderProps = {
 };
 
 export type SceneProps = {
+  isParentMounted: boolean;
   isShowedArrowHint: boolean;
   isShowedSpacebarHint: boolean;
   pushShowedHint: (hint: Hint) => void;
   noteCount: number;
   addNoteCount: (num?: number) => void;
+  setRenderOnClickListeners: React.Dispatch<
+    React.SetStateAction<((e: React.MouseEvent) => void)[]>
+  >;
 } & SceneRenderProps;
 
 export const Inputs = {
@@ -93,6 +103,9 @@ const SceneScreen: React.FC<SceneRenderProps> = (props) => {
   const [isMounted, setMountState] = useState<boolean>(false);
   const [showedHints, setShowedHints] = useState<Hint[]>([]);
   const [noteCount, setNoteCount] = useState<number>(0);
+  const [renderOnClickListeners, setRenderOnClickListeners] = useState<
+    ((e: React.MouseEvent) => void)[]
+  >([]);
 
   const pushShowedHint = useCallback<(hint: Hint) => void>((hint) => {
     setShowedHints((prev) => {
@@ -142,36 +155,49 @@ const SceneScreen: React.FC<SceneRenderProps> = (props) => {
     }
   }, []);
 
+  const onClickRender = useCallback<MouseEventHandler<HTMLDivElement>>(
+    (event) => {
+      renderOnClickListeners.forEach((it) => {
+        if (it) it(event);
+      });
+    },
+    [renderOnClickListeners]
+  );
+
   useEffect(() => {
     if (props.isReset) {
       setShowedHints([]);
       setNoteCount(0);
     }
-  }, [props.isReset]);
 
-  useEffect(() => {
     if (window) {
       window.addEventListener("keydown", onKeydown);
       window.addEventListener("keyup", onKeyup);
     }
 
+    setMountState(true);
+
     return () => {
+      setMountState(false);
+
       if (window) {
         window.removeEventListener("keydown", onKeydown);
         window.removeEventListener("keyup", onKeyup);
       }
     };
-  }, [onKeydown, onKeyup]);
+  }, [props.isReset, onKeydown, onKeyup]);
 
   return (
-    <div className={styles.container}>
+    <div className={styles.container} onClick={onClickRender}>
       <SceneRender
         {...props}
         pushShowedHint={pushShowedHint}
         isShowedArrowHint={isShowedArrowHint}
         isShowedSpacebarHint={isShowedSpacebarHint}
+        isParentMounted={isMounted}
         noteCount={noteCount}
         addNoteCount={addNoteCount}
+        setRenderOnClickListeners={setRenderOnClickListeners}
       />
       {noteCount > 0 && (
         <div className={styles.musicNoteCounterContainer}>
