@@ -11,12 +11,29 @@
     z-index: 3;
 
     .imageInner {
+        position: relative;
         display: flex;
         & > img {
             height: 80vh;
             object-fit: contain;
             margin-bottom: -10rem;
         }
+    }
+}
+
+@keyframes hiddenHint {
+    0% {
+        filter: opacity(1);
+    }
+
+    99% {
+        filter: opacity(0);
+        display: block;
+    }
+
+    100% {
+        filter: opacity(0);
+        display: none;
     }
 }
 
@@ -56,10 +73,10 @@
                 margin: 0 0.125rem;
             }
         }
-    }
 
-    .hiddenHint {
-        animation: hiddenHint 500ms linear both;
+        .hiddenHint {
+            animation: hiddenHint 500ms linear both;
+        }
     }
 }
 
@@ -95,4 +112,44 @@
     height: 60vh;
     width: 60vh;
     border-radius: 30vh;
+}
+
+@keyframes popupMusicNote {
+    0% {
+        transform: translateY(2rem);
+        filter: opacity(1);
+    }
+
+    30% {
+        transform: translateY(-2rem);
+        filter: opacity(1);
+    }
+
+    60% {
+        transform: translateY(-2rem);
+        filter: opacity(1);
+    }
+
+    100% {
+        transform: translateY(-2rem);
+        filter: opacity(0);
+    }
+}
+
+.musicNote {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+
+    z-index: -1;
+    animation: popupMusicNote ease-in-out both;
+
+    & > img {
+        height: 3rem;
+        width: 3rem;
+        object-fit: contain;
+    }
 }

@@ -1,8 +1,15 @@
 import clsx from "clsx";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import KeyHint from "~/components/KeyHint";
+import Icon from "~/constants/Icon";
 import Illustration from "~/constants/Illustration";
-import { SceneProps } from "../../SceneScreen";
+import { Hints, Inputs, SceneProps } from "../../SceneScreen";
 import sceneStyle from "../general.module.scss";
 import styles from "./SceneE.module.scss";
 
@@ -13,6 +20,9 @@ const SceneE: React.FC<SceneProps> = ({
   phrase,
   part,
   isShowedSpacebarHint,
+  addNoteCount,
+  pushShowedHint,
+  isPlaying,
 }) => {
   type Circle = {
     index: number;
@@ -42,21 +52,6 @@ const SceneE: React.FC<SceneProps> = ({
     return LocalScenes.A;
   }, [part, bar]);
 
-  const [circles, setCircles] = useState<Circle[]>([]);
-  const scaler = useCallback<(num: number) => number>(
-    (num) =>
-      1 + (num - position) / 1000 > 0 ? 1 + (num - position) / 1000 : 0,
-    [position]
-  );
-
-  const opacity = useCallback<(num: number) => number>(
-    (num) => {
-      const ratio = (position / num) ** 64;
-      return ratio > 1 ? 1 : ratio;
-    },
-    [position, scaler]
-  );
-
   const illust = useMemo(() => {
     if (scene === LocalScenes.B) {
       return Illustration.miku.frontSmiley;
@@ -68,6 +63,29 @@ const SceneE: React.FC<SceneProps> = ({
     return Illustration.miku.fron;
   }, [scene]);
 
+  const imageInner = useRef<HTMLDivElement>();
+
+  const popupMusicNote = useCallback(() => {
+    if (!document) return;
+
+    const dom = document.createElement("div");
+    dom.className = styles.musicNote;
+    dom.setAttribute("style", `animation-duration: ${beat.duration}ms`);
+    const img = document.createElement("img");
+    img.src = Icon.musicNoteWH;
+    dom.appendChild(img);
+
+    imageInner?.current?.appendChild(dom);
+
+    new Promise<void>((resolve) => {
+      setTimeout(() => {
+        imageInner?.current?.removeChild(dom);
+        resolve();
+      }, beat.duration + 100);
+    });
+  }, [imageInner, beat]);
+
+  const [circles, setCircles] = useState<Circle[]>([]);
   const [goneCircles, setGoneCircles] = useState<Circle[]>([]);
   const nearCircle = useMemo<Circle>(
     () =>
@@ -81,15 +99,47 @@ const SceneE: React.FC<SceneProps> = ({
       ),
     [position, circles]
   );
+  const scaler = useCallback<(num: number) => number>(
+    (num) =>
+      1 + (num - position) / 1000 > 0 ? 1 + (num - position) / 1000 : 0,
+    [position]
+  );
 
-  const judgeCircle = useCallback<(position: number) => void>(() => {}, [
-    nearCircle,
-    goneCircles,
-  ]);
+  const opacity = useCallback<(circle: Circle) => number>(
+    (circle) => {
+      if (goneCircles.includes(circle)) return 0;
+
+      const ratio = (position / circle.position) ** 64;
+      return ratio > 1 ? 1 : ratio;
+    },
+    [position, scaler, goneCircles]
+  );
+
+  const judgeCircle = useCallback<(time: number) => void>(
+    (time) => {
+      if (
+        !goneCircles.includes(nearCircle) &&
+        Math.abs(nearCircle.position - time) <= 100
+      ) {
+        addNoteCount();
+        popupMusicNote();
+        setGoneCircles((prev) => {
+          prev.push(nearCircle);
+          return prev;
+        });
+      }
+    },
+    [nearCircle, goneCircles, popupMusicNote]
+  );
 
   const onKeydown = useCallback(
-    (event: KeyboardEvent) => {},
-    [position, judgeCircle]
+    (event: KeyboardEvent) => {
+      if (event.code === Inputs.space) {
+        if (isPlaying) pushShowedHint(Hints.spacebarHint);
+        judgeCircle(position);
+      }
+    },
+    [position, judgeCircle, pushShowedHint]
   );
 
   useEffect(() => {
@@ -123,8 +173,11 @@ const SceneE: React.FC<SceneProps> = ({
         <div className={sceneStyle.phrase}>{phrase && phrase.phrase.text}</div>
       </div>
       <div className={styles.imageContainer}>
-        <div className={styles.imageInner}>
+        <div className={styles.imageInner} ref={imageInner}>
           <img src={illust} />
+          <div className={styles.musicNote}>
+            <img src={Icon.musicNoteWH} />
+          </div>
         </div>
       </div>
 
@@ -153,9 +206,7 @@ const SceneE: React.FC<SceneProps> = ({
             className={styles.circle}
             style={{
               transform: `scale(${scaler(it.position)})`,
-              filter: `brightness(${
-                2 - opacity(it.position)
-              }) opacity(${opacity(it.position)})`,
+              filter: `brightness(${2 - opacity(it)}) opacity(${opacity(it)})`,
             }}
           ></div>
         </div>

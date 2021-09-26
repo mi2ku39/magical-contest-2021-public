@@ -90,6 +90,7 @@ export const Hints = {
 export type Hint = typeof Hints[keyof typeof Hints];
 
 const SceneScreen: React.FC<SceneRenderProps> = (props) => {
+  const [isMounted, setMountState] = useState<boolean>(false);
   const [showedHints, setShowedHints] = useState<Hint[]>([]);
   const [noteCount, setNoteCount] = useState<number>(0);
 
