@@ -35,6 +35,7 @@ jobs:
         run: |
           git add .
           git commit -m "release commit"
+          git push
 
       - name: Create release tag
         id: create_tag
