@@ -11,7 +11,6 @@ import DummyImage from "~/components/DummyImage";
 import KeyHint from "~/components/KeyHint";
 import Icon from "~/constants/Icon";
 import Illustration from "~/constants/Illustration";
-import QuantizedBar from "~/models/Beats/QuantizedBar";
 import { Hints, SceneProps } from "../../SceneScreen";
 import sceneStyle from "../general.module.scss";
 import styles from "./SceneC.module.scss";
@@ -48,10 +47,12 @@ const SceneC: React.FC<SceneProps> = ({
     C: 3,
   };
   type LocalScene = typeof LocalScenes[keyof typeof LocalScenes];
+
   const scene = useMemo<LocalScene>(() => {
-    if (part.endBar.index - 2 === bar.index) {
+    if (part.barLength > 4 && part.endBar.index - 1 === bar.index) {
       return LocalScenes.B;
     }
+
     return LocalScenes.A;
   }, [part, bar]);
 
@@ -154,19 +155,23 @@ const SceneC: React.FC<SceneProps> = ({
     setMainBeforeMovedTime(position);
   }, [position]);
 
+  const [mainBeforeDeg, setMainBeforeDeg] = useState<number>(null);
+  const [mainBeforeDirection, setMainBeforeDirection] =
+    useState<Direction>(null);
+
   useMemo(() => {
-    if (mainBeforeDirection === Directions.left && scene === LocalScenes.A) {
+    if (
+      mainBeforeDirection === Directions.left &&
+      (mainMoveHorizontalDirection === Directions.left ||
+        mainMoveVerticalDirection !== Directions.none) &&
+      scene === LocalScenes.A
+    ) {
       if (addNoteCount) {
         addNoteCount();
         popupWalkNote();
       }
     }
   }, [beat]);
-
-  const [mainBeforeDeg, setMainBeforeDeg] = useState<number>(null);
-
-  const [mainBeforeDirection, setMainBeforeDirection] =
-    useState<Direction>(null);
 
   const mainStyle = useMemo<CSSProperties>(() => {
     if (!beat || !position) return {};
@@ -219,6 +224,7 @@ const SceneC: React.FC<SceneProps> = ({
    * 緑の子関係
    */
 
+  const [visibleGree, setVisibleGreen] = useState<boolean>(false);
   const [greenDelay, setGreenDelay] = useState<number>(null);
   const [greenDuration, setGreenDuration] = useState<number>(null);
 
@@ -305,7 +311,13 @@ const SceneC: React.FC<SceneProps> = ({
   }, []);
 
   useEffect(() => {
-    if (part && (greenDuration === null || greenDelay === null)) {
+    if (
+      part &&
+      part.barLength > 4 &&
+      (greenDuration === null || greenDelay === null)
+    ) {
+      setVisibleGreen(true);
+
       if (part.endBar.previous?.previous) {
         setGreenDelay(
           part.endBar.previous.previous.startTime - part.startBar.startTime
@@ -335,31 +347,37 @@ const SceneC: React.FC<SceneProps> = ({
       <div className={sceneStyle.phraseContainer}>
         <div className={sceneStyle.phrase}>{phrase && phrase.phrase.text}</div>
       </div>
-      <div className={styles.characterContainer}>
-        <div
-          className={styles.mainCharacter}
-          ref={mainContainer}
-          style={musicNoteStyle}
-        >
-          <img src={Illustration.main.fly} style={mainStyle} />
-        </div>
-      </div>
-      <div className={styles.hintContainer}>
-        <div className={styles.hintElement}>
-          <div
-            className={clsx(
-              styles.hint,
-              isShowedArrowHint && styles.hiddenHint
-            )}
-          >
-            <KeyHint left />
-            <div>を押してみよう！</div>
+      {scene === LocalScenes.A && (
+        <>
+          <div className={styles.characterContainer}>
+            <div
+              className={styles.mainCharacter}
+              ref={mainContainer}
+              style={musicNoteStyle}
+            >
+              <img src={Illustration.main.fly} style={mainStyle} />
+            </div>
           </div>
+          <div className={styles.hintContainer}>
+            <div className={styles.hintElement}>
+              <div
+                className={clsx(
+                  styles.hint,
+                  isShowedArrowHint && styles.hiddenHint
+                )}
+              >
+                <KeyHint left />
+                <div>を押してみよう！</div>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+      {visibleGree && (
+        <div className={styles.greenContainer} style={greenStyle}>
+          <DummyImage height="10rem" width="5rem" />
         </div>
-      </div>
-      <div className={styles.greenContainer} style={greenStyle}>
-        <DummyImage height="10rem" width="5rem" />
-      </div>
+      )}
     </div>
   );
 };

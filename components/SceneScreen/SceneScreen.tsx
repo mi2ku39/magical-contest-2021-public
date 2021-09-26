@@ -109,11 +109,47 @@ const SceneScreen: React.FC<SceneRenderProps> = (props) => {
     [showedHints]
   );
 
+  const onKeydown = useCallback((event: KeyboardEvent) => {
+    if (
+      event.code === "ArrowUp" ||
+      event.code === "ArrowLeft" ||
+      event.code === "ArrowRight" ||
+      event.code === "ArrowDown" ||
+      event.code === "Space"
+    ) {
+      event.preventDefault();
+    }
+  }, []);
+
+  const onKeyup = useCallback((event: KeyboardEvent) => {
+    if (
+      event.code === "ArrowUp" ||
+      event.code === "ArrowLeft" ||
+      event.code === "ArrowRight" ||
+      event.code === "ArrowDown" ||
+      event.code === "Space"
+    ) {
+      event.preventDefault();
+    }
+  }, []);
+
   useEffect(() => {
     if (props.isReset) {
       setShowedHints([]);
       setNoteCount(0);
     }
+
+    if (window) {
+      window.addEventListener("keydown", onKeydown);
+      window.addEventListener("keyup", onKeyup);
+    }
+
+    return () => {
+      if (window) {
+        window.removeEventListener("keydown", onKeydown);
+        window.removeEventListener("keyup", onKeyup);
+      }
+    };
   }, [props.isReset]);
 
   return (

@@ -1,0 +1,38 @@
+@import "~/styles/css/utilities";
+
+.imageContainer {
+    position: absolute;
+    @include tlrb;
+
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+
+    z-index: 3;
+
+    .imageInner {
+        display: flex;
+        & > img {
+            height: 80vh;
+            object-fit: contain;
+            margin-bottom: -10rem;
+        }
+    }
+}
+
+.timingHint {
+    position: absolute;
+    @include tlrb;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:after {
+        content: "";
+        border: 0.125rem solid #fff;
+        height: 60vh;
+        width: 60vh;
+        border-radius: 30vh;
+    }
+}
