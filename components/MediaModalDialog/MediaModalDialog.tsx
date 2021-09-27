@@ -101,32 +101,40 @@ const MediaModalDialog: React.FC<Props> = ({
         </div>
         <form className={styles.form} onSubmit={onSubmit}>
           <div>
-            <label className={styles.input}>
-              <div>URL (piapro / niconico / YouTube)</div>
+            <label className={styles.inputContainer}>
+              <div className={styles.label}>
+                URL (piapro / niconico / YouTube)
+              </div>
               {reason && <div className={styles.caution}>{reason}</div>}
               <input
                 type="text"
                 id="url"
                 defaultValue={url}
                 onChange={onInputUrl}
+                className={styles.input}
               />
             </label>
           </div>
-          <div>
-            <input
-              type="submit"
-              value="読み込む"
-              disabled={isLoading || !isUrl}
-            />
+          <div className={styles.buttonContainer}>
+            <div>
+              <input
+                type="submit"
+                value="読み込む"
+                disabled={isLoading || !isUrl}
+                className={styles.submitButton}
+              />
+            </div>
+            <div>
+              <button
+                onClick={onClickRestore}
+                disabled={isLoading}
+                className={styles.resetButton}
+              >
+                初期値に戻す
+              </button>
+            </div>
           </div>
         </form>
-        <div>
-          <div>
-            <button onClick={onClickRestore} disabled={isLoading}>
-              初期値に戻す
-            </button>
-          </div>
-        </div>
       </div>
     </ModalDialog>
   );

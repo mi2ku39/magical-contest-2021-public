@@ -1,23 +1,95 @@
-@import "~/styles/css/colors.scss";
+@import "~/styles/css/colors";
+@import "~/styles/css/fonts";
 
 .container {
-    margin: 1rem 1rem;
+    margin: 0.75rem 1rem;
 
     .caution {
-        font-size: 0.8rem;
-        color: rgba($accent-red, 0.68);
+        font-size: 0.875rem;
+        color: rgba($accent-red, 0.88);
     }
 
     .form {
-        margin: 1rem 0;
-        .input {
+        margin-top: 0.75rem;
+
+        .inputContainer {
             color: rgba(0, 0, 0, 0.68);
 
-            & > input {
+            .label {
+                font-size: 0.75rem;
+            }
+
+            .input {
+                @include notoSansJP;
                 box-sizing: border-box;
                 width: 100%;
                 color: rgba(0, 0, 0, 0.88);
-                line-height: 1.4rem;
+
+                padding: 0.5rem 0.5rem 0.25rem;
+                border-radius: 0.25rem 0.25rem 0 0;
+
+                transition: border-bottom 100ms, background-color 500ms;
+                outline: none;
+                border: none;
+                border-bottom: 1px solid #bdbdbd;
+
+                &:focus {
+                    border-bottom: 2px solid $accent-yellow;
+                }
+
+                &:hover {
+                    background-color: #fafafa;
+                }
+            }
+        }
+
+        .buttonContainer {
+            display: inline-flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+
+            @mixin button {
+                @include notoSansJP(400);
+                border-radius: 0.25rem;
+                border: none;
+                padding: 0.5rem 0.75rem;
+
+                transition: filter 200ms, background-color 200ms;
+                filter: opacity(1);
+                background-color: #fff;
+
+                &:disabled {
+                    filter: opacity(0.38);
+                    cursor: progress;
+                }
+
+                &:hover {
+                    background-color: #e0e0e0;
+                }
+
+                &:active {
+                    background-color: #bdbdbd;
+                }
+            }
+
+            .submitButton {
+                @include button;
+            }
+
+            .resetButton {
+                @include button;
+                color: $accent-red;
+
+                &:hover {
+                    background-color: #ffebee;
+                }
+
+                &:active {
+                    background-color: #ffcdd2;
+                }
             }
         }
     }
