@@ -1,0 +1,80 @@
+@import "~/styles/css/utilities";
+@import "~/styles/css/colors";
+@import "~/styles/css/fonts";
+
+@keyframes zoom {
+    from {
+        transform: scale(0.5);
+    }
+
+    to {
+        transform: scale(1);
+    }
+}
+
+.titleContainer {
+    position: absolute;
+    @include tlrb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    & > div {
+        animation: zoom both ease-out;
+        font-size: 6rem;
+        @include kiwiMaru(500);
+        color: $accent-red;
+    }
+}
+
+.staffContainer {
+    position: absolute;
+    @include tlrb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .container {
+        @include kiwiMaru;
+        display: inline-flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 5rem;
+
+        .title {
+            font-size: 2rem;
+            font-weight: 500;
+        }
+
+        .authorContainer {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 5rem 1rem;
+            font-size: 1.5rem;
+            line-height: 1.5rem;
+
+            & > div:nth-child(2n) {
+                font-weight: 500;
+            }
+
+            & > div:nth-child(2n-1) {
+                display: inline-flex;
+                font-size: 1rem;
+                line-height: 1rem;
+                justify-content: flex-end;
+                align-items: center;
+            }
+
+            .small {
+                font-size: 1.25rem;
+            }
+
+            .copyright {
+                justify-content: center !important;
+                font-size: 0.75rem !important;
+                grid-column: 1/3;
+            }
+        }
+    }
+}

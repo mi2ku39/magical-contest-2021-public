@@ -20,6 +20,7 @@ import SceneF from "./Scene/SceneF";
 import SceneG from "./Scene/SceneG";
 import SceneH from "./Scene/SceneH";
 import SceneI from "./Scene/SceneI";
+import SceneJ from "./Scene/SceneJ";
 import styles from "./SceneScreen.module.scss";
 
 export type SceneRenderProps = {
@@ -106,7 +107,7 @@ const SceneRender: React.FC<SceneProps> = (props) => {
       return <SceneI {...props} />;
 
     case PartTypes.J:
-      return <SceneI {...props} />;
+      return <SceneJ {...props} />;
 
     default:
       return <DefaultScene {...props} />;

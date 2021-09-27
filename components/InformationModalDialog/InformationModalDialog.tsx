@@ -35,6 +35,21 @@ const InformationModalDialog: React.FC = () => {
             </a>
             応募作品です。
           </div>
+          <div className={styles.description}>
+            <a href="https://developer.textalive.jp/" target="_blank">
+              TextAlive App API
+            </a>
+            を用いてYouTube、niconico、piaproの楽曲情報を取得し、再生しています。
+          </div>
+          <div className={styles.description}>
+            <a
+              href="https://www.apache.org/licenses/LICENSE-2.0.html"
+              target="_blank"
+            >
+              Apache license 2.0
+            </a>
+            に基づき、Google Fontsのフォントとアイコンを利用しています。
+          </div>
           <div className={styles.contributorContainer}>
             <div>
               <div className={styles.contributeCategory}>企画・制作</div>
@@ -58,17 +73,8 @@ const InformationModalDialog: React.FC = () => {
               </div>
             </div>
           </div>
-          <div className={styles.description}>
-            <a
-              href="https://www.apache.org/licenses/LICENSE-2.0.html"
-              target="_blank"
-            >
-              Apache license 2.0
-            </a>
-            に基づき、Google Fontsのフォントとアイコンを利用しています。
-          </div>
           <div className={styles.copyright}>
-            &copy; 2021 Mitsuki Kurashige w/ GhostServer.
+            &copy; 2021 Mitsuki Kurashige, GhostServer.
           </div>
         </div>
       </ModalDialog>
