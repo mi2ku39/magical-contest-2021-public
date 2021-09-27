@@ -1,5 +1,19 @@
 @import "~/styles/css/utilities";
 
+@keyframes rythm {
+    0% {
+        transform: scale(1) translateY(0%);
+    }
+
+    10% {
+        transform: scale(1.05) translateY(-2.5%);
+    }
+
+    90% {
+        transform: scale(1) translateY(0%);
+    }
+}
+
 .imageContainer {
     position: absolute;
     z-index: 0;
@@ -39,10 +53,12 @@
 
             &.rightSpeaker {
                 justify-content: center;
+                animation: rythm both infinite;
             }
 
             &.leftSpeaker {
                 justify-content: center;
+                animation: rythm both infinite;
             }
 
             &.rightMic {
@@ -65,5 +81,52 @@
         & > div {
             margin-bottom: 0.25rem;
         }
+    }
+}
+
+@keyframes hiddenHint {
+    0% {
+        filter: opacity(1);
+    }
+
+    99% {
+        filter: opacity(0);
+        display: block;
+    }
+
+    100% {
+        filter: opacity(0);
+        display: none;
+    }
+}
+
+.hintContainer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    height: 50%;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    .hintElement {
+        width: 50%;
+        .hint {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            & > div {
+                margin: 0 0.125rem;
+            }
+        }
+    }
+
+    .hiddenHint {
+        animation: hiddenHint 500ms linear both;
     }
 }

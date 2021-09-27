@@ -39,11 +39,18 @@ export type SceneProps = {
   isParentMounted: boolean;
   isShowedArrowHint: boolean;
   isShowedSpacebarHint: boolean;
+  isShowedDragHint: boolean;
   pushShowedHint: (hint: Hint) => void;
   noteCount: number;
   addNoteCount: (num?: number) => void;
-  setRenderOnClickListeners: React.Dispatch<
-    React.SetStateAction<((e: React.MouseEvent) => void)[]>
+  setRenderOnDragStartListeners: React.Dispatch<
+    React.SetStateAction<((e: SceneDragEvent) => void)[]>
+  >;
+  setRenderOnDragMoveListeners: React.Dispatch<
+    React.SetStateAction<((e: SceneDragEvent) => void)[]>
+  >;
+  setRenderOnDragEndListeners: React.Dispatch<
+    React.SetStateAction<((e: SceneDragEvent) => void)[]>
   >;
 } & SceneRenderProps;
 
@@ -53,6 +60,19 @@ export const Inputs = {
   arrowRight: "ArrowRight",
   arrowDown: "ArrowDown",
   space: "Space",
+};
+
+export type SceneDragEvent = {
+  initial: {
+    clientX: number;
+    clientY: number;
+  };
+  diff: {
+    clientX: number;
+    clientY: number;
+  };
+  clientX: number;
+  clientY: number;
 };
 
 const SceneRender: React.FC<SceneProps> = (props) => {
@@ -96,6 +116,7 @@ const SceneRender: React.FC<SceneProps> = (props) => {
 export const Hints = {
   arrowHint: 1,
   spacebarHint: 2,
+  dragHint: 3,
 };
 export type Hint = typeof Hints[keyof typeof Hints];
 
@@ -103,9 +124,18 @@ const SceneScreen: React.FC<SceneRenderProps> = (props) => {
   const [isMounted, setMountState] = useState<boolean>(false);
   const [showedHints, setShowedHints] = useState<Hint[]>([]);
   const [noteCount, setNoteCount] = useState<number>(0);
-  const [renderOnClickListeners, setRenderOnClickListeners] = useState<
-    ((e: React.MouseEvent) => void)[]
+  const [dragInitial2D, setDragInitial2D] =
+    useState<{ x: number; y: number }>(null);
+  const [renderOnDragStartListeners, setRenderOnDragStartListeners] = useState<
+    ((e: SceneDragEvent) => void)[]
   >([]);
+  const [renderOnDragMoveListeners, setRenderOnDragMoveListeners] = useState<
+    ((e: SceneDragEvent) => void)[]
+  >([]);
+  const [renderOnDragEndListeners, setRenderOnDragEndListeners] = useState<
+    ((e: SceneDragEvent) => void)[]
+  >([]);
+  const [isMouseDowning, setMouseDownState] = useState<boolean>(false);
 
   const pushShowedHint = useCallback<(hint: Hint) => void>((hint) => {
     setShowedHints((prev) => {
@@ -128,6 +158,11 @@ const SceneScreen: React.FC<SceneRenderProps> = (props) => {
 
   const isShowedSpacebarHint = useMemo<boolean>(
     () => showedHints.includes(Hints.spacebarHint),
+    [showedHints]
+  );
+
+  const isShowedDragHint = useMemo<boolean>(
+    () => showedHints.includes(Hints.dragHint),
     [showedHints]
   );
 
@@ -155,13 +190,88 @@ const SceneScreen: React.FC<SceneRenderProps> = (props) => {
     }
   }, []);
 
-  const onClickRender = useCallback<MouseEventHandler<HTMLDivElement>>(
-    (event) => {
-      renderOnClickListeners.forEach((it) => {
-        if (it) it(event);
+  const makeSceneDragEventObject = useCallback<
+    (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => SceneDragEvent
+  >(
+    (e) => {
+      return {
+        initial: {
+          clientX: dragInitial2D?.x,
+          clientY: dragInitial2D?.y,
+        },
+        diff: {
+          clientX: e.clientX - (dragInitial2D?.x ?? 0),
+          clientY: e.clientY - (dragInitial2D?.y ?? 0),
+        },
+        clientX: e.clientX,
+        clientY: e.clientY,
+      };
+    },
+    [dragInitial2D]
+  );
+
+  const onRenderDragStart = useCallback(
+    (e: SceneDragEvent) => {
+      renderOnDragStartListeners.forEach((it) => {
+        if (it) it(e);
       });
     },
-    [renderOnClickListeners]
+    [renderOnDragStartListeners]
+  );
+  const onRenderDragMove = useCallback(
+    (e: SceneDragEvent) => {
+      renderOnDragMoveListeners.forEach((it) => {
+        if (it) it(e);
+      });
+    },
+    [renderOnDragMoveListeners]
+  );
+  const onRenderDragEnd = useCallback(
+    (e: SceneDragEvent) => {
+      renderOnDragEndListeners.forEach((it) => {
+        if (it) it(e);
+      });
+    },
+    [renderOnDragEndListeners]
+  );
+
+  const onMouseDown = useCallback<MouseEventHandler<HTMLDivElement>>(
+    (event) => {
+      if (event.button === 0) {
+        setDragInitial2D((prev) => {
+          if (prev === null) {
+            return { x: event.clientX, y: event.clientY };
+          }
+          return prev;
+        });
+        setMouseDownState(true);
+        onRenderDragStart(makeSceneDragEventObject(event));
+        event.preventDefault();
+      }
+    },
+    [onRenderDragStart, makeSceneDragEventObject]
+  );
+
+  const onMouseMove = useCallback<MouseEventHandler<HTMLDivElement>>(
+    (event) => {
+      if (isMouseDowning) {
+        onRenderDragMove(makeSceneDragEventObject(event));
+        event.preventDefault();
+      }
+    },
+    [isMouseDowning, onRenderDragMove, makeSceneDragEventObject]
+  );
+
+  const onMouseUp = useCallback<MouseEventHandler<HTMLDivElement>>(
+    (event) => {
+      if (event.button === 0) {
+        setDragInitial2D(null);
+        setMouseDownState(false);
+        onRenderDragEnd(makeSceneDragEventObject(event));
+        event.preventDefault();
+      }
+    },
+    [onRenderDragEnd, makeSceneDragEventObject]
   );
 
   useEffect(() => {
@@ -188,16 +298,24 @@ const SceneScreen: React.FC<SceneRenderProps> = (props) => {
   }, [props.isReset, onKeydown, onKeyup]);
 
   return (
-    <div className={styles.container} onClick={onClickRender}>
+    <div
+      className={styles.container}
+      onMouseMove={onMouseMove}
+      onMouseDown={onMouseDown}
+      onMouseUp={onMouseUp}
+    >
       <SceneRender
         {...props}
         pushShowedHint={pushShowedHint}
         isShowedArrowHint={isShowedArrowHint}
         isShowedSpacebarHint={isShowedSpacebarHint}
+        isShowedDragHint={isShowedDragHint}
         isParentMounted={isMounted}
         noteCount={noteCount}
         addNoteCount={addNoteCount}
-        setRenderOnClickListeners={setRenderOnClickListeners}
+        setRenderOnDragStartListeners={setRenderOnDragStartListeners}
+        setRenderOnDragMoveListeners={setRenderOnDragMoveListeners}
+        setRenderOnDragEndListeners={setRenderOnDragEndListeners}
       />
       {noteCount > 0 && (
         <div className={styles.musicNoteCounterContainer}>
