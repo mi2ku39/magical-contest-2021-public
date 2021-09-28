@@ -1,0 +1,105 @@
+@import "~/styles/css/utilities";
+
+@keyframes walk {
+    from {
+        transform: rotateZ(-5deg);
+    }
+
+    to {
+        transform: rotateZ(5deg);
+    }
+}
+
+.container {
+    position: absolute;
+    @include tlrb;
+
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: flex-start;
+    gap: 5rem;
+    padding-left: 5vw;
+    padding-bottom: 1rem;
+
+    & > div {
+        &:nth-child(2n + 1) {
+            & > div {
+                animation: walk both infinite ease-in-out alternate;
+            }
+        }
+
+        &:nth-child(2n) {
+            & > div {
+                animation: walk both infinite ease-in-out alternate-reverse;
+            }
+        }
+    }
+
+    .miku {
+        margin-right: 6rem;
+
+        .illust {
+            margin-right: -6rem;
+            height: 23rem;
+            object-fit: contain;
+        }
+    }
+
+    .main {
+        position: relative;
+        margin-right: 6rem;
+        z-index: 1;
+
+        .mainInner {
+            animation: unset !important;
+            animation-direction: unset !important;
+        }
+
+        .illust {
+            height: 23rem;
+            object-fit: contain;
+        }
+    }
+}
+
+@keyframes popupSoundNote {
+    0% {
+        transform: translateY(0);
+        filter: opacity(1);
+    }
+
+    30% {
+        transform: translateY(-4rem);
+        filter: opacity(1);
+    }
+
+    60% {
+        transform: translateY(-4rem);
+        filter: opacity(1);
+    }
+
+    100% {
+        transform: translateY(-4rem);
+        filter: opacity(0);
+    }
+}
+
+.soundNote {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+
+    z-index: -1;
+    animation: popupSoundNote ease-in-out both !important;
+
+    & > img {
+        height: 3rem;
+        width: 3rem;
+        object-fit: contain;
+    }
+}

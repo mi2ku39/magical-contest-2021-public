@@ -188,7 +188,7 @@ const SceneB: React.FC<SceneProps> = ({
   }, [position, beat, mainBeforeDeg, mainBeforeDirection, mainMoveDirection]);
 
   /**
-   * 挨拶できるキャラクター関係
+   * 出会うキャラクター関係
    */
 
   const [encountablePosition, setEncountablePosition] = useState<number>(null);
@@ -280,8 +280,8 @@ const SceneB: React.FC<SceneProps> = ({
 
   useEffect(() => {
     if (window) {
-      window.addEventListener("keydown", onKeydown, false);
-      window.addEventListener("keyup", onKeyup, false);
+      window.addEventListener("keydown", onKeydown);
+      window.addEventListener("keyup", onKeyup);
     }
     return () => {
       if (window) {
