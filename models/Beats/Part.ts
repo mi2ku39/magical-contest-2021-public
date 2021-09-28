@@ -43,7 +43,7 @@ export default class Part {
     if (!this._bars) {
       const array: QuantizedBar[] = [];
       let bar = this.startBar;
-      while (bar) {
+      while (bar !== this.endBar) {
         array.push(bar);
         bar = bar.next;
       }
