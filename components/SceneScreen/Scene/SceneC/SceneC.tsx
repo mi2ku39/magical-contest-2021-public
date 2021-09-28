@@ -304,10 +304,9 @@ const SceneC: React.FC<SceneProps> = ({
     ) {
       setVisibleGreen(true);
 
-      if (part.endBar.previous?.previous?.previous) {
+      if (part.endBar.previous?.previous) {
         setGreenDelay(
-          part.endBar.previous.previous.previous.startTime -
-            part.startBar.startTime
+          part.endBar.previous.previous.startTime - part.startBar.startTime
         );
         setGreenDuration(
           part.endBar.previous.previous.duration + part.endBar.previous.duration

@@ -1,0 +1,67 @@
+@import "~/styles/css/utilities";
+
+@keyframes wave {
+    0% {
+        transform: scaleY(0.5);
+    }
+
+    25% {
+        transform: scaleY(1);
+    }
+
+    75% {
+        transform: scaleY(0.5);
+    }
+
+    100% {
+        transform: scaleY(0.5);
+    }
+}
+
+.imageContainer {
+    position: absolute;
+    @include tlrb;
+    padding-bottom: 1rem;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+
+    .tvContainer {
+        position: relative;
+
+        .waveContainer {
+            position: absolute;
+            @include tlrb;
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+            justify-content: center;
+
+            & > div {
+                background-color: #ffffff;
+                height: 50%;
+                width: 0.75rem;
+                border-radius: 0.25rem;
+
+                animation-fill-mode: both;
+                animation-iteration-count: infinite;
+
+                &:nth-child(1) {
+                    animation-name: wave;
+                }
+
+                &:nth-child(2) {
+                    animation-name: wave;
+                }
+
+                &:nth-child(3) {
+                    animation-name: wave;
+                }
+
+                &:nth-child(4) {
+                    animation-name: wave;
+                }
+            }
+        }
+    }
+}
