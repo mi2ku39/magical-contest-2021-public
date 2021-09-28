@@ -241,20 +241,52 @@ const index: React.FC = () => {
     };
   }, [token, player, mediaElement, listeners]);
 
+  // イースターエッグ
+  const [, setKeyInput] = useState<string>("");
+  const [isVisibleGuage, setGuageVisibility] = useState<boolean>(false);
+
+  const onKeyDown = useCallback<(e: KeyboardEvent) => void>((e) => {
+    if (e.key === "3" || e.key === "9") {
+      setKeyInput((prev) => {
+        if (`${prev}${e.key}`.includes("3939")) {
+          setGuageVisibility((prev) => !prev);
+          return "";
+        }
+        return `${prev}${e.key}`;
+      });
+    } else {
+      setKeyInput("");
+    }
+  }, []);
+
+  useEffect(() => {
+    if (window) {
+      window.addEventListener("keydown", onKeyDown);
+    }
+
+    return () => {
+      if (window) {
+        window.removeEventListener("keydown", onKeyDown);
+      }
+    };
+  }, [onKeyDown]);
+
   return (
     <div>
       <div className={styles.container}>
         <div className={styles.guageContainer}>
           <div>
-            <QuantizedSongScreen
-              startTime={startTime}
-              endTime={endTime}
-              now={position}
-              quantizedSong={quantizedSong}
-              bar={bar}
-              beat={beat}
-              hiddenDetailTable
-            />
+            {isVisibleGuage && (
+              <QuantizedSongScreen
+                startTime={startTime}
+                endTime={endTime}
+                now={position}
+                quantizedSong={quantizedSong}
+                bar={bar}
+                beat={beat}
+                hiddenDetailTable
+              />
+            )}
           </div>
         </div>
         <div>
