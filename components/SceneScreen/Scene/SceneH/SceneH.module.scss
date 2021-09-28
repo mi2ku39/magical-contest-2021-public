@@ -1,0 +1,48 @@
+@import "~/styles/css/utilities";
+
+.jizoContainer {
+    position: absolute;
+    @include tlrb;
+    z-index: 1;
+
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+
+    padding-bottom: 1rem;
+}
+
+@keyframes slide {
+    from {
+        transform: translateX(0%);
+    }
+    to {
+        transform: translateX(-100%);
+    }
+}
+
+@keyframes walk {
+    from {
+        transform: rotateZ(-5deg);
+    }
+
+    to {
+        transform: rotateZ(5deg);
+    }
+}
+
+.midoriContainer {
+    position: absolute;
+    @include tlrb;
+
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+
+    padding-bottom: 2rem;
+    animation: slide both linear;
+
+    .inner {
+        animation: walk both infinite alternate linear;
+    }
+}
