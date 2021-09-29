@@ -7,9 +7,11 @@ import React, {
 } from "react";
 import { IBeat, Song } from "textalive-app-api";
 import Icon from "~/constants/Icon";
+import Illustration from "~/constants/Illustration";
 import Part, { PartTypes } from "~/models/Beats/Part";
 import QuantizedBar from "~/models/Beats/QuantizedBar";
 import QuantizedPhrase from "~/models/Beats/QuantizedPhrase";
+import DummyImage from "../DummyImage";
 import DefaultScene from "./Scene/DefaultScene";
 import SceneA from "./Scene/SceneA";
 import SceneB from "./Scene/SceneB";
@@ -305,6 +307,13 @@ const SceneScreen: React.FC<SceneRenderProps> = (props) => {
       onMouseDown={onMouseDown}
       onMouseUp={onMouseUp}
     >
+      <div className={styles.topWakuContainer}>
+        <div>
+          <div>
+            <img src={Illustration.waku.top} />
+          </div>
+        </div>
+      </div>
       <SceneRender
         {...props}
         pushShowedHint={pushShowedHint}
@@ -318,6 +327,13 @@ const SceneScreen: React.FC<SceneRenderProps> = (props) => {
         setRenderOnDragMoveListeners={setRenderOnDragMoveListeners}
         setRenderOnDragEndListeners={setRenderOnDragEndListeners}
       />
+      <div className={styles.bottomWakuContainer}>
+        <div>
+          <div>
+            <img src={Illustration.waku.bottom} />
+          </div>
+        </div>
+      </div>
       {noteCount > 0 && (
         <div className={styles.musicNoteCounterContainer}>
           <img className={styles.big} src={Icon.musicNoteWH} />

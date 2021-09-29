@@ -16,26 +16,28 @@
 
     & > div {
         &:nth-child(1) {
-            height: 10vh;
+            height: 5vh;
             max-height: 130px;
+            min-height: 50px;
         }
 
         &:nth-child(2) {
             flex-grow: 1;
-            max-height: 80vh;
+            height: 100%;
         }
 
         &:nth-child(3) {
-            height: 10vh;
+            height: 5vh;
             max-height: 130px;
+            min-height: 50px;
         }
     }
 
     .information {
-        padding: 1rem;
+        padding: 0 1rem;
         box-sizing: border-box;
         display: flex;
-        align-items: flex-end;
+        align-items: center;
     }
 }
 
