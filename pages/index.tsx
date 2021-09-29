@@ -25,6 +25,7 @@ import SceneScreen from "~/components/SceneScreen";
 import InformationModalDialog from "~/components/InformationModalDialog";
 import MediaModalDialog from "~/components/MediaModalDialog";
 import QuantizedSongScreen from "~/components/QuantizedSongScreen";
+import Ogp from "~/components/OGP";
 
 const index: React.FC = () => {
   const [token] = useState<string>(process.env.NEXT_PUBLIC_TEXTALIVE_APP_TOKEN);
@@ -272,63 +273,66 @@ const index: React.FC = () => {
   }, [onKeyDown]);
 
   return (
-    <div>
-      <div className={styles.container}>
-        <div className={styles.guageContainer}>
+    <>
+      <Ogp />
+      <div>
+        <div className={styles.container}>
+          <div className={styles.guageContainer}>
+            <div>
+              {isVisibleGuage && (
+                <QuantizedSongScreen
+                  startTime={startTime}
+                  endTime={endTime}
+                  now={position}
+                  quantizedSong={quantizedSong}
+                  bar={bar}
+                  beat={beat}
+                  hiddenDetailTable
+                />
+              )}
+            </div>
+          </div>
           <div>
-            {isVisibleGuage && (
-              <QuantizedSongScreen
-                startTime={startTime}
-                endTime={endTime}
-                now={position}
-                quantizedSong={quantizedSong}
-                bar={bar}
-                beat={beat}
-                hiddenDetailTable
-              />
-            )}
+            <SceneScreen
+              position={position}
+              beat={beat}
+              bar={bar}
+              part={part}
+              phrase={phrase}
+              song={song}
+              isPlayable={isEnablePlayButton}
+              isPlaying={isPlaying}
+              isReset={isReset}
+              requestPlay={requestPlay}
+            />
+          </div>
+          <div className={styles.information}>
+            <div>
+              <InformationModalDialog />
+            </div>
           </div>
         </div>
-        <div>
-          <SceneScreen
-            position={position}
-            beat={beat}
-            bar={bar}
-            part={part}
-            phrase={phrase}
-            song={song}
-            isPlayable={isEnablePlayButton}
+        <div className={styles.media}>
+          <MediaController
+            player={player}
+            onUpdateMediaDom={setMediaElement}
+            onRequestedStop={onRequestedStop}
+            initialMuteState={isInitialMute}
+            initialVolume={initialVolume}
             isPlaying={isPlaying}
-            isReset={isReset}
-            requestPlay={requestPlay}
+            isEnablePlayButton={isEnablePlayButton}
+            onClickInfo={onClickMediaInfo}
           />
         </div>
-        <div className={styles.information}>
-          <div>
-            <InformationModalDialog />
-          </div>
-        </div>
-      </div>
-      <div className={styles.media}>
-        <MediaController
-          player={player}
-          onUpdateMediaDom={setMediaElement}
-          onRequestedStop={onRequestedStop}
-          initialMuteState={isInitialMute}
-          initialVolume={initialVolume}
-          isPlaying={isPlaying}
-          isEnablePlayButton={isEnablePlayButton}
-          onClickInfo={onClickMediaInfo}
+        <MediaModalDialog
+          song={song}
+          open={isOpeningMediaModal}
+          closer={mediaModalCloser}
+          onChangeUrl={onChangeUrl}
+          restoreDefaultUrl={restoreDefaultUrl}
         />
       </div>
-      <MediaModalDialog
-        song={song}
-        open={isOpeningMediaModal}
-        closer={mediaModalCloser}
-        onChangeUrl={onChangeUrl}
-        restoreDefaultUrl={restoreDefaultUrl}
-      />
-    </div>
+    </>
   );
 };
 export default index;
