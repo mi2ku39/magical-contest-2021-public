@@ -19,5 +19,21 @@ export default {
   },
   character: {
     sosen: `${basePath}/characters/sosen.png`,
+    cho: {
+      walk: `${basePath}/characters/cho-walk.png`,
+      walkAlt: `${basePath}/characters/cho-walk-alt.png`,
+    },
+    hato: {
+      walk: `${basePath}/characters/hato-walk.png`,
+      walkAlt: `${basePath}/characters/hato-walk-alt.png`,
+    },
+    kirin: {
+      walk: `${basePath}/characters/kirin-walk.png`,
+      walkAlt: `${basePath}/characters/kirin-walk-alt.png`,
+    },
+    tanuki: {
+      walk: `${basePath}/characters/tanuki-walk.png`,
+      walkAlt: `${basePath}/characters/tanuki-walk-alt.png`,
+    },
   },
 };

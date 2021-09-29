@@ -7,7 +7,7 @@
     }
 
     50% {
-        transform: translateY(0%);
+        transform: translateY(25%);
     }
 
     100% {
@@ -17,7 +17,7 @@
 
 @keyframes firstThrowUp {
     0% {
-        transform: translateY(0%);
+        transform: translateY(25%);
     }
 
     100% {
@@ -242,10 +242,10 @@
     & > div {
         box-sizing: border-box;
         padding-left: 400px;
-        padding-bottom: 6rem;
+        padding-bottom: 100px;
 
         & > img {
-            height: 1500px;
+            height: 1600px;
             animation: walk ease-in-out infinite alternate both;
         }
     }

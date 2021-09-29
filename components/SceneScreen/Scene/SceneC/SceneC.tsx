@@ -363,8 +363,10 @@ const SceneC: React.FC<SceneProps> = ({
         </>
       )}
       {visibleGree && (
-        <div className={styles.greenContainer} style={greenStyle}>
-          <DummyImage height="10rem" width="5rem" />
+        <div className={styles.greenContainer}>
+          <div style={greenStyle}>
+            <img src={Illustration.character.cho.walk} />
+          </div>
         </div>
       )}
     </div>

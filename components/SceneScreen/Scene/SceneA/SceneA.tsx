@@ -77,16 +77,14 @@ const SceneA: React.FC<SceneProps> = ({
       setMikuThrowDuration(
         (part.startBar.startBeat.next.startTime -
           part.startBar.startBeat.startTime) *
-          1.5
+          2
       );
 
-      setMainThrowDelay(
-        (part.startBar.startBeat.next.startTime - offset) / 1.5
-      );
+      setMainThrowDelay((part.startBar.startBeat.next.startTime - offset) / 2);
       setMainThrowDuration(
         (part.startBar.startBeat.next.next.endTime -
           part.startBar.startBeat.next.startTime) *
-          1.5
+          2
       );
 
       setTitleCharacterDelay(
@@ -104,16 +102,14 @@ const SceneA: React.FC<SceneProps> = ({
       setMikuThrowDuration(
         (part.startBar.startBeat.next.startTime -
           part.startBar.startBeat.startTime) *
-          1.5
+          2
       );
 
-      setMainThrowDelay(
-        (part.startBar.startBeat.next.startTime - offset) / 1.5
-      );
+      setMainThrowDelay((part.startBar.startBeat.next.startTime - offset) / 2);
       setMainThrowDuration(
         (part.startBar.startBeat.next.next.endTime -
           part.startBar.startBeat.next.startTime) *
-          1.5
+          2
       );
 
       setTitleCharacterDelay(
