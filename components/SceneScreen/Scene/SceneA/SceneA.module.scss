@@ -42,7 +42,8 @@
 }
 
 .mikuImgContainer {
-    display: inline-block;
+    display: flex;
+    justify-content: center;
     height: 100%;
     padding: 50px 0;
     box-sizing: border-box;
@@ -57,7 +58,8 @@
 }
 
 .mainImgContainer {
-    display: inline-block;
+    display: flex;
+    justify-content: center;
     height: 100%;
     padding: 50px 0;
     box-sizing: border-box;
@@ -87,7 +89,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    height: 30%;
+    height: 45%;
 
     text-align: center;
     animation: slideInFromBottom normal both;

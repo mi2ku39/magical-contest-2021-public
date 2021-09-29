@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from "react";
-import { SongleTimer } from "textalive-app-api";
 import Illustration from "~/constants/Illustration";
 import { SceneProps } from "../../SceneScreen";
 import sceneStyle from "../general.module.scss";
@@ -12,7 +11,6 @@ const SceneA: React.FC<SceneProps> = ({
   position,
   beat,
   bar,
-  phrase,
   part,
   isPlaying,
   song,
@@ -77,14 +75,18 @@ const SceneA: React.FC<SceneProps> = ({
       );
     } else if (part.barLength === 4) {
       setMikuThrowDuration(
-        part.startBar.startBeat.next.startTime -
-          part.startBar.startBeat.startTime
+        (part.startBar.startBeat.next.startTime -
+          part.startBar.startBeat.startTime) *
+          1.5
       );
 
-      setMainThrowDelay(part.startBar.startBeat.next.startTime - offset);
+      setMainThrowDelay(
+        (part.startBar.startBeat.next.startTime - offset) / 1.5
+      );
       setMainThrowDuration(
-        part.startBar.startBeat.next.next.endTime -
-          part.startBar.startBeat.next.startTime
+        (part.startBar.startBeat.next.next.endTime -
+          part.startBar.startBeat.next.startTime) *
+          1.5
       );
 
       setTitleCharacterDelay(
@@ -100,14 +102,18 @@ const SceneA: React.FC<SceneProps> = ({
       );
     } else {
       setMikuThrowDuration(
-        part.startBar.startBeat.next.startTime -
-          part.startBar.startBeat.startTime
+        (part.startBar.startBeat.next.startTime -
+          part.startBar.startBeat.startTime) *
+          1.5
       );
 
-      setMainThrowDelay(part.startBar.startBeat.next.startTime - offset);
+      setMainThrowDelay(
+        (part.startBar.startBeat.next.startTime - offset) / 1.5
+      );
       setMainThrowDuration(
-        part.startBar.startBeat.next.next.endTime -
-          part.startBar.startBeat.next.startTime
+        (part.startBar.startBeat.next.next.endTime -
+          part.startBar.startBeat.next.startTime) *
+          1.5
       );
 
       setTitleCharacterDelay(

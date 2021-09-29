@@ -28,6 +28,7 @@
             overflow: hidden;
 
             & > div {
+                display: flex;
                 & > img {
                     height: 100px;
                 }
@@ -47,9 +48,11 @@
             height: 100%;
             display: flex;
             justify-content: center;
+            align-items: flex-end;
             overflow: hidden;
 
             & > div {
+                display: flex;
                 & > img {
                     height: 100px;
                 }
