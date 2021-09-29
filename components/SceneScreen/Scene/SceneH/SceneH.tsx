@@ -1,5 +1,6 @@
 import { CSSProperties, useMemo } from "react";
 import DummyImage from "~/components/DummyImage";
+import Illustration from "~/constants/Illustration";
 import { SceneProps } from "../../SceneScreen";
 import sceneStyle from "../general.module.scss";
 import styles from "./SceneH.module.scss";
@@ -45,6 +46,14 @@ const SceneH: React.FC<SceneProps> = ({
     };
   }, [animationPlayState, averageBeatDuration]);
 
+  const choIllust = useMemo(
+    () =>
+      !beat || beat.position % 2 === 1
+        ? Illustration.character.cho.walk
+        : Illustration.character.cho.walkAlt,
+    [beat]
+  );
+
   return (
     <div className={sceneStyle.container}>
       <div className={sceneStyle.phraseContainer}>
@@ -52,12 +61,12 @@ const SceneH: React.FC<SceneProps> = ({
       </div>
       <div className={styles.jizoContainer}>
         <div>
-          <DummyImage height="15rem" width="6rem" />
+          <img src={Illustration.character.sosen} className={styles.jizoImg} />{" "}
         </div>
       </div>
       <div className={styles.midoriContainer} style={midoriSlideStyle}>
         <div className={styles.inner} style={midoriWalkStyle}>
-          <DummyImage height="23rem" width="10rem" />
+          <img src={choIllust} />
         </div>
       </div>
     </div>

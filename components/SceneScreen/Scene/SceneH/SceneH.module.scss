@@ -9,7 +9,12 @@
     align-items: flex-end;
     justify-content: center;
 
-    padding-bottom: 1rem;
+    padding-bottom: 110px;
+
+    .jizoImg {
+        height: 15rem;
+        object-fit: contain;
+    }
 }
 
 @keyframes slide {
@@ -39,10 +44,15 @@
     align-items: flex-end;
     justify-content: flex-end;
 
-    padding-bottom: 2rem;
+    padding-bottom: 120px;
     animation: slide both linear;
 
     .inner {
         animation: walk both infinite alternate linear;
+
+        & > img {
+            height: 20rem;
+            object-fit: contain;
+        }
     }
 }

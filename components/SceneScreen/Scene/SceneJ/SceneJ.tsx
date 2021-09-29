@@ -63,7 +63,7 @@ const SceneJ: React.FC<SceneProps> = ({
                 <div className={styles.authorContainer}>
                   <div>企画・制作</div>
                   <div>倉重みつき</div>
-                  <div>イラスト協力</div>
+                  <div>デザイン・イラスト制作</div>
                   <div>nowa</div>
                   <div>モチーフ</div>
                   <div>

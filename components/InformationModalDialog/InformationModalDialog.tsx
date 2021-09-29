@@ -58,7 +58,9 @@ const InformationModalDialog: React.FC = () => {
           </div>
           <div className={styles.contributorContainer}>
             <div>
-              <div className={styles.contributeCategory}>イラスト協力</div>
+              <div className={styles.contributeCategory}>
+                デザイン・イラスト制作
+              </div>
               <div className={styles.contributorName}>nowa</div>
             </div>
           </div>

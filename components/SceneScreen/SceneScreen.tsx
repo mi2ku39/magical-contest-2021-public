@@ -106,7 +106,7 @@ const SceneRender: React.FC<SceneProps> = (props) => {
       return <SceneH {...props} />;
 
     case PartTypes.I:
-      return <SceneI {...props} />;
+      return <SceneD {...props} />;
 
     case PartTypes.J:
       return <SceneJ {...props} />;
