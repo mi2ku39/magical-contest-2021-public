@@ -1,5 +1,4 @@
 import React, {
-  isValidElement,
   MutableRefObject,
   useCallback,
   useEffect,
