@@ -6,6 +6,9 @@
 [Apache License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.html)に基づき、Google Fonts のフォントとアイコンを利用しています。  
 また、TextAlive App API を通じて[TextAlive for Developers](https://developer.textalive.jp/)より楽曲データを取得して使用しています。
 
+「密かなる交信曲」をモチーフに Web アプリケーションの制作とイラストデータの作成を行い、コンテストに参加することを濁茶様に確認を上許諾をいただいております。  
+nowa 様にもこのプログラミング・コンテストに利用する旨と濁茶様より許諾を得ていることを伝え、イラストデータの作成をしていただいております。
+
 # ビルドを行う
 
 Node.js v14.17.2 及び yarn v1.22.10 でビルドができることを確認しております。  

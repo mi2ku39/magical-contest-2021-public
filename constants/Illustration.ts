@@ -13,4 +13,8 @@ export default {
     walk: `${basePath}/miku/walk.png`,
     walkAlt: `${basePath}/miku/walk-alt.png`,
   },
+  waku: {
+    top: `${basePath}/waku/top.png`,
+    bottom: `${basePath}/waku/bottom.png`,
+  },
 };
