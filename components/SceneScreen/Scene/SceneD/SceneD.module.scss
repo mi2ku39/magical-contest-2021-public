@@ -1,5 +1,52 @@
 @import "~/styles/css/utilities";
 
+@keyframes hiddenHint {
+    0% {
+        filter: opacity(1);
+    }
+
+    99% {
+        filter: opacity(0);
+        display: block;
+    }
+
+    100% {
+        filter: opacity(0);
+        display: none;
+    }
+}
+
+.hintContainer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 30%;
+    z-index: 1;
+
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: flex-start;
+
+    .hintElement {
+        width: 50%;
+        font-weight: 700;
+
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+
+        & > div {
+            margin: 0 0.125rem;
+        }
+    }
+    .hiddenHint {
+        animation: hiddenHint 500ms linear both;
+    }
+}
+
 @keyframes walk {
     from {
         transform: rotateZ(-5deg);

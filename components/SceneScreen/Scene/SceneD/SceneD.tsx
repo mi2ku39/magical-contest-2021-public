@@ -1,4 +1,5 @@
-import {
+import clsx from "clsx";
+import React, {
   CSSProperties,
   useCallback,
   useEffect,
@@ -7,9 +8,9 @@ import {
   useState,
 } from "react";
 import DummyImage from "~/components/DummyImage";
+import KeyHint from "~/components/KeyHint";
 import Icon from "~/constants/Icon";
 import Illustration from "~/constants/Illustration";
-import QuantizedBar from "~/models/Beats/QuantizedBar";
 import { Hints, Inputs, SceneProps } from "../../SceneScreen";
 import sceneStyle from "../general.module.scss";
 import styles from "./SceneD.module.scss";
@@ -22,6 +23,7 @@ const SceneD: React.FC<SceneProps> = ({
   part,
   isPlaying,
   isParentMounted,
+  isShowedArrowHint,
   addNoteCount,
   pushShowedHint,
 }) => {
@@ -281,6 +283,17 @@ const SceneD: React.FC<SceneProps> = ({
     <div className={sceneStyle.container}>
       <div className={sceneStyle.phraseContainer}>
         <div className={sceneStyle.phrase}>{phrase && phrase.phrase.text}</div>
+      </div>
+      <div className={styles.hintContainer}>
+        <div
+          className={clsx(
+            styles.hintElement,
+            isShowedArrowHint && styles.hiddenHint
+          )}
+        >
+          <KeyHint left />
+          <div>を押してみよう！</div>
+        </div>
       </div>
       <div className={styles.container}>
         <div className={styles.miku} style={paradeStyle}>
