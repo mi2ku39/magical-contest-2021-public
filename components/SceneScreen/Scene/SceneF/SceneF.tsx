@@ -8,6 +8,7 @@ import {
   useState,
 } from "react";
 import DummyImage from "~/components/DummyImage";
+import Illustration from "~/constants/Illustration";
 import { Hints, SceneDragEvent, SceneProps } from "../../SceneScreen";
 import sceneStyle from "../general.module.scss";
 import styles from "./SceneF.module.scss";
@@ -190,27 +191,30 @@ const SceneF: React.FC<SceneProps> = ({
             <div className={styles.performerContainer}>
               <div ref={performerRef}>
                 <div style={performerStyle}>
-                  <DummyImage width="10rem" height="20rem" />
+                  <img
+                    src={Illustration.stages.performer}
+                    className={styles.performerImg}
+                  />
                 </div>
               </div>
             </div>
             <div className={styles.machineContainer}>
               <div className={styles.leftSpeaker} style={speakerStyle}>
-                <DummyImage width="8rem" height="15rem" />
+                <img src={Illustration.stages.speakerLeft} />
               </div>
               <div className={styles.leftMic}>
-                <DummyImage width="6rem" height="4rem" />
+                <img src={Illustration.stages.micLeft} />
               </div>
               <div className={styles.rightMic}>
-                <DummyImage width="6rem" height="4rem" />
+                <img src={Illustration.stages.micRight} />
               </div>
               <div className={styles.rightSpeaker} style={speakerStyle}>
-                <DummyImage width="8rem" height="15rem" />
+                <img src={Illustration.stages.speakerRight} />
               </div>
             </div>
           </div>
           <div className={styles.stageContainer}>
-            <DummyImage width="70rem" height="6rem" />
+            <img src={Illustration.stages.stage} />
           </div>
         </div>
       </div>

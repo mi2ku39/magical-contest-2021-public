@@ -31,7 +31,14 @@
     }
 
     .stageContainer {
-        margin-bottom: 5vh;
+        margin-bottom: 110px;
+        position: relative;
+        z-index: 1;
+
+        & > img {
+            height: 8rem;
+            object-fit: contain;
+        }
     }
 
     .onStageContainer {
@@ -48,25 +55,48 @@
 
         & > div {
             width: 25%;
-            margin-bottom: 0.25rem;
             display: flex;
 
             &.rightSpeaker {
                 justify-content: center;
                 animation: rythm both infinite;
+                margin-bottom: -2.5rem;
+
+                & > img {
+                    height: 15rem;
+                    object-fit: contain;
+                }
             }
 
             &.leftSpeaker {
                 justify-content: center;
                 animation: rythm both infinite;
+                margin-bottom: -2.5rem;
+
+                & > img {
+                    height: 15rem;
+                    object-fit: contain;
+                }
             }
 
             &.rightMic {
                 justify-content: flex-end;
+                margin-bottom: -1.5rem;
+
+                & > img {
+                    height: 5rem;
+                    object-fit: contain;
+                }
             }
 
             &.leftMic {
                 justify-content: flex-start;
+                margin-bottom: -1.5rem;
+
+                & > img {
+                    height: 5rem;
+                    object-fit: contain;
+                }
             }
         }
     }
@@ -78,9 +108,12 @@
         display: flex;
         justify-content: center;
 
-        & > div {
-            margin-bottom: 0.25rem;
-        }
+        margin-bottom: -0.5rem;
+    }
+
+    .performerImg {
+        height: 20rem;
+        object-fit: contain;
     }
 }
 

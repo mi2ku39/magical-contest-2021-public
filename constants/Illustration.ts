@@ -36,4 +36,12 @@ export default {
       walkAlt: `${basePath}/characters/tanuki-walk-alt.png`,
     },
   },
+  stages: {
+    performer: `${basePath}/stages/performer.png`,
+    stage: `${basePath}/stages/stage.png`,
+    speakerLeft: `${basePath}/stages/speaker-left.png`,
+    speakerRight: `${basePath}/stages/speaker-right.png`,
+    micLeft: `${basePath}/stages/mic-left.png`,
+    micRight: `${basePath}/stages/mic-right.png`,
+  },
 };
