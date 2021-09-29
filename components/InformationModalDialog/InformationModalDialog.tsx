@@ -27,7 +27,7 @@ const InformationModalDialog: React.FC = () => {
         closer={modalCloser}
       >
         <div className={styles.modalContainer}>
-          <div className={styles.title}>「密かなる二次創作」</div>
+          <div className={styles.title}>「密かなるにじそうさく」</div>
           <div className={styles.description}>
             本Webアプリケーションは
             <a href="https://magicalmirai.com/2021/procon/" target="_blank">

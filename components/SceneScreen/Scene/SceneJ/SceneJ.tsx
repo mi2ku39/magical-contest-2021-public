@@ -59,7 +59,7 @@ const SceneJ: React.FC<SceneProps> = ({
           {scene === LocalScenes.B && (
             <div className={styles.staffContainer}>
               <div className={styles.container}>
-                <div className={styles.title}>密かなる二次創作</div>
+                <div className={styles.title}>密かなるにじそうさく</div>
                 <div className={styles.authorContainer}>
                   <div>企画・制作</div>
                   <div>倉重みつき</div>
