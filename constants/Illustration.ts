@@ -17,4 +17,7 @@ export default {
     top: `${basePath}/waku/top.png`,
     bottom: `${basePath}/waku/bottom.png`,
   },
+  character: {
+    sosen: `${basePath}/characters/sosen.png`,
+  },
 };

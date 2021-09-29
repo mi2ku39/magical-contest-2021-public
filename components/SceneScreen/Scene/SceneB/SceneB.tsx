@@ -315,7 +315,7 @@ const SceneB: React.FC<SceneProps> = ({
         </div>
       </div>
       <div className={styles.encountableContainer} style={encountableStyle}>
-        <DummyImage width="5rem" height="10rem" />
+        <img src={Illustration.character.sosen} />
       </div>
     </div>
   );
