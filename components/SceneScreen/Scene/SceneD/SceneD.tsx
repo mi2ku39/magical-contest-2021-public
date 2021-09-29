@@ -154,7 +154,7 @@ const SceneD: React.FC<SceneProps> = ({
 
   const mikuIllust = useMemo(
     () =>
-      !beat || !isMoving || beat.position % 2 === 1
+      !beat || beat.position % 2 === 1
         ? Illustration.miku.walk
         : Illustration.miku.walkAlt,
     [beat, isMoving]
@@ -227,6 +227,8 @@ const SceneD: React.FC<SceneProps> = ({
       transform: `translateX(${translate < 0 ? 0 : -1 * translate}px)`,
     };
   }, [paradeMovedDistance, mainMovedDistance]);
+
+  const illustFlag = useMemo(() => !beat || beat.position % 2 === 1, [beat]);
 
   /**
    * keyevent関係
@@ -308,22 +310,50 @@ const SceneD: React.FC<SceneProps> = ({
         </div>
         <div style={paradeStyle}>
           <div style={paradeAnimationStyle}>
-            <DummyImage height="23rem" width="10rem" />
+            <img
+              src={
+                illustFlag
+                  ? Illustration.character.cho.walk
+                  : Illustration.character.cho.walkAlt
+              }
+              className={styles.choImg}
+            />
           </div>
         </div>
         <div style={paradeStyle}>
           <div style={paradeAnimationStyle}>
-            <DummyImage height="23rem" width="10rem" />
+            <img
+              src={
+                illustFlag
+                  ? Illustration.character.hato.walk
+                  : Illustration.character.hato.walkAlt
+              }
+              className={styles.hatoImg}
+            />
           </div>
         </div>
         <div style={paradeStyle}>
           <div style={paradeAnimationStyle}>
-            <DummyImage height="23rem" width="10rem" />
+            <img
+              src={
+                illustFlag
+                  ? Illustration.character.kirin.walk
+                  : Illustration.character.kirin.walkAlt
+              }
+              className={styles.kirinImg}
+            />
           </div>
         </div>
         <div style={paradeStyle}>
           <div style={paradeAnimationStyle}>
-            <DummyImage height="23rem" width="10rem" />
+            <img
+              src={
+                illustFlag
+                  ? Illustration.character.tanuki.walk
+                  : Illustration.character.tanuki.walkAlt
+              }
+              className={styles.tanukiImg}
+            />
           </div>
         </div>
       </div>
