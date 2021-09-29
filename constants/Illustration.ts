@@ -12,6 +12,7 @@ export default {
     ftonSmileyColored: `${basePath}/miku/smiley-colored.png`,
     walk: `${basePath}/miku/walk.png`,
     walkAlt: `${basePath}/miku/walk-alt.png`,
+    tv: `${basePath}/miku/tv.png`,
   },
   waku: {
     top: `${basePath}/waku/top.png`,

@@ -2,44 +2,55 @@
 
 @keyframes wave {
     0% {
-        transform: scaleY(0.5);
-    }
-
-    25% {
         transform: scaleY(1);
     }
 
+    25% {
+        transform: scaleY(2);
+    }
+
     75% {
-        transform: scaleY(0.5);
+        transform: scaleY(1);
     }
 
     100% {
-        transform: scaleY(0.5);
+        transform: scaleY(1);
     }
 }
 
 .imageContainer {
     position: absolute;
     @include tlrb;
-    padding-bottom: 1rem;
+    padding-bottom: 110px;
     display: flex;
     align-items: flex-end;
     justify-content: center;
 
     .tvContainer {
         position: relative;
+        height: 23rem;
+        overflow: hidden;
+
+        .tvImg {
+            height: 23rem;
+            object-fit: contain;
+        }
 
         .waveContainer {
             position: absolute;
+            z-index: -1;
             @include tlrb;
             display: flex;
-            gap: 1.5rem;
+            gap: 3rem;
             align-items: center;
             justify-content: center;
+            padding-top: 2rem;
+
+            background-color: #ff807f;
 
             & > div {
                 background-color: #ffffff;
-                height: 50%;
+                height: 10%;
                 width: 0.75rem;
                 border-radius: 0.25rem;
 

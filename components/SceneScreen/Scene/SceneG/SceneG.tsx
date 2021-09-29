@@ -1,5 +1,6 @@
 import { CSSProperties, useEffect, useMemo } from "react";
 import DummyImage from "~/components/DummyImage";
+import Illustration from "~/constants/Illustration";
 import { SceneProps } from "../../SceneScreen";
 import sceneStyle from "../general.module.scss";
 import styles from "./SceneG.module.scss";
@@ -39,7 +40,7 @@ const SceneG: React.FC<SceneProps> = ({
       <div className={styles.imageContainer}>
         <div className={styles.tvContainer}>
           <div>
-            <DummyImage height="10rem" width="14rem" />
+            <img src={Illustration.miku.tv} className={styles.tvImg} />
           </div>
           <div className={styles.waveContainer}>
             <div style={{ ...waveStyle }}></div>
