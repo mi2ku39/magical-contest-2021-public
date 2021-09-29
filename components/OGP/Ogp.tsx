@@ -5,8 +5,8 @@ const Ogp: React.FC = () => (
     <title>密かなるにじそうさく</title>
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@nytimesbits" />
-    <meta name="twitter:creator" content="@nickbilton" />
+    <meta name="twitter:site" content="@GhostServer_JP" />
+    <meta name="twitter:creator" content="@mi2_ku39" />
     <meta name="description" content="密かなるにじそうさく" />
     <meta
       property="og:url"
@@ -18,7 +18,7 @@ const Ogp: React.FC = () => (
     <meta property="og:type" content="website" />
     <meta
       property="og:image"
-      content="https://denpaghost.github.io/magical-contest-2021/ogps/ogp.png"
+      content="https://denpaghost.github.io/magical-contest-2021/images/ogps/ogp.png"
     />
     <meta property="og:image:width" content="1200px" />
     <meta property="og:image:height" content="630px" />

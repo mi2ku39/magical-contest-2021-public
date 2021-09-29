@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import Icon from "~/constants/Icon";
 import ControllerButton from "../ControllerButton";
 import styles from "./ModalDialog.module.scss";
 type Props = {
@@ -21,7 +22,7 @@ const ModalDialog: React.FC<Props> = ({
           <div>{title}</div>
           <div>
             <ControllerButton
-              src="/images/icons/close.svg"
+              src={Icon.close}
               balloonText="閉じる"
               onClick={closer}
             />
