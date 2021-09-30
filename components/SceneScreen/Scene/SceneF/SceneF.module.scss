@@ -58,23 +58,23 @@
             display: flex;
 
             &.rightSpeaker {
-                justify-content: center;
+                justify-content: flex-end;
                 animation: rythm both infinite;
-                margin-bottom: -2.5rem;
+                margin-bottom: -3rem;
 
                 & > img {
-                    height: 15rem;
+                    height: 17rem;
                     object-fit: contain;
                 }
             }
 
             &.leftSpeaker {
-                justify-content: center;
+                justify-content: flex-start;
                 animation: rythm both infinite;
-                margin-bottom: -2.5rem;
+                margin-bottom: -3rem;
 
                 & > img {
-                    height: 15rem;
+                    height: 17rem;
                     object-fit: contain;
                 }
             }
@@ -82,9 +82,10 @@
             &.rightMic {
                 justify-content: flex-end;
                 margin-bottom: -1.5rem;
+                margin-left: 4.5rem;
 
                 & > img {
-                    height: 5rem;
+                    height: 6rem;
                     object-fit: contain;
                 }
             }
@@ -92,9 +93,10 @@
             &.leftMic {
                 justify-content: flex-start;
                 margin-bottom: -1.5rem;
+                margin-right: 4.5rem;
 
                 & > img {
-                    height: 5rem;
+                    height: 6rem;
                     object-fit: contain;
                 }
             }
@@ -112,7 +114,7 @@
     }
 
     .performerImg {
-        height: 20rem;
+        height: 24rem;
         object-fit: contain;
     }
 }
