@@ -21,6 +21,7 @@ export default {
   character: {
     sosen: `${basePath}/characters/sosen.png`,
     cho: {
+      fron: `${basePath}/characters/cho.png`,
       walk: `${basePath}/characters/cho-walk.png`,
       walkAlt: `${basePath}/characters/cho-walk-alt.png`,
     },
