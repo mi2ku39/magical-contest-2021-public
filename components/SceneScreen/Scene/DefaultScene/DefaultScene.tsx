@@ -32,15 +32,19 @@ const DefaultScene: React.FC<SceneProps> = ({
   return (
     <div className={generalStyles.container}>
       {song ? (
-        <div className={styles.container}>
-          <div className={styles.songInfoContainer}>
-            <div className={styles.title}>{song.name}</div>
-            <div className={styles.composer}>{song.artist.name}</div>
+        <>
+          <div className={styles.container}>
+            <div className={styles.songInfoContainer}>
+              <div className={styles.title}>{song.name}</div>
+              <div className={styles.composer}>{song.artist.name}</div>
+            </div>
           </div>
-          <div className={styles.startHint}>
-            {isPlayable ? "スペースキーを押してスタート" : "読み込み中..."}
+          <div className={styles.hintContainer}>
+            <div className={styles.startHint}>
+              {isPlayable ? "スペースキーを押してスタート" : "読み込み中..."}
+            </div>
           </div>
-        </div>
+        </>
       ) : (
         <div>loading...</div>
       )}
