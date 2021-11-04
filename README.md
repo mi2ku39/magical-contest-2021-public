@@ -1,13 +1,16 @@
-# denpaghost/magical-contest-2021
+# denpaghost/magical-contest-2021-public
 
-[denpaghost.github.io/magical-contest-2021](https://denpaghost.github.io/magical-contest-2021)
+[denpaghost.github.io/magical-contest-2021-public](https://denpaghost.github.io/magical-contest-2021-public)
 
-本リポジトリは 初音ミク「マジカルミライ 2021」プログラミング・コンテスト の応募作品「密かなるにじそうさく」のソースコードです。  
-[Apache License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.html)に基づき、Google Fonts のフォントとアイコンを利用しています。  
-また、TextAlive App API を通じて[TextAlive for Developers](https://developer.textalive.jp/)より楽曲データを取得して使用しています。
+本リポジトリは 初音ミク「マジカルミライ 2021」プログラミング・コンテスト の応募作品「密かなるにじそうさく」のソースコードより、イラストデータを取り除いたものです。  
+TextAlive App APIを利用したソフトウェアの開発の参考になることを目的として公開しております。  
+もし、ご自分で動作させる場合は画像データをご用意の上、 `public/images/`ディレクトリに配置してお試しください。その際は非公開環境でお試しいただきますようご理解をよろしくお願いいたします。
 
-「密かなる交信曲」をモチーフに Web アプリケーションの制作とイラストデータの作成を行い、コンテストに参加することを濁茶様に確認を上許諾をいただいております。  
-nowa 様にもこのプログラミング・コンテストに利用する旨と濁茶様より許諾を得ていることを伝え、イラストデータの作成をしていただいております。
+提出した作品そのものは[密かなるにじそうさく (magicalmirai.com版)](https://magicalmirai.com/2021/procon/entry/entry04/)にて、審査後にもメンテナンスを継続しているものが[密かなるにじそうさく (denpaghost.github.io版)](https://denpaghost.github.io/magical-contest-2021)にて公開されておりますのでこちらも併せてご覧ください。
+
+「密かなるにじそうさく」では[Apache License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.html)に基づき、Google Fonts のフォントとアイコンを利用しています。  
+また、TextAlive App API を通じて[TextAlive for Developers](https://developer.textalive.jp/)より楽曲データを取得して使用しています。  
+また、「密かなる交信曲」をモチーフに Web アプリケーションの制作を行い、コンテストに参加することを事前に濁茶様に確認の上許諾をいただいております。
 
 # ビルドを行う
 
@@ -91,6 +94,8 @@ nowa 様
 
 倉重みつき  
 [くらしげ 👻 さん (@mi2_ku39) / Twitter](https://twitter.com/mi2_ku39)
+
+※コミットログに記録されている[DenpaGhost](https://twitter.com/Denpa_Ghost)は倉重みつきと同一人物です。
 
 with GhostServer  
 [GhostServer](https://portal.ghostserver.jp/)
